@@ -1,0 +1,24 @@
+<form class="example-form">
+    <div class="main-search-field">
+        <mat-form-field class="main-search-field-item">
+            <mat-label>WhoIsWho</mat-label>
+            <input matInput 
+                placeholder="Ex. John Smith" 
+                aria-label="Search" 
+                
+                [matAutocomplete]="autoComplete"
+                name="searchString"
+                [(ngModel)]="searchString" 
+                (ngModelChange)="doSuggestions()">
+
+            <mat-autocomplete #autoComplete="matAutocomplete">
+                <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name">
+                {{ suggest.name + " " + suggest.key }}
+                </mat-option>
+            </mat-autocomplete>
+
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <div class="main-search-field-item" style="text-align: center;">Your index contains 1'234'567 records. Last update 29 Feb 1972</div>
+    </div>
+</form>
