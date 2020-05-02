@@ -1,0 +1,101 @@
+﻿id;name;type
+C062E3B0-437A-1925-75FD-88E5E1CDF5BB;eu tempor erat;keyvault
+4A037AE4-7155-69A9-D503-959D72FAA267;vitae aliquam eros;virtual machine
+B0E417A9-0285-48E5-AA21-9C1FE53FE65A;Mauris blandit enim;web app
+02C213F8-C8BB-7BF8-EC70-56541814F6AE;non;event hub
+A85F4A1A-5A81-A999-D2F0-C22939E71363;Aliquam ultrices iaculis;sql Azure
+38975B59-850A-B66C-0402-B1280A19DB3E;sociosqu ad;virtual machine
+B46FA5A8-FA51-0303-E08C-9AA99115414B;euismod in,;storage
+CFE047D6-6460-9C53-52B2-A3CF04E86FB6;sit amet ultricies sem;hdinsight
+E74794A2-BCB6-E7FA-239A-DE5043BB09F4;pharetra,;sql Azure
+A2CDA05E-1EB1-EA5B-BCBC-4B5F46D87821;elit,;storage
+66C01387-8976-FC04-08C3-EC2B71DD8AE5;sem. Pellentesque ut ipsum;storage
+9D310ED2-5C07-A48B-A68F-A6AF3C948DA1;est ac;sql Azure
+72EE1BE7-8245-1BE8-A5A2-0729A3C7F2FD;ac urna. Ut tincidunt;virtual machine
+AC3CBDAF-54D9-F88F-27BC-D0250379D1EA;luctus,;storage
+8D79C633-A51C-0D3E-B4D5-92ACD7543706;leo;virtual machine
+D86AD8F2-D301-0CC4-E478-FF1DDE22747C;magna. Suspendisse;sql Azure
+0E6F840F-A3F9-BD8C-C039-3463369E9D67;Curabitur massa. Vestibulum;web app
+962A79ED-2B34-7A9E-AC66-746191118006;nulla. Cras eu tellus;keyvault
+387031B2-5E1D-8D2C-3CE1-ECA5B76C1267;arcu vel;sql Azure
+A6344D2F-7B0B-BD0A-C631-6CBFE8C67112;Aliquam erat volutpat. Nulla;virtual machine
+672C21C7-97B8-8D09-BCFF-87CF8B6E1F0E;luctus vulputate, nisi;storage
+D18F9E78-3157-0EF4-93B0-A06D47E9B387;Nulla aliquet. Proin velit.;sql Azure
+3AA1DBBF-F4E1-D720-5843-BAFDB71A5677;non, vestibulum;web app
+9F41F98E-8A67-1ECD-A013-73A30E8FD6EB;mauris blandit;storage
+DDC71D3E-22DF-EAFE-2F44-8635A1B6E53A;amet risus. Donec;event hub
+320BD180-98F8-8D8C-8836-2C59054B37F1;eu erat semper rutrum.;web app
+240C5CAC-8A62-D016-934B-C57435D2D950;mi pede,;event hub
+E35B8BC4-D2D8-4F8C-D4AC-A39BD0E39616;est tempor bibendum. Donec;sql Azure
+2AEECE33-96EF-6D48-B53A-7150807C9FB3;mi. Aliquam;event hub
+391A8D70-50F1-0A54-E773-8788F5BFC191;Cras;keyvault
+DDE0A293-51BE-D00B-6364-BBF2DE140450;accumsan neque et;virtual machine
+E0796697-03DC-DD1B-DDF3-7C1E0BEA4A49;et magnis dis parturient;keyvault
+532FB22F-7A9B-BBAD-8FB9-06EBC518D79E;sociis natoque penatibus et;event hub
+54B645DD-E1C1-72F6-6D95-EFE671E76E4F;Nam;event hub
+0C44F11D-BE3A-F336-E736-99913162082A;scelerisque dui.;event hub
+9604347D-EEBB-96A2-4A17-EBC05F8CF8C5;eu enim. Etiam imperdiet;storage
+F3CB5B28-7DBC-4B8B-AC1F-89B242661A3B;ac tellus. Suspendisse sed;storage
+B0E87F17-8B11-A386-0E5A-C60A51D10D05;Mauris eu;sql Azure
+2776AD87-D656-88BE-6C03-493446E0520B;Phasellus elit pede, malesuada;web app
+4E8925C2-39D5-B17D-FF2F-1CC842DB18E2;amet,;event hub
+52E4A3F7-E8F0-65D0-CA1F-201227D3D732;sem elit, pharetra;web app
+32B12F3C-5076-1834-0A68-6C0621C0DF19;ornare;keyvault
+42B56413-AF95-E1BB-D6FE-5EECCA129B1E;eu;virtual machine
+776ABF27-5A73-5C60-B63F-12AC7F94824B;porttitor tellus non magna.;event hub
+1D842723-7BA4-92AF-DC3B-1955B5704728;vulputate, risus;virtual machine
+A457DDFF-75AC-1D17-1201-E2D8C74F56E4;interdum enim;virtual machine
+F45CB468-B322-4800-B2AA-79562E74C377;vulputate mauris;storage
+1E8BBAA0-1EDE-8F3A-1659-C3A53C4D626C;tempor lorem, eget;event hub
+824EFA60-D775-7907-3FD5-02459385EB9A;Suspendisse eleifend. Cras sed;event hub
+50491454-0562-4125-9160-40022A064ADA;natoque penatibus;keyvault
+0D1BC2B7-CD2C-1D49-7B11-D81C609F6198;Fusce dolor;sql Azure
+448C04BA-9F71-5A6C-B491-4E62EC5D7EFB;erat,;storage
+1E164F75-9423-A2F0-D594-2A2E36642407;lectus;keyvault
+76F6E0C7-C209-38BB-1660-9636DFF42E47;consequat;event hub
+7516C004-CE30-BDCD-25B3-3A5A7B2115E3;quis;virtual machine
+0F09FC84-1A2E-75A8-2F74-DCA19B9611A6;ultrices. Vivamus;virtual machine
+9F3C547D-6E96-3540-4609-B01387C5EEF4;amet, faucibus;sql Azure
+55D94439-46F8-30F0-F3BE-C9FC1E844232;accumsan convallis, ante lectus;storage
+A0013723-1A76-434B-35C3-08D7DAF92B04;sit amet,;virtual machine
+2C51914A-DD6D-61AF-8677-AA6A1E039BFB;magnis dis parturient;keyvault
+B5B963C1-0CA7-EC95-56CB-B4D49A5E7AE5;a mi fringilla;keyvault
+40025FC0-FB5D-5863-57BB-645B8FAE2687;Sed neque. Sed eget;storage
+D6F04FEC-1B4C-45E2-8066-1CFE659AA5F2;semper tellus id;web app
+90968839-EBE6-6A35-B0D7-B368497B0686;amet massa.;sql Azure
+28FFAA11-496B-0C22-F4CB-7FDA842FB2EC;egestas ligula.;keyvault
+01802E16-6A74-4466-0716-1E665871B300;in lobortis tellus;event hub
+E9740E6C-69C3-5CCC-13B1-37765ED5FAE9;arcu.;event hub
+0285CBAB-7F97-3257-F50D-AFF9365C6EE1;faucibus lectus, a sollicitudin;web app
+0E98164F-D875-A08C-3450-5241E49F4A72;In tincidunt;web app
+33553ADE-55DD-A3AC-532B-7949346885E6;ut mi. Duis;event hub
+AC54B47F-70C4-AFA7-7986-D3B74658602B;Vestibulum accumsan neque et;storage
+2F62ECEB-6779-EE43-59D0-F3081833773B;imperdiet;sql Azure
+2798E2A3-F669-D8FC-7138-792B0189650C;ac orci.;hdinsight
+BFDE6CA6-CCE3-03EC-6D3A-EF563DFEF910;auctor, nunc nulla;storage
+4DA72C58-8C5C-9A94-CE1D-3FD272C35B3C;ullamcorper. Duis at;hdinsight
+D90DA425-24A3-9B38-E1D6-7ADB275AC6C0;orci, consectetuer euismod;storage
+6C50926C-1BA6-2490-0AFF-7DF9B8954A7E;et pede. Nunc sed;sql Azure
+05E9E419-5F25-BECD-E806-0179D9030DCD;sociis natoque penatibus et;storage
+70C1B0EE-7623-F9E4-D458-DA1E51EE7EB2;enim. Etiam imperdiet;sql Azure
+474A3BE2-4E0E-C4E5-154E-C843AE321601;accumsan convallis, ante lectus;storage
+3697D5D8-0829-6DA2-D821-57E7812AEC5B;eu enim. Etiam imperdiet;sql Azure
+4A0C6FF9-8FC4-DD45-222B-05F569DE1A9F;odio semper;storage
+C237AAC4-4187-A933-3FF4-EA653F53B865;velit dui,;keyvault
+5C81A2F2-3D4D-4D85-DB5F-A0FE006AB2C7;amet, consectetuer adipiscing elit.;event hub
+291C010F-5520-E16A-F6BA-152B198410C8;augue;web app
+7D72D40C-7664-C704-0BE8-00EC7F276E1D;Suspendisse eleifend.;event hub
+7417B080-0B30-C430-E01F-FDAFFE5ECDA5;Phasellus libero;storage
+6FAA6760-7017-6777-D5B3-E88B2A257565;sed, sapien.;keyvault
+88CEBDC9-5D7A-51E0-F844-24DEEE282892;aliquam eu, accumsan sed,;virtual machine
+3E60181B-B2B9-4636-6BF6-BE5DC74A4FCF;sit;event hub
+E4834179-E478-2255-3916-6671F989EB04;Mauris ut quam vel;storage
+0AF66914-A4AA-0BA5-2E79-6E0EA4065815;Phasellus ornare. Fusce mollis.;keyvault
+9C5B80F9-1A18-51F2-ABAE-71E917077B50;ligula elit, pretium;hdinsight
+A4125A7E-3B99-E6EF-5116-E0952B419D31;sit amet;web app
+602EBA5C-3E89-61C8-B1DF-174A987AD2CF;ante bibendum;virtual machine
+FF2AE728-8940-CA1C-7AE9-33268A83F060;nibh.;hdinsight
+5151326D-DE1F-B5F3-B8E6-E8C37FA72943;libero. Integer;hdinsight
+9FF1BF90-D1BB-6E1B-7DD0-45499AF46CFF;metus facilisis lorem tristique;hdinsight
+E5ADC8E0-92E1-E949-85DF-90EC44B50AAA;pharetra;virtual machine
+1B3152EF-9FD6-E5E8-F42A-BC912F398082;eu arcu. Morbi sit;virtual machine
