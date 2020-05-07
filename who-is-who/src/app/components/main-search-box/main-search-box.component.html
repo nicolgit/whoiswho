@@ -9,15 +9,18 @@
                 [matAutocomplete]="autoComplete"
                 name="searchString"
                 [(ngModel)]="searchString" 
-                (ngModelChange)="doSuggestions()">
+                (ngModelChange)="doSuggestions()"
+                
+                (keyup.enter)="goSearch()">
 
-            <mat-autocomplete #autoComplete="matAutocomplete">
-                <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name">
-                {{ suggest.name + " " + suggest.key }}
+            <mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)='goSelectedAutoComplete($event.option.id)' >
+                <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name" [id]="suggest.key">
+                    <b>{{ suggest.name}}</b> - {{suggest.key}} 
                 </mat-option>
             </mat-autocomplete>
-
-            <mat-icon matSuffix>search</mat-icon>
+            <button matSuffix mat-icon-button (click)="goSearch()">
+                <mat-icon matSuffix>search</mat-icon>
+            </button>
         </mat-form-field>
         <div class="main-search-field-item" style="text-align: center;">Your index contains 1'234'567 records. Last update 29 Feb 1972</div>
     </div>

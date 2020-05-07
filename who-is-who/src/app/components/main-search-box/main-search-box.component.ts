@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AzureSearchService } from '../azure-search.service'
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { AzureSearchService } from '../../azure-search.service'
 
 export class Suggest {
   name: string;
@@ -12,7 +13,9 @@ export class Suggest {
   styleUrls: ['./main-search-box.component.css']
 })
 export class MainSearchBoxComponent implements OnInit {
-  constructor( private SearchService:AzureSearchService) { }
+  constructor( 
+    private SearchService:AzureSearchService,
+    private router: Router) { }
 
 
   ngOnInit(): void {
@@ -21,7 +24,9 @@ export class MainSearchBoxComponent implements OnInit {
   searchString: string;
   
   suggestions: Suggest[];
-
+  
+  selectedAutocomplete: Suggest;
+  
   doSuggestions()
   {
       var caller = this;
@@ -47,18 +52,17 @@ export class MainSearchBoxComponent implements OnInit {
         });
         
       }
-      
-      /*
-      var max = Math.floor(Math.random() * 10) + 1; // from 1 to 10
-      for (var i = 0; i<max; i++)
-      {
-        var s = new Suggest();
+  }
 
-        s.key = "12345";
-        s.name = this.searchString + " lorem ipsur dixit";
+  goSearch() {
+    if (typeof this.searchString != 'undefined' && this.searchString.trim())
+    {
+      this.router.navigateByUrl('/search/' + encodeURI(this.searchString) );
+    }
+  }
 
-        this.suggestions.push(s);
-      }
-      */
+  goSelectedAutoComplete (id)
+  {
+    this.router.navigateByUrl('/result/' + encodeURI(id) );
   }
 }
