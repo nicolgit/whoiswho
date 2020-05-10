@@ -1,0 +1,25 @@
+
+.main-search-field
+{
+    display: flex;
+    flex-direction: column;
+    width: inherit; 
+    height: 100%;
+    margin-top: 20px;
+}
+
+.main-search-field-item
+{
+    flex-grow: 1; 
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: medium;
+}
+
+.result-items
+{
+    flex-grow: 1; 
+    margin-left: 15%;
+    margin-right: 15%;
+    font-size: medium;
+}

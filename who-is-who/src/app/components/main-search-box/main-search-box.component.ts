@@ -24,7 +24,6 @@ export class MainSearchBoxComponent implements OnInit {
   searchString: string;
   
   suggestions: Suggest[];
-  
   selectedAutocomplete: Suggest;
   
   doSuggestions()

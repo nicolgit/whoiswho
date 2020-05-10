@@ -5,7 +5,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators'
 
-import { suggester_response, Value } from './model/suggester';
+import { suggester_response } from './model/suggester';
+import { results_response } from './model/results';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +18,8 @@ export class AzureSearchService {
   private base_url = 'https://whoiswho-engine.search.windows.net';
   private index = 'azuretable-index';
 
-  private suggestions_url = this.base_url + '/indexes/' + this.index + '/docs/suggest?api-version=2019-05-06';
+  private suggestions_url = this.base_url + '/indexes/' + this.index + '/docs/suggest?api-version=2019-05-06&suggesterName=default';
+  private results_url = this.base_url + '/indexes/' + this.index + '/docs?api-version=2019-05-06';
 
   constructor( private logger: LoggerService, private http: HttpClient) { }
 
@@ -27,7 +30,7 @@ export class AzureSearchService {
 
   Suggestions(text:string)
   {
-    var get_url = this.suggestions_url + '&search=' + encodeURI(text) + '&suggesterName=default';
+    var get_url = this.suggestions_url + '&search=' + encodeURI(text);
 
     return this.http.get<suggester_response>(get_url, {
         observe: 'body',
@@ -36,5 +39,18 @@ export class AzureSearchService {
           'api-key': this.query_key
         }),
       });
+  }
+
+  Results (text:string)
+  {
+    var get_url = this.results_url + '&search=' + encodeURI(text);
+
+    return this.http.get<results_response>(get_url, {
+      observe: 'body',
+      responseType: 'json',
+      headers: new HttpHeaders({
+        'api-key': this.query_key
+      }),
+    });
   }
 }

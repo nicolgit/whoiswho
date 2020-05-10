@@ -4,21 +4,6 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.main-search-field
-{
-    display: flex;
-    flex-direction: column;
-    width: inherit; 
-    height: 100%;
-    margin-top: 200px;
-}
 
-.main-search-field-item
-{
-    flex-grow: 1; 
-    margin-left: 10%;
-    margin-right: 10%;
-    font-size: medium;
-}
 
 
