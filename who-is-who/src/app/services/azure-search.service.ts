@@ -5,8 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators'
 
-import { suggester_response } from './model/suggester';
-import { results_response } from './model/results';
+import { suggester_response } from '../model/suggester';
+import { results_response } from '../model/results';
 
 @Injectable({
   providedIn: 'root'

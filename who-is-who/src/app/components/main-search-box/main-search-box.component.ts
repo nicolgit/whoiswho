@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { AzureSearchService } from '../../azure-search.service'
+import { AzureSearchService } from '../../services/azure-search.service'
 
 export class Suggest {
   name: string;

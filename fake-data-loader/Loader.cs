@@ -61,7 +61,7 @@ namespace fake_data_loader
                 while (!rd.EndOfStream)
                 {
                     var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Applications, splits[0]);
+                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Application, splits[0]);
                     wiw.Name = splits[1];
                     wiw.DeepLink = @"https://www.microsoft.com";
 
@@ -104,7 +104,7 @@ namespace fake_data_loader
                 while (!rd.EndOfStream)
                 {
                     var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Resources, splits[0]);
+                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Resource, splits[0]);
                     wiw.Name = splits[1];
                     wiw.DeepLink = @"https://www.microsoft.com";
                     wiw.ResourceGroupId = resourceGroups[rand.Next(resourceGroups.Count)].RowKey;
@@ -148,7 +148,7 @@ namespace fake_data_loader
                 while (!rd.EndOfStream)
                 {
                     var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.ResourceGroups, splits[0]);
+                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.ResourceGroup, splits[0]);
                     wiw.Name = splits[1];
                     wiw.DeepLink = @"https://www.microsoft.com";
                     wiw.SubscriptionId = subscriptions[rand.Next(subscriptions.Count)].RowKey;

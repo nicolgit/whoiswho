@@ -11,11 +11,11 @@ namespace fake_data_loader.Model
         UserInGroup = 3,
         Subscription = 4,
         UserGroupInSubscription=5,
-        ResourceGroups = 6,
+        ResourceGroup = 6,
         UserGroupInResourceGroup = 7,
-        Resources = 8,
+        Resource = 8,
         UserGroupInResource = 9,
-        Applications = 10,
+        Application = 10,
         UserGroupInApplication = 11
     };
 

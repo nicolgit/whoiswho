@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { AzureSearchService } from '../../azure-search.service'
-
-import {MatIconModule} from '@angular/material/icon';
+import { AzureSearchService } from '../../services/azure-search.service'
 
 export class Result {
   row1: string;
@@ -25,7 +23,7 @@ export class Suggest {
 })
 export class ResultListComponent implements OnInit {
 
-  constructor(
+  constructor(  
     private SearchService:AzureSearchService,
     private route: ActivatedRoute,
     private router: Router) { }
