@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { AzureSearchService } from '../../services/azure-search.service'
+import { AzureSearchService } from '../../services/azure-search.service';
+import { AzureIconService } from '../../services/azure-icons.service';
 
 export class Result {
+  iconSVG: SafeHtml;
+  
   row1: string;
   row2: string;
-  iconSVG: string;
+  
   key: string;
 }
 
@@ -25,8 +29,10 @@ export class ResultListComponent implements OnInit {
 
   constructor(  
     private SearchService:AzureSearchService,
+    private IconService:AzureIconService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private sanitizer:DomSanitizer) { }
 
   ngOnInit(): void {
       this.searchString = this.route.snapshot.paramMap.get('search_for');
@@ -98,7 +104,14 @@ export class ResultListComponent implements OnInit {
           s.key = element.Key
           s.row1 = element.Name;
           s.row2 = element.Type;
-          s.iconSVG = "<b>ciao</b><i>ciao</i>";
+          caller.IconService.getSvg(element.Type).subscribe( data =>
+            {
+              data = data.replace("<svg ", "<svg style='width: 32; height: 32;' ")
+              var sanit = caller.sanitizer.bypassSecurityTrustHtml(data);
+              
+              s.iconSVG = sanit;
+            }
+          );
 
           caller.searchResults.push(s);
         });    
