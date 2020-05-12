@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 export class Result {
   row1: string;
   row2: string;
-  icont: string;
+  iconSVG: string;
   key: string;
 }
 
@@ -100,6 +100,7 @@ export class ResultListComponent implements OnInit {
           s.key = element.Key
           s.row1 = element.Name;
           s.row2 = element.Type;
+          s.iconSVG = "<b>ciao</b><i>ciao</i>";
 
           caller.searchResults.push(s);
         });    

@@ -23,3 +23,9 @@
     margin-right: 15%;
     font-size: medium;
 }
+
+.mat-line.result-title
+{
+    font-weight: bold;
+    font-size: larger;
+}
