@@ -14,8 +14,10 @@
                 (keyup.enter)="goSearch()">
 
             <mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)='goSelectedAutoComplete($event.option.id)' >
-                <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name" [id]="suggest.key">
-                    <b>{{ suggest.name}}</b> - {{suggest.key}} 
+                <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name" [id]="suggest.key" >
+                    <div style="display: flex;">
+                        <div [innerHTML]="suggest.iconSVG"></div>&nbsp;&nbsp;&nbsp;{{suggest.name}} (<span [innerHTML]="suggest.highlightText"></span>)&nbsp;|&nbsp;<span>{{suggest.type}}</span>
+                    </div>                    
                 </mat-option>
             </mat-autocomplete>
             <button matSuffix mat-icon-button (click)="goSearch()">

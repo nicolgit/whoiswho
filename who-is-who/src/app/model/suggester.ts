@@ -7,5 +7,7 @@
   export interface Value {
     "@search.text": string;
     Key: string;
+    Name: string;
+    Type: string;
   }
 

@@ -18,7 +18,7 @@ export class AzureSearchService {
   private base_url = 'https://whoiswho-engine.search.windows.net';
   private index = 'azuretable-index';
 
-  private suggestions_url = this.base_url + '/indexes/' + this.index + '/docs/suggest?api-version=2019-05-06&suggesterName=default';
+  private suggestions_url = this.base_url + '/indexes/' + this.index + '/docs/suggest?api-version=2019-05-06&suggesterName=default&highlightPreTag=<b>&highlightPostTag=</b>&$select=Type,Key,Name&fuzzy=true';
   private results_url = this.base_url + '/indexes/' + this.index + '/docs?api-version=2019-05-06';
 
   constructor( private logger: LoggerService, private http: HttpClient) { }

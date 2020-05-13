@@ -1,5 +1,6 @@
 <form class="example-form">
     <div class="main-search-field">
+        <img src="/assets/customer/main-logo.png" class="logo">
         <mat-form-field class="main-search-field-item">
             <mat-label>WhoIsWho</mat-label>
             <input matInput 
@@ -13,15 +14,18 @@
                 
                 (keyup.enter)="goSearch()">
 
-            <mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)='goSelectedAutoComplete($event.option.id)' >
-                <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name" [id]="suggest.key">
-                    <b>{{ suggest.name}}</b> - {{suggest.key}} 
-                </mat-option>
-            </mat-autocomplete>
+                <mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)='goSelectedAutoComplete($event.option.id)' >
+                    <mat-option *ngFor="let suggest of suggestions" [value]="suggest.name" [id]="suggest.key" >
+                        <div style="display: flex;">
+                            <div [innerHTML]="suggest.iconSVG"></div>&nbsp;&nbsp;&nbsp;{{suggest.name}} (<span [innerHTML]="suggest.highlightText"></span>)&nbsp;|&nbsp;<span>{{suggest.type}}</span>
+                        </div>                    
+                    </mat-option>
+                </mat-autocomplete>
             <button matSuffix mat-icon-button (click)="goSearch()">
                 <mat-icon matSuffix>search</mat-icon>
             </button>
         </mat-form-field>
-        <div class="main-search-field-item" style="text-align: center;">Your index contains 1'234'567 records. Last update 29 Feb 1972</div>
+        <div class="home-page-subtitle">Your index contains <b>1'234'567</b> records. Last update <b>29 Feb 1972</b></div>
+        <div class="home-page-subtitle">powered by <a href="https://azure.microsoft.com/en-us/services/search/" target="_new" >Azure Cognitive Search</a></div>
     </div>
 </form>

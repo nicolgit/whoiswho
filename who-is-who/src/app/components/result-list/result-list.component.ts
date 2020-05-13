@@ -15,7 +15,10 @@ export class Result {
 }
 
 export class Suggest {
+  iconSVG: SafeHtml;
+  highlightText: SafeHtml;
   name: string;
+  type: string;
   key: string;
 }
 
@@ -58,8 +61,18 @@ export class ResultListComponent implements OnInit {
             sr.value.forEach(element => {
               var s = new Suggest();
 
-              s.key = element.Key
-              s.name = element["@search.text"];
+              s.key = element.Key;
+              s.name = element.Name;
+              s.type = element.Type;
+              s.highlightText = caller.sanitizer.bypassSecurityTrustHtml(element["@search.text"]);
+              caller.IconService.getSvg(element.Type).subscribe( data =>
+                {
+                  data = data.replace("<svg ", "<svg style='width: 16; height: 16;' ")
+                  var sanit = caller.sanitizer.bypassSecurityTrustHtml(data);
+                  
+                  s.iconSVG = sanit;
+                }
+              );
 
               caller.suggestions.push(s);
             });    
