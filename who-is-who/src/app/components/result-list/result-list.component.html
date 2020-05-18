@@ -28,9 +28,9 @@
     <p></p>
     <p></p>
 
-    <div class="main-search-field-item">
+    <div class="result-items">
         <mat-list>
-            <mat-list-item *ngFor="let result of searchResults" [id]="result.key">
+            <mat-list-item *ngFor="let result of searchResults" [id]="result.key" [routerLink]="['/result/' + result.key]">
                 <div  mat-list-icon [innerHTML]="result.iconSVG"></div>
                 <h1 matLine class="result-title">{{result.row1}}</h1>
                 <p matLine>
