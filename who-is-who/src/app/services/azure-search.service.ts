@@ -53,4 +53,17 @@ export class AzureSearchService {
       }),
     });
   }
+
+  ResultByKey (key:string)
+  {
+    var get_url = this.results_url + "&$filter=Key eq '" + encodeURI(key) + "'";
+
+    return this.http.get<results_response>(get_url, {
+      observe: 'body',
+      responseType: 'json',
+      headers: new HttpHeaders({
+        'api-key': this.query_key
+      }),
+    });
+  }
 }

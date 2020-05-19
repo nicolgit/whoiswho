@@ -48,7 +48,7 @@ import { ResultComponent } from './components/result/result.component';
             component: ResultComponent
           },
           {
-            path: ':id',
+            path: ':key',
             component: ResultComponent
           } 
         ]
