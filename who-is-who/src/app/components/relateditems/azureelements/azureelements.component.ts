@@ -2,22 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { AzureSearchService } from '../../services/azure-search.service';
-import { AzureIconService } from '../../services/azure-icons.service';
+import { AzureSearchService } from '../../../services/azure-search.service';
+import { AzureIconService } from '../../../services/azure-icons.service';
 
 @Component({
-  selector: 'app-result',
-  templateUrl: './result.component.html',
-  styleUrls: ['../../stylesCommon.css', './result.component.css']
+  selector: 'related-azure-elements',
+  templateUrl: './azureelements.component.html',
+  styleUrls: [ '../../../stylesCommon.css', './azureelements.component.css']
 })
-export class ResultComponent implements OnInit {
+export class AzureElementsComponent implements OnInit {
 
   constructor(private SearchService:AzureSearchService,
     private IconService:AzureIconService,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer:DomSanitizer,
-
     ) { }
 
   ngOnInit(): void {
@@ -36,6 +35,7 @@ export class ResultComponent implements OnInit {
   department:string;
   lastupdate:string;
   deeplink:string;
+  
 
   public goDeeplink(url:string)
   {

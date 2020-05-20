@@ -6,12 +6,3 @@
     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
 }
-
-.divider-class {
-    margin-top: 12px;
-    margin-bottom: 12px;
-}
-
-.azuresvc-card {
-    max-width: 256px;
-}

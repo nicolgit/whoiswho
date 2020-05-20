@@ -13,38 +13,21 @@
     <mat-card class="user-card">
         <mat-card-header>
         <div mat-card-avatar class="user-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+        <mat-card-title>{{ name }} {{ surname }} - {{ department }}</mat-card-title>
+        <mat-card-subtitle>{{ email }}</mat-card-subtitle>
+        <mat-card-subtitle><b>last update</b>: {{lastupdate}}</mat-card-subtitle>
         </mat-card-header>
         
         <mat-card-content>
-        <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
-        </p>
         </mat-card-content>
+
         <mat-card-actions>
-        <button mat-button>SEE ON AZURE</button>
-        <button mat-button>SEE ON SERVICE NOW</button>
+        <button mat-button (click)="goDeeplink(deeplink);">SEE ON AZURE</button>
+        <button mat-button (click)="goDeeplink(deeplink);">SEE ON SERVICE NOW</button>
         </mat-card-actions>
     </mat-card>
 
-    <mat-divider class="divider-class"></mat-divider>
-
-    <mat-card class="azuresvc-card">
-        <mat-card-header>
-            <div  mat-card-avatar [innerHTML]="iconSVG"></div>
-            <mat-card-title>Shiba Inu</mat-card-title>
-            <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-        
-        </mat-card-content>
-        <mat-card-actions>
-        <button mat-button>SEE ON AZURE</button>
-        </mat-card-actions>
-    </mat-card>
+    <related-azure-elements Name="Related Subscriptions" Type="Subscription" Filter="Type eq 'UserGroupInSubscription'"></related-azure-elements>
+    
 </div>
 

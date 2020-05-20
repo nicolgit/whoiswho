@@ -18,12 +18,15 @@ import { MainSearchBoxComponent } from './components/main-search-box/main-search
 import { ResultListComponent } from './components/result-list/result-list.component';
 import { ResultComponent } from './components/result/result.component';
 
+import { AzureElementsComponent } from './components/relatedItems/azureelements/azureelements.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     MainSearchBoxComponent,
     ResultListComponent,
     ResultComponent,
+    AzureElementsComponent,
   ],
   imports: [
     BrowserModule,
