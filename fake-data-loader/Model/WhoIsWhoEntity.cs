@@ -43,5 +43,9 @@ namespace fake_data_loader.Model
         public string GroupType { get; set; }
         public string SubscriptionId { get; set; }
         public string ResourceGroupId { get; set; }
+        public string ResourceId { get; set; }
+        public string UserId { get; set; }
+        public string GroupId { get; set; }
+        public string ApplicationId { get; set; }
     }
 }

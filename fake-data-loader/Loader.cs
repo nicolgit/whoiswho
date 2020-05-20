@@ -93,8 +93,10 @@ namespace fake_data_loader
                     int randUsers=rand.Next(4);
                     for (int i=0; i<randUsers; i++)
                     {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInApplication,$"{wiw.RowKey}|{users[rand.Next(users.Count)].RowKey}" );
+                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInApplication,Guid.NewGuid().ToString());
                         userGroup.Name = roles[rand.Next(roles.Count)];
+                        userGroup.ApplicationId = wiw.RowKey;
+                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
                         Console.WriteLine($"User added to subscription {wiw.RowKey} added successfully");
                     }
@@ -102,8 +104,10 @@ namespace fake_data_loader
                     randUsers=rand.Next(4);
                     for (int i=0; i<randUsers; i++)
                     {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInApplication,$"{wiw.RowKey}|{groups[rand.Next(groups.Count)].RowKey}" );
+                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInApplication,Guid.NewGuid().ToString());
                         userGroup.Name = roles[rand.Next(roles.Count)];
+                        userGroup.ApplicationId = wiw.RowKey;
+                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
                         Console.WriteLine($"Group added to subscription {wiw.RowKey} added successfully");
@@ -138,17 +142,20 @@ namespace fake_data_loader
                     int randUsers=rand.Next(5);
                     for (int i=0; i<randUsers; i++)
                     {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResource,$"{wiw.RowKey}|{users[rand.Next(users.Count)].RowKey}" );
+                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResource,Guid.NewGuid().ToString());
                         userGroup.Name = roles[rand.Next(roles.Count)];
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-
+                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
+                        userGroup.ResourceId = wiw.RowKey;
                         Console.WriteLine($"User added to resource {wiw.RowKey} added successfully");
                     }
 
                     randUsers=rand.Next(5);
                     for (int i=0; i<randUsers; i++)
                     {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResource,$"{wiw.RowKey}|{groups[rand.Next(groups.Count)].RowKey}" );
+                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResource,Guid.NewGuid().ToString() );
+                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
+                        userGroup.ResourceId = wiw.RowKey;
                         userGroup.Name = roles[rand.Next(roles.Count)];
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
@@ -184,7 +191,9 @@ namespace fake_data_loader
                     int randUsers=rand.Next(5);
                     for (int i=0; i<randUsers; i++)
                     {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResourceGroup,$"{wiw.RowKey}|{users[rand.Next(users.Count)].RowKey}" );
+                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResourceGroup, Guid.NewGuid().ToString() );
+                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
+                        userGroup.ResourceGroupId = wiw.RowKey;
                         userGroup.Name = roles[rand.Next(roles.Count)];
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
@@ -195,6 +204,8 @@ namespace fake_data_loader
                     for (int i=0; i<randUsers; i++)
                     {
                         var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResourceGroup,$"{wiw.RowKey}|{groups[rand.Next(groups.Count)].RowKey}" );
+                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
+                        userGroup.ResourceGroupId = wiw.RowKey;
                         userGroup.Name = roles[rand.Next(roles.Count)];
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
@@ -229,7 +240,9 @@ namespace fake_data_loader
                     int randUsers=rand.Next(5);
                     for (int i=0; i<randUsers; i++)
                     {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInSubscription,$"{wiw.RowKey}|{users[rand.Next(users.Count)].RowKey}" );
+                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInSubscription, Guid.NewGuid().ToString() );
+                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
+                        userGroup.SubscriptionId = wiw.RowKey;
                         userGroup.Name = roles[rand.Next(roles.Count)];
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
@@ -240,6 +253,8 @@ namespace fake_data_loader
                     for (int i=0; i<randUsers; i++)
                     {
                         var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInSubscription,$"{wiw.RowKey}|{groups[rand.Next(groups.Count)].RowKey}" );
+                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
+                        userGroup.SubscriptionId = wiw.RowKey;
                         userGroup.Name = roles[rand.Next(roles.Count)];
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
@@ -330,6 +345,8 @@ namespace fake_data_loader
                     for (int i=0; i<randUsers; i++)
                     {
                         var userGroup= new WhoIsWhoEntity(Model.ItemType.UserInGroup,$"{wiw.RowKey}-{users[rand.Next(users.Count)].RowKey}" );
+                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
+                        userGroup.GroupId = wiw.RowKey; 
                         userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
 
                         Console.WriteLine($"User added to {wiw.RowKey} added successfully");
