@@ -11,7 +11,6 @@
                 name="searchString"
                 [(ngModel)]="searchString" 
                 (ngModelChange)="doSuggestions()"
-                
                 (keyup.enter)="goSearch()">
 
                 <mat-autocomplete #autoComplete="matAutocomplete" (optionSelected)='goSelectedAutoComplete($event.option.id)' >
@@ -25,7 +24,6 @@
                 <mat-icon matSuffix>search</mat-icon>
             </button>
         </mat-form-field>
-        <div class="home-page-subtitle">Your index contains <b>1'234'567</b> records. Last update <b>29 Feb 1972</b></div>
-        <div class="home-page-subtitle">powered by <a href="https://azure.microsoft.com/en-us/services/search/" target="_new" >Azure Cognitive Search</a></div>
+        <div class="home-page-subtitle">Your index contains <b>{{indexSize}}</b> records - powered by <a href="https://azure.microsoft.com/en-us/services/search/" target="_new" >Azure Cognitive Search</a></div>
     </div>
 </form>

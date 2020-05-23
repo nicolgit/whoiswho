@@ -26,8 +26,16 @@ export class MainSearchBoxComponent implements OnInit {
 
 
   ngOnInit(): void {
+    var caller = this;
+    this.SearchService.IndexSize().subscribe({
+      next(sr)
+      {
+       caller.indexSize = sr;
+      }
+    });
   }
 
+  indexSize:string;
   searchString: string;
   
   suggestions: Suggest[];
