@@ -6,6 +6,9 @@ using fake_data_loader.Model;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
 
+
+// USE BOGUS LIbrary for sampledata
+
 namespace fake_data_loader
 {
     public class Loader

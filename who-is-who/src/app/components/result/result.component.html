@@ -15,6 +15,7 @@
         <div mat-card-avatar class="user-header-image"></div>
         <mat-card-title>{{ name }} {{ surname }} - {{ department }}</mat-card-title>
         <mat-card-subtitle>{{ email }}</mat-card-subtitle>
+        <mat-card-subtitle><b>id</b>: {{rowKey}}</mat-card-subtitle>
         <mat-card-subtitle><b>last update</b>: {{lastupdate}}</mat-card-subtitle>
         </mat-card-header>
         
@@ -27,7 +28,59 @@
         </mat-card-actions>
     </mat-card>
 
-    <related-azure-elements Name="Related Subscriptions" Type="Subscription" Filter="Type eq 'UserGroupInSubscription'"></related-azure-elements>
+    <related-azure-elements #subscriptions 
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Subscriptions" 
+        
+        FilterCorelationType="Type eq 'UserGroupInSubscription'" 
+        FilterElementType="Subscription"
+        FilterElementTypeId="SubscriptionId" 
+        ></related-azure-elements>
     
+    <related-azure-elements #resourcegroup
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure Resource Groups" 
+        
+        FilterCorelationType="Type eq 'UserGroupInResourceGroup'" 
+        FilterElementType="ResourceGroup"
+        FilterElementTypeId="ResourceGroupId" 
+        ></related-azure-elements>
+
+    <related-azure-elements #resource
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure Resource" 
+        
+        FilterCorelationType="Type eq 'UserGroupInResource'" 
+        FilterElementType="Resource"
+        FilterElementTypeId="ResourceId" 
+        ></related-azure-elements>
+    
+    <related-azure-elements #groups 
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure Groups" 
+        
+        FilterCorelationType="Type eq 'UserInGroup'" 
+        FilterElementType="Group"
+        FilterElementTypeId="GroupId" 
+        ></related-azure-elements>
+    
+    <related-azure-elements #Application 
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure Applications" 
+        
+        FilterCorelationType="Type eq 'UserGroupInApplication'" 
+        FilterElementType="Application"
+        FilterElementTypeId="ApplicationId" 
+        ></related-azure-elements>
 </div>
 

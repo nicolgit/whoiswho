@@ -109,7 +109,7 @@ export class ResultListComponent implements OnInit {
       s += "*";
     }
 
-    this.SearchService.Results(s).subscribe( {
+    this.SearchService.ResultsByText(s).subscribe( {
       next(sr) {
         sr.value.forEach(element => {
           var s = new Result();

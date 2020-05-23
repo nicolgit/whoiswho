@@ -13,11 +13,15 @@ export interface Value {
     GroupType?: any;
     Name: string;
     Type: string;
-    Department?: any;
-    Mail?: any;
-    Surname?: any;
-    UserType?: any;
-    DeepLink: string;
-    ResourceGroupId?: any;
-    SubscriptionId?: any;
+    Department?: string;
+    Mail?: string;
+    Surname?: string;
+    UserType?: string;
+    DeepLink?: string;
+    ResourceGroupId?: string;
+    ResourceId?: string;
+    SubscriptionId?: string;
+    GroupId?: string;
+    ApplicationId?: string;
+    ImgUrl?: string
 }

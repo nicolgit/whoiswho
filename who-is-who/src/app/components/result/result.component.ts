@@ -27,6 +27,7 @@ export class ResultComponent implements OnInit {
   }
 
   key: string;
+  rowKey:string;
   errorMessage: string;
   resourceType: string;
   iconSVG: SafeHtml;
@@ -65,6 +66,7 @@ export class ResultComponent implements OnInit {
             caller.department = element.Department;
             caller.lastupdate = element.Timestamp.toString();
             caller.deeplink = element.DeepLink;
+            caller.rowKey = element.RowKey;
         });    
       },
       error(msg) {

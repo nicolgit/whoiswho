@@ -41,9 +41,22 @@ export class AzureSearchService {
       });
   }
 
-  Results (text:string)
+  ResultsByText (text:string)
   {
     var get_url = this.results_url + '&search=' + encodeURI(text);
+
+    return this.http.get<results_response>(get_url, {
+      observe: 'body',
+      responseType: 'json',
+      headers: new HttpHeaders({
+        'api-key': this.query_key
+      }),
+    });
+  }
+
+  ResultsByFilters (filters:string)
+  {
+    var get_url = this.results_url + '&$filter=' + encodeURI(filters);
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',
