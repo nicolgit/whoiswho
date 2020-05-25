@@ -114,8 +114,10 @@ export class ResultListComponent implements OnInit {
         sr.value.forEach(element => {
           var s = new Result();
 
+          
           s.key = element.Key
           s.row1 = element.Name;
+                    
           s.row2 = element.Type;
           caller.IconService.getSvg(element.Type).subscribe( data =>
             {

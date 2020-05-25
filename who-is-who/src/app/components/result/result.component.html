@@ -28,7 +28,31 @@
         </mat-card-actions>
     </mat-card>
 
-    <related-azure-elements #subscriptions 
+    
+    
+    <related-azure-elements #groups 
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure Groups" 
+        
+        FilterCorelationType="Type eq 'UserInGroup'" 
+        FilterElementType="Group"
+        FilterElementTypeId="GroupId" 
+        ></related-azure-elements>
+        
+    <related-azure-elements #Application 
+        ParentKey="UserId"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure Applications" 
+        
+        FilterCorelationType="Type eq 'UserGroupInApplication'" 
+        FilterElementType="Application"
+        FilterElementTypeId="ApplicationId" 
+        ></related-azure-elements>
+    
+        <related-azure-elements #subscriptions 
         ParentKey="UserId"
         [ParentValue]="rowKey"
 
@@ -59,28 +83,6 @@
         FilterCorelationType="Type eq 'UserGroupInResource'" 
         FilterElementType="Resource"
         FilterElementTypeId="ResourceId" 
-        ></related-azure-elements>
-    
-    <related-azure-elements #groups 
-        ParentKey="UserId"
-        [ParentValue]="rowKey"
-
-        Name="Related Azure Groups" 
-        
-        FilterCorelationType="Type eq 'UserInGroup'" 
-        FilterElementType="Group"
-        FilterElementTypeId="GroupId" 
-        ></related-azure-elements>
-    
-    <related-azure-elements #Application 
-        ParentKey="UserId"
-        [ParentValue]="rowKey"
-
-        Name="Related Azure Applications" 
-        
-        FilterCorelationType="Type eq 'UserGroupInApplication'" 
-        FilterElementType="Application"
-        FilterElementTypeId="ApplicationId" 
         ></related-azure-elements>
 </div>
 

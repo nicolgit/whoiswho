@@ -23,5 +23,6 @@ export interface Value {
     SubscriptionId?: string;
     GroupId?: string;
     ApplicationId?: string;
-    ImgUrl?: string
+    ImgUrl?: string;
+    ResourceType?:string;
 }

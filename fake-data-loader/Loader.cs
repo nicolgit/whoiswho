@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Bogus;
 using fake_data_loader.Model;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,8 @@ namespace fake_data_loader
         private List<Model.WhoIsWhoEntity> subscriptions = new List<Model.WhoIsWhoEntity>();
         private List<Model.WhoIsWhoEntity> resourceGroups = new List<Model.WhoIsWhoEntity>();
         private List<Model.WhoIsWhoEntity> resources = new List<Model.WhoIsWhoEntity>();
-        private List<string> roles = new List<string>();
+        private List<string> roles;
+        private List<string> resourceTypes;
 
         public Loader()
         {
@@ -33,329 +35,392 @@ namespace fake_data_loader
 
         public async Task Run()
         {
+            Randomizer.Seed = new Random(1972);
+            
             await CleanTable();
 
             LoadRBACRoles();
+
+            LoadResourceTypes();            
             
             await LoadTags();
 
             await LoadUsers();
             
             await LoadGroups();
-
+            
             await LoadSubscriptions();
-
+            
             await LoadResourceGroups();
 
-            await LoadResources();
+            await LoadAzureResources();
 
             await LoadApplications();
-
+            
             return;
         }
 
         private void LoadRBACRoles()
         {
-            const string FILENAME_ROLES = "..\\fake-data\\roles.csv";
+            var localRoles = new[] { "Reader", "Contributor", "Owner", "User Access Administrator"};
+            
+            roles = new List<string>();
 
-            using (var rd = new StreamReader(FILENAME_ROLES))
+            foreach (var role in localRoles)
             {
-                rd.ReadLine(); // skip first line
-
-                while (!rd.EndOfStream)
-                {
-                    var splits = rd.ReadLine().Split(';');
-                    var role = splits[0];
-                    
-                    roles.Add(role);
-
-                    Console.WriteLine($"Azure Role {role} added successfully");
-                }
+                roles.Add(role);
             }
+
+            Console.WriteLine($"Azure Roles created successfully");
+        }
+
+         private void LoadResourceTypes()
+        {
+            var local = new[] { "AppService", "Virtual Machine", "SQL Azure", "Search Service", "BOT Service", "Cosmos DB","Data Lake"};
+            
+            resourceTypes = new List<string>();
+
+            foreach (var role in local)
+            {
+                resourceTypes.Add(role);
+            }
+
+            Console.WriteLine($"Azure resource Types created successfully");
         }
 
         private async Task LoadApplications()
         {
-            Random rand = new Random();
+            var rand = new Bogus.Randomizer();
 
-            const string FILENAME_APPLICATIONS = "..\\fake-data\\applications.csv";
+            var fakeApplication= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.Application}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"res {f.Commerce.Product()} {Guid.NewGuid()}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.Application}")
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
 
-            using (var rd = new StreamReader(FILENAME_APPLICATIONS))
+            var fakeUserInApplication = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInApplication}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInApplication}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeGroupInApplication = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInApplication}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInApplication}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            int max = 50;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeApplication.Generate();
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                resourceGroups.Add(wiw);
 
-                while (!rd.EndOfStream)
+                Console.WriteLine($"Application added successfully {wiw.ToString()}");
+
+                int usersInApplication = rand.Int(3,5);
+                for (int j=0; j<usersInApplication; j++)
                 {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Application, splits[0]);
-                    wiw.Name = splits[1];
-                    wiw.DeepLink = @"https://www.microsoft.com";
+                    var uig = fakeUserInApplication.Generate();
+                    uig.ApplicationId = wiw.RowKey;
 
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"User In Application {uig.ToString()}");
+                }
 
-                    int randUsers=rand.Next(4);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInApplication,Guid.NewGuid().ToString());
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup.ApplicationId = wiw.RowKey;
-                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-                        Console.WriteLine($"User added to subscription {wiw.RowKey} added successfully");
-                    }
+                int groupsInApplication = rand.Int(3,5);
+                for (int j=0; j<groupsInApplication; j++)
+                {
+                    var uig = fakeUserInApplication.Generate();
+                    uig.ApplicationId = wiw.RowKey;
 
-                    randUsers=rand.Next(4);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInApplication,Guid.NewGuid().ToString());
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup.ApplicationId = wiw.RowKey;
-                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-
-                        Console.WriteLine($"Group added to subscription {wiw.RowKey} added successfully");
-                    }
-
-                    Console.WriteLine($"Subscription {wiw.RowKey} added successfully");
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"Group In Application {uig.ToString()}");
                 }
             }
         }
 
-        private async Task LoadResources()
+        private async Task LoadAzureResources()
         {
-            Random rand = new Random();
+            var rand = new Bogus.Randomizer();
 
-            const string FILENAME_RESOURCES = "..\\fake-data\\resources.csv";
+            var fakeResource= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.Resource}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"res {f.Commerce.ProductName()} {f.UniqueIndex}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.Resource}")
+                .RuleFor(o => o.ResourceType, f =>  f.PickRandom(resourceTypes))
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
 
-            using (var rd = new StreamReader(FILENAME_RESOURCES))
+            var fakeUserInResource = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInResource}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInResource}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeGroupInResource = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInResource}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInSubscription}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            int max = 50;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeResource.Generate();
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                resources.Add(wiw);
 
-                while (!rd.EndOfStream)
+                Console.WriteLine($"ResourceGroup added successfully {wiw.ToString()}");
+
+                int usersInResource = rand.Int(3,5);
+                for (int j=0; j<usersInResource; j++)
                 {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Resource, splits[0]);
-                    wiw.Name = splits[1];
-                    wiw.DeepLink = @"https://www.microsoft.com";
-                    wiw.ResourceGroupId = resourceGroups[rand.Next(resourceGroups.Count)].RowKey;
+                    var uig = fakeUserInResource.Generate();
+                    uig.ResourceId = wiw.RowKey;
 
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
-                    resources.Add(wiw);
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"User In Resource {uig.ToString()}");
+                }
 
-                    int randUsers=rand.Next(5);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResource,Guid.NewGuid().ToString());
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
-                        userGroup.ResourceId = wiw.RowKey;
-                        Console.WriteLine($"User added to resource {wiw.RowKey} added successfully");
-                    }
+                int groupsInResource = rand.Int(3,5);
+                for (int j=0; j<groupsInResource; j++)
+                {
+                    var uig = fakeGroupInResource.Generate();
+                    uig.ResourceId = wiw.RowKey;
 
-                    randUsers=rand.Next(5);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResource,Guid.NewGuid().ToString() );
-                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
-                        userGroup.ResourceId = wiw.RowKey;
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-
-                        Console.WriteLine($"Group added to resource {wiw.RowKey} added successfully");
-                    }
-
-                    Console.WriteLine($"Resource {wiw.RowKey} added successfully");
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"Group In Resource {uig.ToString()}");
                 }
             }
         }
 
         private async Task LoadResourceGroups()
         {
-            Random rand = new Random();
+            var rand = new Bogus.Randomizer();
 
-            const string FILENAME_RESOURCEGROUPS = "..\\fake-data\\resourcegroups.csv";
+            var fakeResourceGroups= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.ResourceGroup}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"rg {f.Commerce.Color()} {f.UniqueIndex}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.ResourceGroup}")
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
 
-            using (var rd = new StreamReader(FILENAME_RESOURCEGROUPS))
+            var fakeUserInResourceGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInResourceGroup}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInResourceGroup}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeGroupInSubscription = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInResourceGroup}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInResourceGroup}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            int max = 50;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeResourceGroups.Generate();
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                resourceGroups.Add(wiw);
 
-                while (!rd.EndOfStream)
+                Console.WriteLine($"ResourceGroup added successfully {wiw.ToString()}");
+
+                int usersInResourceGroup = rand.Int(3,5);
+                for (int j=0; j<usersInResourceGroup; j++)
                 {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.ResourceGroup, splits[0]);
-                    wiw.Name = splits[1];
-                    wiw.DeepLink = @"https://www.microsoft.com";
-                    wiw.SubscriptionId = subscriptions[rand.Next(subscriptions.Count)].RowKey;
+                    var uig = fakeUserInResourceGroup.Generate();
+                    uig.ResourceGroupId = wiw.RowKey;
 
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
-                    resourceGroups.Add(wiw);
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"User In ResourceGroup {uig.ToString()}");
+                }
 
-                    int randUsers=rand.Next(5);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResourceGroup, Guid.NewGuid().ToString() );
-                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
-                        userGroup.ResourceGroupId = wiw.RowKey;
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
+                int groupsInResourceGroup = rand.Int(3,5);
+                for (int j=0; j<groupsInResourceGroup; j++)
+                {
+                    var uig = fakeResourceGroups.Generate();
+                    uig.ResourceGroupId = wiw.RowKey;
 
-                        Console.WriteLine($"User added to resourcegroup {wiw.RowKey} added successfully");
-                    }
-
-                    randUsers=rand.Next(5);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInResourceGroup,$"{wiw.RowKey}|{groups[rand.Next(groups.Count)].RowKey}" );
-                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
-                        userGroup.ResourceGroupId = wiw.RowKey;
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-
-                        Console.WriteLine($"Group added to resourcegroup {wiw.RowKey} added successfully");
-                    }
-
-                    Console.WriteLine($"Subscription {wiw.RowKey} added successfully");
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"Group In ResourceGroup {uig.ToString()}");
                 }
             }
         }
 
         private async Task LoadSubscriptions()
         {
-            Random rand = new Random();
+            var rand = new Bogus.Randomizer();
 
-            const string FILENAME_SUBSCRIPTIONS = "..\\fake-data\\subscriptions.csv";
+            var fakeSubscriptions= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.Subscription}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"subscription {f.Commerce.ProductMaterial()} {f.UniqueIndex}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.Subscription}")
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
 
-            using (var rd = new StreamReader(FILENAME_SUBSCRIPTIONS))
+            var fakeUserInSubscription = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInSubscription}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInSubscription}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeGroupInSubscription = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserGroupInSubscription}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInSubscription}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            int max = 50;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeSubscriptions.Generate();
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                subscriptions.Add(wiw);
 
-                while (!rd.EndOfStream)
+                Console.WriteLine($"Subscription added successfully {wiw.ToString()}");
+
+                int usersInSubscriptions = rand.Int(3,5);
+                for (int j=0; j<usersInSubscriptions; j++)
                 {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Subscription, splits[0]);
-                    wiw.Name = splits[1];
-                    wiw.DeepLink = @"https://www.microsoft.com";
+                    var uig = fakeUserInSubscription.Generate();
+                    uig.SubscriptionId = wiw.RowKey;
 
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
-                    subscriptions.Add(wiw);
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"User In Subscription {uig.ToString()}");
+                }
 
-                    int randUsers=rand.Next(5);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInSubscription, Guid.NewGuid().ToString() );
-                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
-                        userGroup.SubscriptionId = wiw.RowKey;
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
+                int groupsInSubscriptions = rand.Int(3,5);
+                for (int j=0; j<groupsInSubscriptions; j++)
+                {
+                    var uig = fakeGroupInSubscription.Generate();
+                    uig.GroupId = wiw.RowKey;
 
-                        Console.WriteLine($"User added to subscription {wiw.RowKey} added successfully");
-                    }
-
-                    randUsers=rand.Next(5);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserGroupInSubscription,$"{wiw.RowKey}|{groups[rand.Next(groups.Count)].RowKey}" );
-                        userGroup.GroupId = groups[rand.Next(groups.Count)].RowKey;
-                        userGroup.SubscriptionId = wiw.RowKey;
-                        userGroup.Name = roles[rand.Next(roles.Count)];
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-
-                        Console.WriteLine($"Group added to subscription {wiw.RowKey} added successfully");
-                    }
-
-                    Console.WriteLine($"Subscription {wiw.RowKey} added successfully");
-
-
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"Group In Subscription {uig.ToString()}");
                 }
             }
-
         }
 
         private async Task LoadUsers()
         {
-            const string FILENAME_USERS = "..\\fake-data\\users.csv";
+            var usertypes = new[] { "AD user", "Guest" };
 
-            using (var rd = new StreamReader(FILENAME_USERS))
+            var rand = new Bogus.Randomizer();
+
+            var fakeUsers= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.User}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => f.Name.FirstName())
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.User}")
+                .RuleFor(o => o.Surname, f => f.Name.LastName())
+                .RuleFor(o => o.UserType, f => f.PickRandom(usertypes))
+                .RuleFor(o => o.Mail, f => f.Internet.Email())
+                .RuleFor(o => o.Department, f=>f.Commerce.Department())
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath())
+                .RuleFor(o=> o.ImgUrl, f=>f.Image.PicsumUrl());
+
+               
+            int max = 150;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeUsers.Generate();
 
-                while (!rd.EndOfStream)
-                {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.User, splits[0]);
-                    wiw.Name = splits[1];
-                    wiw.Surname = splits[2];
-                    wiw.UserType = splits[3];
-                    wiw.Mail = splits[4];
-                    wiw.Department = splits[5];
-                    wiw.DeepLink = @"https://www.microsoft.com";
-
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
-
-                    users.Add(wiw);
-                    
-                    Console.WriteLine($"User {wiw.RowKey} added successfully");
-                }
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                
+                users.Add(wiw);
+                Console.WriteLine($"User added successfully {wiw.ToString()}");
             }
         }
 
         private async Task LoadTags()
         {
-            const string FILENAME_USERS = "..\\fake-data\\tags.csv";
+            var rand = new Bogus.Randomizer();
 
-            using (var rd = new StreamReader(FILENAME_USERS))
+            var fakeTags = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.Tag}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"CLID:{rand.Replace("##-####-####")}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.Tag}");
+            
+            int max = 50;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeTags.Generate();
 
-                while (!rd.EndOfStream)
-                {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Tag, splits[0]);
-                    wiw.Name = splits[1];
-                    
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
 
-                    tags.Add(wiw);
-                    
-                    Console.WriteLine($"Tag {wiw.RowKey} added successfully");
-                }
+                tags.Add(wiw);
+                
+                Console.WriteLine($"Tag added successfully {wiw.ToString()}");
             }
         }
         private async Task LoadGroups()
         {
-            Random rand = new Random();
+            var groupType = new[] { "Mail Enabled", "Security" };
 
-            const string FILENAME_GROUPS = "..\\fake-data\\groups.csv";
+            var rand = new Bogus.Randomizer();
 
-            using (var rd = new StreamReader(FILENAME_GROUPS))
+            var fakeGroups= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.Group}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"Group {f.Commerce.ProductName()} {f.UniqueIndex}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.Group}")
+                .RuleFor(o => o.GroupType, f => f.PickRandom(groupType))
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath())
+                .RuleFor(o=> o.ImgUrl, f=>f.Image.PicsumUrl());
+
+            var fakeUserInGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, $"{Model.ItemType.UserInGroup}{rand.Replace("-##")}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInGroup}");
+
+
+            int max = 50;
+            for (int i=0; i<max; i++)
             {
-                rd.ReadLine(); // skip first line
+                var wiw = fakeGroups.Generate();
+                wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                groups.Add(wiw);
 
-                while (!rd.EndOfStream)
+                Console.WriteLine($"User added successfully {wiw.ToString()}");
+
+                int usersInGroup = rand.Int(3,5);
+                for (int j=0; j<usersInGroup; j++)
                 {
-                    var splits = rd.ReadLine().Split(';');
-                    var wiw = new Model.WhoIsWhoEntity(Model.ItemType.Group, splits[0]);
-                    wiw.Name = splits[1];
-                    wiw.GroupType = splits[2];
-                    wiw.DeepLink = @"https://www.microsoft.com";
-                    
-                    wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
+                    var uig = fakeUserInGroup.Generate();
+                    uig.GroupId = wiw.RowKey;
 
-                    groups.Add(wiw);
-
-                    int randUsers=rand.Next(10);
-                    for (int i=0; i<randUsers; i++)
-                    {
-                        var userGroup= new WhoIsWhoEntity(Model.ItemType.UserInGroup,$"{wiw.RowKey}-{users[rand.Next(users.Count)].RowKey}" );
-                        userGroup.UserId = users[rand.Next(users.Count)].RowKey;
-                        userGroup.GroupId = wiw.RowKey; 
-                        userGroup = await InsertOrMergeEntityAsync( wiwTable, userGroup);
-
-                        Console.WriteLine($"User added to {wiw.RowKey} added successfully");
-                    }
-
-                    Console.WriteLine($"Group {wiw.RowKey} added successfully");
+                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                    Console.WriteLine($"User In Group {uig.ToString()}");
                 }
             }
         }

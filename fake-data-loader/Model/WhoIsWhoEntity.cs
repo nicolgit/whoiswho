@@ -2,6 +2,7 @@ namespace fake_data_loader.Model
 {
     using System;
     using Microsoft.Azure.Cosmos.Table;
+    using Newtonsoft.Json;
 
     public enum ItemType
     {
@@ -47,5 +48,13 @@ namespace fake_data_loader.Model
         public string UserId { get; set; }
         public string GroupId { get; set; }
         public string ApplicationId { get; set; }
+        public string ImgUrl { get; set; }
+        public string ResourceType { get; set; }
+        
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.None);
+        }
     }
 }
