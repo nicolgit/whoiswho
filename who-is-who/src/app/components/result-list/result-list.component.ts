@@ -114,11 +114,15 @@ export class ResultListComponent implements OnInit {
         sr.value.forEach(element => {
           var s = new Result();
 
-          
           s.key = element.Key
           s.row1 = element.Name;
                     
           s.row2 = element.Type;
+          if (element.ResourceType != null)
+          {
+            s.row2 += " - " + element.ResourceType;
+          }
+
           caller.IconService.getSvg(element.Type).subscribe( data =>
             {
               data = data.replace("<svg ", "<svg style='width: 32; height: 32;' ")

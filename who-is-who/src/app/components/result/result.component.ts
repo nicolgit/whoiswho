@@ -37,6 +37,7 @@ export class ResultComponent implements OnInit {
   department:string;
   lastupdate:string;
   deeplink:string;
+  ImgUrl:string;
 
   public goDeeplink(url:string)
   {
@@ -67,6 +68,7 @@ export class ResultComponent implements OnInit {
             caller.lastupdate = element.Timestamp.toString();
             caller.deeplink = element.DeepLink;
             caller.rowKey = element.RowKey;
+            caller.ImgUrl = element.ImgUrl;
         });    
       },
       error(msg) {
