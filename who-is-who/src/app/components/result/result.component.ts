@@ -38,6 +38,8 @@ export class ResultComponent implements OnInit {
   lastupdate:string;
   deeplink:string;
   ImgUrl:string;
+  userType:string;
+  groupType:string;
 
   public goDeeplink(url:string)
   {
@@ -69,6 +71,8 @@ export class ResultComponent implements OnInit {
             caller.deeplink = element.DeepLink;
             caller.rowKey = element.RowKey;
             caller.ImgUrl = element.ImgUrl;
+            caller.userType = element.UserType;
+            caller.groupType = element.GroupType;
         });    
       },
       error(msg) {
@@ -76,5 +80,10 @@ export class ResultComponent implements OnInit {
         console.log('error: ', msg.message);
       }
     });
+  }
+
+  public hasValue (item:string)
+  {
+    return item != null;
   }
 }

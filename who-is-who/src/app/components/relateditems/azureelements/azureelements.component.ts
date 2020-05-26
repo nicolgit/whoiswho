@@ -58,7 +58,7 @@ export class AzureElementsComponent implements OnInit {
   get hasData(): boolean {
     return this.searchResults != null && this.searchResults.length>0;
   }
-  
+
   searchResults: Result[];
 
   public goDeeplink(url:string)

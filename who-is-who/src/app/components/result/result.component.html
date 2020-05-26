@@ -3,7 +3,7 @@
 
     <mat-list>
         <mat-list-item>
-            <div  mat-list-icon [innerHTML]="iconSVG"></div>
+            <div *ngIf="hasValue(ImgUrl)"  mat-list-icon [innerHTML]="iconSVG"></div>
             <h1 matLine><b>{{ resourceType }}</b></h1>
         </mat-list-item>    
     </mat-list>
@@ -12,9 +12,14 @@
     
     <mat-card class="user-card">
         <mat-card-header>
-        <div mat-card-avatar class="user-header-image" [ngStyle]="{ 'background-image': 'url(' + ImgUrl + ')'}"></div>
-        <mat-card-title>{{ name }} {{ surname }} - {{ department }}</mat-card-title>
-        <mat-card-subtitle>{{ email }}</mat-card-subtitle>
+        <div *ngIf="!hasValue(ImgUrl)" mat-card-avatar [innerHTML]="iconSVG"></div>
+        <div *ngIf="hasValue(ImgUrl)" mat-card-avatar class="user-header-image" [ngStyle]="{ 'background-image': 'url(' + ImgUrl + ')'}"></div>
+        <mat-card-title>{{ name }} {{ surname }}</mat-card-title>
+        <mat-card-subtitle *ngIf="hasValue(email)" ><b>mail:</b> {{ email }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="hasValue(department)" ><b>department:</b> {{ department }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="hasValue(userType)" ><b>user type:</b> {{ userType }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="hasValue(groupType)" ><b>group type:</b> {{ groupType }}</mat-card-subtitle>
+        <mat-card-subtitle></mat-card-subtitle>
         <mat-card-subtitle><b>id</b>: {{rowKey}}</mat-card-subtitle>
         <mat-card-subtitle><b>last update</b>: {{lastupdate}}</mat-card-subtitle>
         </mat-card-header>
