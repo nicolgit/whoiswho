@@ -116,6 +116,10 @@ export class ResultListComponent implements OnInit {
 
           s.key = element.Key
           s.row1 = element.Name;
+          if (element.Surname != null)
+          {
+            s.row1 += " " + element.Surname;
+          }
                     
           s.row2 = element.Type;
           if (element.ResourceType != null)

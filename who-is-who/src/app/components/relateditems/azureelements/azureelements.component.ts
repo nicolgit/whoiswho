@@ -55,6 +55,10 @@ export class AzureElementsComponent implements OnInit {
   errorMessage: string;
   iconSVG: SafeHtml;
   
+  get hasData(): boolean {
+    return this.searchResults != null && this.searchResults.length>0;
+  }
+  
   searchResults: Result[];
 
   public goDeeplink(url:string)
