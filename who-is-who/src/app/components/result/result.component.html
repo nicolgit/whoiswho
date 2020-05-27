@@ -19,17 +19,18 @@
         <mat-card-subtitle *ngIf="hasValue(department)" ><b>department:</b> {{ department }}</mat-card-subtitle>
         <mat-card-subtitle *ngIf="hasValue(userType)" ><b>user type:</b> {{ userType }}</mat-card-subtitle>
         <mat-card-subtitle *ngIf="hasValue(groupType)" ><b>group type:</b> {{ groupType }}</mat-card-subtitle>
-        <mat-card-subtitle></mat-card-subtitle>
-        <mat-card-subtitle><b>id</b>: {{rowKey}}</mat-card-subtitle>
-        <mat-card-subtitle><b>last update</b>: {{lastupdate}}</mat-card-subtitle>
+        <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+        
         </mat-card-header>
         
         <mat-card-content>
+            <b>id</b>: {{rowKey}}<br/>
+            <b>last update</b>: {{lastupdate}}
         </mat-card-content>
 
         <mat-card-actions>
         <button mat-button (click)="goDeeplink(deeplink);">SEE ON AZURE</button>
-        <button mat-button (click)="goDeeplink(deeplink);">SEE ON SERVICE NOW</button>
+        <button mat-button (click)="goDeeplink(deeplink);" *ngIf="resourceType == 'User'">SEE ON SERVICE NOW</button>
         </mat-card-actions>
     </mat-card>
 
