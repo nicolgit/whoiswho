@@ -65,7 +65,19 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure Applications" 
+        Name="Related Groups" 
+        
+        FilterCorelationType="Type eq 'UserInGroup'" 
+        FilterElementType="Group"
+        FilterElementTypeId="GroupId" 
+        ></related-azure-elements>
+
+    <related-azure-elements 
+        [ParentType]="resourceType"
+        [ParentKey]="typeIdColumn"
+        [ParentValue]="rowKey"
+
+        Name="Related Azure AD Applications" 
         
         FilterCorelationType="Type eq 'UserInApplication'" 
         FilterElementType="Application"

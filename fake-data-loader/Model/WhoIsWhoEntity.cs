@@ -24,11 +24,10 @@ namespace fake_data_loader.Model
         GroupInApplication,
         ResourceGroupInSubscription, // to be implemented
         ResourceInResourceGroup, // to be implemented
-        TagInResouce,
-        TagInResourceGroup,
-        TagInSubscription,
-        TagInApplication
-
+        TagInResouce, 
+        TagInResourceGroup, 
+        TagInSubscription, 
+        TagInApplication 
     };
 
     public class WhoIsWhoEntity : TableEntity
@@ -61,6 +60,7 @@ namespace fake_data_loader.Model
         public string ApplicationId { get; set; }
         public string ImgUrl { get; set; }
         public string ResourceType { get; set; }
+        public string TagId { get; set; }
         
 
         public override string ToString()

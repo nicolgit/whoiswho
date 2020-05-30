@@ -116,6 +116,13 @@ namespace fake_data_loader
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInApplication}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
             
+            var fakeTagInApplication = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.TagInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInApplication}");
+
             int max = 50;
             for (int i=0; i<max; i++)
             {
@@ -143,6 +150,16 @@ namespace fake_data_loader
 
                     uig = await InsertOrMergeEntityAsync( wiwTable, uig);
                     Console.WriteLine($"Group In Application {uig.ToString()}");
+                }
+
+                int tagsInApplication = rand.Int(3,5);
+                for (int j=0; j<tagsInApplication; j++)
+                {
+                    var tig = fakeTagInApplication.Generate();
+                    tig.ApplicationId = wiw.RowKey;
+
+                    tig = await InsertOrMergeEntityAsync( wiwTable, tig);
+                    Console.WriteLine($"Group In Application {tig.ToString()}");
                 }
             }
         }
@@ -177,6 +194,20 @@ namespace fake_data_loader
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInResource}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
+            var fakeTagInResources = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.TagInResouce}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInResouce}");
+
+            var fakeResourceGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.ResourceInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ResourceGroupId, f => f.PickRandom(resourceGroups).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.ResourceInResourceGroup}");
+
             int max = 50;
             for (int i=0; i<max; i++)
             {
@@ -205,6 +236,22 @@ namespace fake_data_loader
                     uig = await InsertOrMergeEntityAsync( wiwTable, uig);
                     Console.WriteLine($"Group In Resource {uig.ToString()}");
                 }
+
+                int tagsInResource = rand.Int(3,5);
+                for (int j=0; j<tagsInResource; j++)
+                {
+                    var tig = fakeTagInResources.Generate();
+                    tig.ApplicationId = wiw.RowKey;
+
+                    tig = await InsertOrMergeEntityAsync( wiwTable, tig);
+                    Console.WriteLine($"Tag In Resource {tig.ToString()}");
+                }
+
+                var rg = fakeResourceGroup.Generate();
+                rg.ResourceId = wiw.RowKey;
+
+                rg = await InsertOrMergeEntityAsync( wiwTable, rg);
+                Console.WriteLine($"Tag In Resource {rg.ToString()}");
             }
         }
 
@@ -237,6 +284,20 @@ namespace fake_data_loader
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInResourceGroup}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
+            var fakeTagInResourceGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.TagInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInResourceGroup}");
+
+            var fakeSubscription = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.ResourceGroupInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.SubscriptionId, f => f.PickRandom(subscriptions).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInResourceGroup}");
+
             int max = 50;
             for (int i=0; i<max; i++)
             {
@@ -249,22 +310,37 @@ namespace fake_data_loader
                 int usersInResourceGroup = rand.Int(3,5);
                 for (int j=0; j<usersInResourceGroup; j++)
                 {
-                    var uig = fakeUserInResourceGroup.Generate();
-                    uig.ResourceGroupId = wiw.RowKey;
+                    var fui = fakeUserInResourceGroup.Generate();
+                    fui.ResourceGroupId = wiw.RowKey;
 
-                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
-                    Console.WriteLine($"User In ResourceGroup {uig.ToString()}");
+                    fui = await InsertOrMergeEntityAsync( wiwTable, fui);
+                    Console.WriteLine($"User In ResourceGroup {fui.ToString()}");
                 }
 
                 int groupsInResourceGroup = rand.Int(3,5);
                 for (int j=0; j<groupsInResourceGroup; j++)
                 {
-                    var uig = fakeResourceGroups.Generate();
-                    uig.ResourceGroupId = wiw.RowKey;
+                    var frg = fakeResourceGroups.Generate();
+                    frg.ResourceGroupId = wiw.RowKey;
 
-                    uig = await InsertOrMergeEntityAsync( wiwTable, uig);
-                    Console.WriteLine($"Group In ResourceGroup {uig.ToString()}");
+                    frg = await InsertOrMergeEntityAsync( wiwTable, frg);
+                    Console.WriteLine($"Group In ResourceGroup {frg.ToString()}");
                 }
+
+                int tagsInResourceGroup = rand.Int(3,5);
+                for (int j=0; j<tagsInResourceGroup; j++)
+                {
+                    var tig = fakeTagInResourceGroup.Generate();
+                    tig.ApplicationId = wiw.RowKey;
+
+                    tig = await InsertOrMergeEntityAsync( wiwTable, tig);
+                    Console.WriteLine($"Tag In ResourceGroup {tig.ToString()}");
+                }
+
+                var uig = fakeSubscription.Generate();
+                uig.ResourceGroupId = wiw.RowKey;
+                uig = await InsertOrMergeEntityAsync( wiwTable, uig);
+                Console.WriteLine($"subscription <-> resource group {uig.ToString()}");
             }
         }
 
@@ -296,6 +372,13 @@ namespace fake_data_loader
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInSubscription}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
+             var fakeTagInSubscription = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.TagInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInSubscription}");
+
             int max = 50;
             for (int i=0; i<max; i++)
             {
@@ -323,6 +406,16 @@ namespace fake_data_loader
 
                     uig = await InsertOrMergeEntityAsync( wiwTable, uig);
                     Console.WriteLine($"Group In Subscription {uig.ToString()}");
+                }
+
+                 int tagsInSunscription = rand.Int(3,5);
+                for (int j=0; j<tagsInSunscription; j++)
+                {
+                    var tig = fakeTagInSubscription.Generate();
+                    tig.ApplicationId = wiw.RowKey;
+
+                    tig = await InsertOrMergeEntityAsync( wiwTable, tig);
+                    Console.WriteLine($"Tag In Subscription {tig.ToString()}");
                 }
             }
         }
