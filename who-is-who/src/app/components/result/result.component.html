@@ -34,68 +34,76 @@
         </mat-card-actions>
     </mat-card>
 
-    <related-azure-elements #users_in_subscrption
+    <!-- SUBSCRIPTIONS -->
+    <related-azure-elements 
+        [ParentType]="resourceType"
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Users and Groups" 
+        Name="Subscription's Users" 
         
-        FilterCorelationType="Type eq 'UserGroupInSubscription'" 
+        FilterCorelationType="Type eq 'UserInSubscription'" 
         FilterElementType="User"
         FilterElementTypeId="UserId" 
         ></related-azure-elements>
-
-    <related-azure-elements #groups 
+    
+    <related-azure-elements 
+        [ParentType]="resourceType"
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure Groups" 
+        Name="Subscription's Groups" 
         
-        FilterCorelationType="Type eq 'UserInGroup'" 
+        FilterCorelationType="Type eq 'GroupInSubscription'" 
         FilterElementType="Group"
         FilterElementTypeId="GroupId" 
         ></related-azure-elements>
-        
-    <related-azure-elements #Application 
+    
+    <!-- USER -->
+    <related-azure-elements 
+        [ParentType]="resourceType"
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Applications" 
         
-        FilterCorelationType="Type eq 'UserGroupInApplication'" 
+        FilterCorelationType="Type eq 'UserInApplication'" 
         FilterElementType="Application"
         FilterElementTypeId="ApplicationId" 
         ></related-azure-elements>
     
         <related-azure-elements #subscriptions 
+        [ParentType]="resourceType"
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Subscriptions" 
         
-        FilterCorelationType="Type eq 'UserGroupInSubscription'" 
+        FilterCorelationType="Type eq 'UserInSubscription'" 
         FilterElementType="Subscription"
         FilterElementTypeId="SubscriptionId" 
         ></related-azure-elements>
     
-    <related-azure-elements #resourcegroup
+    <related-azure-elements 
+        [ParentType]="resourceType"
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure Resource Groups" 
+        Name="Related Azure ResourceGroups" 
         
-        FilterCorelationType="Type eq 'UserGroupInResourceGroup'" 
+        FilterCorelationType="Type eq 'UserInResourceGroup'" 
         FilterElementType="ResourceGroup"
         FilterElementTypeId="ResourceGroupId" 
         ></related-azure-elements>
 
-    <related-azure-elements #resource
+    <related-azure-elements 
+        [ParentType]="resourceType"
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Resource" 
         
-        FilterCorelationType="Type eq 'UserGroupInResource'" 
+        FilterCorelationType="Type eq 'UserInResource'" 
         FilterElementType="Resource"
         FilterElementTypeId="ResourceId" 
         ></related-azure-elements>

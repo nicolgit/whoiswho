@@ -6,18 +6,29 @@ namespace fake_data_loader.Model
 
     public enum ItemType
     {
-        Tag = 0,
-        User = 1,
-        Group = 2,
-        UserInGroup = 3,
-        Subscription = 4,
-        UserGroupInSubscription=5,
-        ResourceGroup = 6,
-        UserGroupInResourceGroup = 7,
-        Resource = 8,
-        UserGroupInResource = 9,
-        Application = 10,
-        UserGroupInApplication = 11
+        Tag,
+        User,
+        Group,
+        UserInGroup,
+        Subscription,
+        UserInSubscription,
+        GroupInSubscription,
+        ResourceGroup,
+        UserInResourceGroup,
+        GroupInResourceGroup,
+        Resource,
+        UserInResource,
+        GroupInResource,
+        Application,
+        UserInApplication,
+        GroupInApplication,
+        ResourceGroupInSubscription, // to be implemented
+        ResourceInResourceGroup, // to be implemented
+        TagInResouce,
+        TagInResourceGroup,
+        TagInSubscription,
+        TagInApplication
+
     };
 
     public class WhoIsWhoEntity : TableEntity

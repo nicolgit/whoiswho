@@ -33,24 +33,40 @@ export class AzureElementsComponent implements OnInit {
   }
 
   @Input() Name: string;
-  @Input() ParentKey:string;  
-
   @Input() FilterCorelationType: string;
   @Input() FilterElementType:string;
   @Input() FilterElementTypeId:string;
   
   private _parentValue;
   @Input() 
-  set ParentValue (pv:string) {
-    if (pv != null && pv != "" )
-    {
-      this._parentValue = pv;
-      this.RefreshUI();
-    }
+  set ParentValue (pv:string) {    
+    this._parentValue = pv;
+    this.RefreshUI();
   }
   get ParentValue():string {
     return this._parentValue;
   }
+
+  private _parentType;
+  @Input()
+  set ParentType (pt:string) {
+    this._parentType = pt;
+    this.RefreshUI();
+  }
+  get ParentType():string {
+    return this._parentType;
+  }
+
+  private _parentKey;
+  @Input()
+  set ParentKey (pt:string) {
+    this._parentKey = pt;
+    this.RefreshUI();
+  }
+  get ParentKey():string {
+    return this._parentKey;
+  }
+
 
   errorMessage: string;
   iconSVG: SafeHtml;
@@ -71,6 +87,18 @@ export class AzureElementsComponent implements OnInit {
   {
     var caller = this;
     caller.searchResults = [];
+
+    if (this._parentKey == null || this._parentType == null || this._parentValue == null)
+      {
+        // parameters still not ready
+        return;
+      }
+    
+      if (this._parentType == this.FilterElementType)
+      {
+        // not applicable
+        return;
+      }
     
     var filters = caller.FilterCorelationType + " and " + caller.ParentKey + " eq '" + caller.ParentValue + "'";
 
@@ -108,7 +136,7 @@ export class AzureElementsComponent implements OnInit {
               throw "ElementType not managed yet! ('" + caller.FilterElementType + "')";
           }
 
-          var filters2 = "RowKey eq '" + id + "'";
+          var filters2 = "Type eq '" + caller.FilterElementType + "' and RowKey eq '" + id + "'";
 
           caller.SearchService.ResultsByFilters(filters2).subscribe( { 
             next(sr) {             

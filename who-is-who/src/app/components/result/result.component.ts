@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -8,7 +8,7 @@ import { AzureIconService } from '../../services/azure-icons.service';
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
-  styleUrls: ['../../stylesCommon.css', './result.component.css']
+  styleUrls: ['../../stylesCommon.css', './result.component.css'],
 })
 export class ResultComponent implements OnInit {
 
@@ -17,14 +17,12 @@ export class ResultComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer:DomSanitizer,
-
     ) { }
 
   ngOnInit(): void {
-    this.key = this.route.snapshot.paramMap.get('key');
-    this.populate();
-
-  }
+      this.key = this.route.snapshot.paramMap.get('key');
+      this.populate();
+    }
 
   key: string;
   rowKey:string;

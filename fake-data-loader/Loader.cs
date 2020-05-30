@@ -102,20 +102,20 @@ namespace fake_data_loader
 
             var fakeUserInApplication = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserInApplication}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInApplication}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInApplication}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInApplication = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.GroupInApplication}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInApplication}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInApplication}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
-
+            
             int max = 50;
             for (int i=0; i<max; i++)
             {
@@ -163,18 +163,18 @@ namespace fake_data_loader
 
             var fakeUserInResource = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInResource}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserInResource}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInResource}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInResource}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInResource = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInResource}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.GroupInResource}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInSubscription}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInResource}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             int max = 50;
@@ -223,18 +223,18 @@ namespace fake_data_loader
 
             var fakeUserInResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserInResourceGroup}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInResourceGroup}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInResourceGroup}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.GroupInResourceGroup}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInResourceGroup}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInResourceGroup}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             int max = 50;
@@ -282,18 +282,18 @@ namespace fake_data_loader
 
             var fakeUserInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserInSubscription}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInSubscription}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInSubscription}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.UserGroupInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.GroupInSubscription}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.GroupId, f => f.PickRandom(groups).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.UserGroupInSubscription}")
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.GroupInSubscription}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             int max = 50;
