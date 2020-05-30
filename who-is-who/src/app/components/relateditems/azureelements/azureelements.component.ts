@@ -101,11 +101,14 @@ export class AzureElementsComponent implements OnInit {
             case 'Application':
               id = element.ApplicationId;
               break;
+            case 'User':
+              id = element.UserId;
+              break;
             default:
-              throw "not implemented yet! (" + caller.FilterElementType + "')";
+              throw "ElementType not managed yet! ('" + caller.FilterElementType + "')";
           }
 
-          var filters2 = "Type eq '" + caller.FilterElementType + "' and RowKey eq '" + id + "'";
+          var filters2 = "RowKey eq '" + id + "'";
 
           caller.SearchService.ResultsByFilters(filters2).subscribe( { 
             next(sr) {             

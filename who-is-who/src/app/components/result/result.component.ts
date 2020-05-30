@@ -28,6 +28,7 @@ export class ResultComponent implements OnInit {
 
   key: string;
   rowKey:string;
+  type:string;
   errorMessage: string;
   resourceType: string;
   iconSVG: SafeHtml;
@@ -40,6 +41,7 @@ export class ResultComponent implements OnInit {
   ImgUrl:string;
   userType:string;
   groupType:string;
+  typeIdColumn:string;
 
   public goDeeplink(url:string)
   {
@@ -63,6 +65,7 @@ export class ResultComponent implements OnInit {
               
               caller.iconSVG = sanit;
             });
+            caller.type = element.Type;
             caller.name = element.Name;
             caller.surname = element.Surname;
             caller.email = element.Mail;
@@ -73,6 +76,7 @@ export class ResultComponent implements OnInit {
             caller.ImgUrl = element.ImgUrl;
             caller.userType = element.UserType;
             caller.groupType = element.GroupType;
+            caller.typeIdColumn = element.Type + "Id"; 
         });    
       },
       error(msg) {
@@ -86,4 +90,8 @@ export class ResultComponent implements OnInit {
   {
     return item != null;
   }
+
+
+
+  
 }

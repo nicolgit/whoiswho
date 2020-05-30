@@ -34,8 +34,19 @@
         </mat-card-actions>
     </mat-card>
 
+    <related-azure-elements #users_in_subscrption
+        [ParentKey]="typeIdColumn"
+        [ParentValue]="rowKey"
+
+        Name="Related Users and Groups" 
+        
+        FilterCorelationType="Type eq 'UserGroupInSubscription'" 
+        FilterElementType="User"
+        FilterElementTypeId="UserId" 
+        ></related-azure-elements>
+
     <related-azure-elements #groups 
-        ParentKey="UserId"
+        [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Groups" 
@@ -46,7 +57,7 @@
         ></related-azure-elements>
         
     <related-azure-elements #Application 
-        ParentKey="UserId"
+        [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Applications" 
@@ -57,10 +68,10 @@
         ></related-azure-elements>
     
         <related-azure-elements #subscriptions 
-        ParentKey="UserId"
+        [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Subscriptions" 
+        Name="Related Azure Subscriptions" 
         
         FilterCorelationType="Type eq 'UserGroupInSubscription'" 
         FilterElementType="Subscription"
@@ -68,7 +79,7 @@
         ></related-azure-elements>
     
     <related-azure-elements #resourcegroup
-        ParentKey="UserId"
+        [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Resource Groups" 
@@ -79,7 +90,7 @@
         ></related-azure-elements>
 
     <related-azure-elements #resource
-        ParentKey="UserId"
+        [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
         Name="Related Azure Resource" 

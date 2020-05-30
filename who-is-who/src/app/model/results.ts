@@ -21,6 +21,7 @@ export interface Value {
     ResourceGroupId?: string;
     ResourceId?: string;
     SubscriptionId?: string;
+    UserId:string;
     GroupId?: string;
     ApplicationId?: string;
     ImgUrl?: string;
