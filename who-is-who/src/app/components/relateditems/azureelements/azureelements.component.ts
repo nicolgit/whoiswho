@@ -83,6 +83,12 @@ export class AzureElementsComponent implements OnInit {
     win.focus();
   }
 
+  public go(url:string)
+  {
+    this.router.navigateByUrl('/result/' + encodeURI(url) );
+    this.RefreshUI();
+  }
+
   public RefreshUI()
   {
     var caller = this;
@@ -132,6 +138,9 @@ export class AzureElementsComponent implements OnInit {
             case 'User':
               id = element.UserId;
               break;
+            case 'Tag':
+              id = element.TagId;
+              break;
             default:
               throw "ElementType not managed yet! ('" + caller.FilterElementType + "')";
           }
@@ -141,8 +150,9 @@ export class AzureElementsComponent implements OnInit {
           caller.SearchService.ResultsByFilters(filters2).subscribe( { 
             next(sr) {             
               sr.value.forEach(element => {
-                s.row1 = element.Name
-                
+                s.row1 = element.Name;
+                s.key = element.Key;
+
                 caller.IconService.getSvg(element.Type).subscribe( data =>
                   {
                     data = data.replace("<svg ", "<svg style='width: 32; height: 32;' ")

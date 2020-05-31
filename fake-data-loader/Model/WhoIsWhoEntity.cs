@@ -24,7 +24,7 @@ namespace fake_data_loader.Model
         GroupInApplication,
         ResourceGroupInSubscription, // to be implemented
         ResourceInResourceGroup, // to be implemented
-        TagInResouce, 
+        TagInResource, 
         TagInResourceGroup, 
         TagInSubscription, 
         TagInApplication 

@@ -26,4 +26,5 @@ export interface Value {
     ApplicationId?: string;
     ImgUrl?: string;
     ResourceType?:string;
+    TagId?:string;
 }

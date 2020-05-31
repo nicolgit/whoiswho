@@ -14,6 +14,9 @@ namespace fake_data_loader
 {
     public class Loader
     {
+        int QUANTITY = 50;
+        int QUANTITY_USERS = 100;
+
         IConfiguration config;
         CloudTable wiwTable;
 
@@ -123,7 +126,7 @@ namespace fake_data_loader
                 .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInApplication}");
 
-            int max = 50;
+            int max = QUANTITY;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeApplication.Generate();
@@ -145,7 +148,7 @@ namespace fake_data_loader
                 int groupsInApplication = rand.Int(3,5);
                 for (int j=0; j<groupsInApplication; j++)
                 {
-                    var uig = fakeUserInApplication.Generate();
+                    var uig = fakeGroupInApplication.Generate();
                     uig.ApplicationId = wiw.RowKey;
 
                     uig = await InsertOrMergeEntityAsync( wiwTable, uig);
@@ -196,10 +199,10 @@ namespace fake_data_loader
 
             var fakeTagInResources = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.TagInResouce}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.TagInResource}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInResouce}");
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInResource}");
 
             var fakeResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
@@ -208,7 +211,7 @@ namespace fake_data_loader
                 .RuleFor(o => o.ResourceGroupId, f => f.PickRandom(resourceGroups).RowKey)
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.ResourceInResourceGroup}");
 
-            int max = 50;
+            int max = QUANTITY;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeResource.Generate();
@@ -241,7 +244,7 @@ namespace fake_data_loader
                 for (int j=0; j<tagsInResource; j++)
                 {
                     var tig = fakeTagInResources.Generate();
-                    tig.ApplicationId = wiw.RowKey;
+                    tig.ResourceId = wiw.RowKey;
 
                     tig = await InsertOrMergeEntityAsync( wiwTable, tig);
                     Console.WriteLine($"Tag In Resource {tig.ToString()}");
@@ -276,7 +279,7 @@ namespace fake_data_loader
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInResourceGroup}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
-            var fakeGroupInSubscription = new Faker<WhoIsWhoEntity>()
+            var fakeGroupInResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
                 .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.GroupInResourceGroup}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
@@ -296,9 +299,9 @@ namespace fake_data_loader
                 .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.ResourceGroupInSubscription}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.SubscriptionId, f => f.PickRandom(subscriptions).RowKey)
-                .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInResourceGroup}");
+                .RuleFor(o => o.Type, f => $"{Model.ItemType.ResourceGroupInSubscription}");
 
-            int max = 50;
+            int max = QUANTITY;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeResourceGroups.Generate();
@@ -320,7 +323,7 @@ namespace fake_data_loader
                 int groupsInResourceGroup = rand.Int(3,5);
                 for (int j=0; j<groupsInResourceGroup; j++)
                 {
-                    var frg = fakeResourceGroups.Generate();
+                    var frg = fakeGroupInResourceGroup.Generate();
                     frg.ResourceGroupId = wiw.RowKey;
 
                     frg = await InsertOrMergeEntityAsync( wiwTable, frg);
@@ -331,7 +334,7 @@ namespace fake_data_loader
                 for (int j=0; j<tagsInResourceGroup; j++)
                 {
                     var tig = fakeTagInResourceGroup.Generate();
-                    tig.ApplicationId = wiw.RowKey;
+                    tig.ResourceGroupId = wiw.RowKey;
 
                     tig = await InsertOrMergeEntityAsync( wiwTable, tig);
                     Console.WriteLine($"Tag In ResourceGroup {tig.ToString()}");
@@ -379,7 +382,7 @@ namespace fake_data_loader
                 .RuleFor(o => o.TagId, f => f.PickRandom(tags).RowKey)
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.TagInSubscription}");
 
-            int max = 50;
+            int max = QUANTITY;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeSubscriptions.Generate();
@@ -412,7 +415,7 @@ namespace fake_data_loader
                 for (int j=0; j<tagsInSunscription; j++)
                 {
                     var tig = fakeTagInSubscription.Generate();
-                    tig.ApplicationId = wiw.RowKey;
+                    tig.SubscriptionId = wiw.RowKey;
 
                     tig = await InsertOrMergeEntityAsync( wiwTable, tig);
                     Console.WriteLine($"Tag In Subscription {tig.ToString()}");
@@ -440,7 +443,7 @@ namespace fake_data_loader
                 .RuleFor(o=> o.ImgUrl, f=>f.Image.PicsumUrl());
 
                
-            int max = 150;
+            int max = QUANTITY_USERS;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeUsers.Generate();
@@ -463,7 +466,7 @@ namespace fake_data_loader
                 .RuleFor(o => o.Name, f => $"CLID:{rand.Replace("##-####-####")}")
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.Tag}");
             
-            int max = 50;
+            int max = QUANTITY;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeTags.Generate();
@@ -499,7 +502,7 @@ namespace fake_data_loader
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.UserInGroup}");
 
 
-            int max = 50;
+            int max = QUANTITY;
             for (int i=0; i<max; i++)
             {
                 var wiw = fakeGroups.Generate();
@@ -542,14 +545,37 @@ namespace fake_data_loader
 
             // Create a table client for interacting with the table service 
             CloudTable table = tableClient.GetTableReference(tableName);
-            if (await table.CreateIfNotExistsAsync())
+
+            await table.DeleteAsync();
+
+            bool created = false;
+
+            while (!created)
             {
-                Console.WriteLine("Created Table named: {0}", tableName);
+                try 
+                {
+                    if (await table.CreateIfNotExistsAsync())
+                    {
+                        Console.WriteLine("Created Table named: {0}", tableName);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table {0} already exists", tableName);
+                    }
+                    created = true;
+                }   
+                catch (Exception e)
+                {
+                    int retry = 2;
+
+                    Console.WriteLine ($"ERROR: {e.Message}");
+                    Console.WriteLine ($"retry in {retry} sec");
+
+                    await Task.Delay(1000*retry);
+                } 
             }
-            else
-            {
-                Console.WriteLine("Table {0} already exists", tableName);
-            }
+
+            
 
             Console.WriteLine();
             return table;
