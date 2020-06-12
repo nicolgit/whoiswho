@@ -77,7 +77,7 @@ export class AzureElementsComponent implements OnInit {
 
   searchResults: Result[];
 
-  public goDeeplink(url:string)
+  public goDeeplink(url:string) 
   {
     var win = window.open(url, '_blank');
     win.focus();
@@ -85,8 +85,12 @@ export class AzureElementsComponent implements OnInit {
 
   public go(url:string)
   {
-    this.router.navigateByUrl('/result/' + encodeURI(url) );
-    this.RefreshUI();
+    this.router.navigateByUrl('/result/' + encodeURI(url) ).then(() => {
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
+    }).then((e) => {
+      window.location.reload();
+    });
   }
 
   public RefreshUI()
@@ -157,7 +161,6 @@ export class AzureElementsComponent implements OnInit {
                   {
                     data = data.replace("<svg ", "<svg style='width: 32; height: 32;' ")
                     var sanit = caller.sanitizer.bypassSecurityTrustHtml(data);
-                    
                     s.iconSVG = sanit;
                   }
                 ); 
