@@ -358,5 +358,42 @@
         FilterElementType="Resource"
         FilterElementTypeId="ResourceId" 
         ></related-azure-elements>
-</div>
+
+    <!-- APPLICATION -->
+<related-azure-elements 
+    [ParentType]="resourceType"
+    [ParentKey]="typeIdColumn"
+    [ParentValue]="rowKey"
+
+    Name="Application's Users" 
+    
+    FilterCorelationType="Type eq 'UserInApplication'" 
+    FilterElementType="User"
+    FilterElementTypeId="UserId" 
+    ></related-azure-elements>
+
+<related-azure-elements 
+    [ParentType]="resourceType"
+    [ParentKey]="typeIdColumn"
+    [ParentValue]="rowKey"
+
+    Name="Application's Groups" 
+    
+    FilterCorelationType="Type eq 'GroupInApplication'" 
+    FilterElementType="Group"
+    FilterElementTypeId="GroupId" 
+    ></related-azure-elements>
+
+<related-azure-elements 
+    [ParentType]="resourceType"
+    [ParentKey]="typeIdColumn"
+    [ParentValue]="rowKey"
+
+    Name="Application's Tags" 
+    
+    FilterCorelationType="Type eq 'TagInApplication'" 
+    FilterElementType="Tag"
+    FilterElementTypeId="TagId" 
+    ></related-azure-elements>
+    </div>
 

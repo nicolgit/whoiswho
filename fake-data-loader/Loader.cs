@@ -131,7 +131,6 @@ namespace fake_data_loader
             {
                 var wiw = fakeApplication.Generate();
                 wiw = await InsertOrMergeEntityAsync( wiwTable, wiw);
-                resourceGroups.Add(wiw);
 
                 Console.WriteLine($"Application added successfully {wiw.ToString()}");
 

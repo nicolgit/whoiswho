@@ -119,7 +119,7 @@ export class AzureElementsComponent implements OnInit {
 
           s.key = element.Key
           s.row1 = "?";
-          s.row2 = element.Name;
+          s.row2 = "?";
 
           var id = "";
 
@@ -155,6 +155,12 @@ export class AzureElementsComponent implements OnInit {
             next(sr) {             
               sr.value.forEach(element => {
                 s.row1 = element.Name;
+                if (element.Surname != null)
+                {
+                  s.row1 += " " + element.Surname;
+                }
+                s.row2 = element.Mail;
+
                 s.key = element.Key;
 
                 caller.IconService.getSvg(element.Type).subscribe( data =>
