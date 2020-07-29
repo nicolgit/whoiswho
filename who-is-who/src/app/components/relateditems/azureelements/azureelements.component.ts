@@ -10,6 +10,7 @@ export class Result {
   
   row1: string;
   row2: string;
+  row3: string;
   
   key: string;
 }
@@ -119,7 +120,8 @@ export class AzureElementsComponent implements OnInit {
 
           s.key = element.Key
           s.row1 = "?";
-          s.row2 = "?";
+          s.row2 = element.Name;
+          s.row3 = "";
 
           var id = "";
 
@@ -159,8 +161,13 @@ export class AzureElementsComponent implements OnInit {
                 {
                   s.row1 += " " + element.Surname;
                 }
-                s.row2 = element.Mail;
 
+                if (element.Mail != null)
+                  s.row3  = element.Mail;
+
+                if (element.ResourceType != null)
+                  s.row3  = element.ResourceType;
+                  
                 s.key = element.Key;
 
                 caller.IconService.getSvg(element.Type).subscribe( data =>

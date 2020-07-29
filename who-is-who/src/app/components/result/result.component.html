@@ -23,8 +23,8 @@
         </mat-card-content>
 
         <mat-card-actions>
-        <button mat-button (click)="goDeeplink(deeplink);">SEE ON AZURE</button>
-        <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'User'">SEE ON SERVICE NOW</button>
+        <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">SEE ON AZURE</button>
+        <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'User'" style="background-color: lightgoldenrodyellow">SEE ON SERVICE NOW</button>
         </mat-card-actions>
     </mat-card>
 
@@ -58,7 +58,7 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Subscription's ResourceGroup" 
+        Name="Subscription's ResourceGroups" 
         
         FilterCorelationType="Type eq 'ResourceGroupInSubscription'" 
         FilterElementType="ResourceGroup"
@@ -255,7 +255,7 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Users" 
+        Name="Group's users" 
         
         FilterCorelationType="Type eq 'UserInGroup'" 
         FilterElementType="User"
@@ -267,7 +267,7 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure AD Applications" 
+        Name="Group's Azure AD Applications"
         
         FilterCorelationType="Type eq 'GroupInApplication'" 
         FilterElementType="Application"
@@ -279,7 +279,7 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure Subscriptions" 
+        Name="Group's Azure Subscriptions" 
         
         FilterCorelationType="Type eq 'GroupInSubscription'" 
         FilterElementType="Subscription"
@@ -291,7 +291,7 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure ResourceGroups" 
+        Name="Group's Azure ResourceGroups" 
         
         FilterCorelationType="Type eq 'GroupInResourceGroup'" 
         FilterElementType="ResourceGroup"
@@ -303,7 +303,7 @@
         [ParentKey]="typeIdColumn"
         [ParentValue]="rowKey"
 
-        Name="Related Azure Resource" 
+        Name="Group Azure Resource" 
         
         FilterCorelationType="Type eq 'GroupInResource'" 
         FilterElementType="Resource"

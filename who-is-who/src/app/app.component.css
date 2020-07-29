@@ -26,16 +26,14 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
   .icon {
     display: inline-block;
     height: 30px;
-    margin: 3px;
-    padding-right: 5px;
     text-align: center;
     vertical-align: middle;
-    width: 15%;
+    width: 32px;
   }
   
   .label {
     display: inline-block;
     line-height: 30px;
     margin: 0;
-    width: 85%;
+
   }

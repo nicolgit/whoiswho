@@ -99,7 +99,7 @@ namespace fake_data_loader
                 .StrictMode(false)
                 .RuleFor(o => o.PartitionKey, f => $"{Model.ItemType.Application}{f.UniqueIndex % 10}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.Name, f => $"res {f.Commerce.Product()} {Guid.NewGuid()}")
+                .RuleFor(o => o.Name, f => $"{f.Commerce.Product()} {Guid.NewGuid()}")
                 .RuleFor(o => o.Type, f => $"{Model.ItemType.Application}")
                 .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
 
@@ -139,6 +139,7 @@ namespace fake_data_loader
                 {
                     var uig = fakeUserInApplication.Generate();
                     uig.ApplicationId = wiw.RowKey;
+                    uig.Name = $"{users} ";
 
                     uig = await InsertOrMergeEntityAsync( wiwTable, uig);
                     Console.WriteLine($"User In Application {uig.ToString()}");
