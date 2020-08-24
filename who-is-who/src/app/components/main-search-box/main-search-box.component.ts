@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { AzureSearchService } from '../../services/azure-search.service'
 import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { AzureSearchService } from '../../services/azure-search.service'
 import { AzureIconService } from '../../services/azure-icons.service';
 
 export class Suggest {
@@ -17,13 +18,14 @@ export class Suggest {
   templateUrl: './main-search-box.component.html',
   styleUrls: ['./main-search-box.component.css']
 })
+
 export class MainSearchBoxComponent implements OnInit {
   constructor( 
     private SearchService:AzureSearchService,
     private IconService:AzureIconService,
     private router: Router,
+    private http: HttpClient,
     private sanitizer:DomSanitizer) { }
-
 
   ngOnInit(): void {
     var caller = this;
@@ -34,13 +36,15 @@ export class MainSearchBoxComponent implements OnInit {
       }
     });
   }
-
+ 
   indexSize:string;
   searchString: string;
   
   suggestions: Suggest[];
   selectedAutocomplete: Suggest;
-  
+
+  userName: string;
+
   doSuggestions()
   {
     var caller = this;

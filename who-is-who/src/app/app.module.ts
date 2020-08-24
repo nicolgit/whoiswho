@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 
@@ -14,11 +14,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
+import { MsalModule, MsalInterceptor, MsalService } from '@azure/msal-angular';
+
 import { MainSearchBoxComponent } from './components/main-search-box/main-search-box.component';
 import { ResultListComponent } from './components/result-list/result-list.component';
 import { ResultComponent } from './components/result/result.component';
 
 import { AzureElementsComponent } from './components/relatedItems/azureelements/azureelements.component';
+
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
   declarations: [
@@ -30,33 +34,56 @@ import { AzureElementsComponent } from './components/relatedItems/azureelements/
   ],
   imports: [
     BrowserModule,
-  RouterModule.forRoot([
-      { path: '', component:MainSearchBoxComponent },
-      { path: 'search', 
-        children: [
-          {
-            path: '',
-            component: ResultListComponent
-          },
-          {
-            path: ':search_for',
-            component: ResultListComponent
-          } 
-        ]
+    RouterModule.forRoot([
+        { path: '', component:MainSearchBoxComponent },
+        { path: 'search', 
+          children: [
+            {
+              path: '',
+              component: ResultListComponent
+            },
+            {
+              path: ':search_for',
+              component: ResultListComponent
+            } 
+          ]
+        },
+        { path: 'result',
+          children: [
+            {
+              path: '',
+              component: ResultComponent
+            },
+            {
+              path: ':key',
+              component: ResultComponent
+            } 
+          ]
+        }
+      ]),
+    MsalModule.forRoot({
+      auth: {
+        clientId: 'c45b71f2-8b57-43c0-8c8e-bcf7a00fa946', // This is your client ID
+        authority: 'https://login.microsoftonline.com/common/', // This is your tenant ID
+        redirectUri: 'http://localhost:4200/'// This is your redirect URI
       },
-      { path: 'result',
-        children: [
-          {
-            path: '',
-            component: ResultComponent
-          },
-          {
-            path: ':key',
-            component: ResultComponent
-          } 
-        ]
-      }
-     ]),
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
+      },
+    }, {
+      popUp: !isIE,
+      consentScopes: [
+        'user.read',
+        'openid',
+        'profile',
+      ],
+      unprotectedResources: [],
+      protectedResourceMap: [
+        ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+      ],
+      extraQueryParameters: {}
+    }),
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -67,7 +94,14 @@ import { AzureElementsComponent } from './components/relatedItems/azureelements/
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

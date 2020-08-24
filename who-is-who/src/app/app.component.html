@@ -24,7 +24,7 @@
       </div>
        <div>
          <a>
-            Premier Dev Azure Applications Manager
+            Premier Azure Apps Management
          </a>
        </div>
        <div fxFlex fxLayout fxLayoutAlign="flex-end"  fxHide.xs>
@@ -42,9 +42,9 @@
                   </a>
                 </li>
               <li>
-                  <a>
+                  <a [routerLink]="" (click)="logout()">
+                    <span class="label">{{userName}} - Logout</span>
                     <mat-icon class="icon">input</mat-icon>
-                    <span class="label">LogOut</span>
                    </a>
               </li>
           </ul>
