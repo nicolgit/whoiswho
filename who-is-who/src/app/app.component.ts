@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   private graphMeEndpoint = "https://graph.microsoft.com/v1.0/me";
 
-  title = 'who-is-who';
+  title = 'Azure Apps management portal';
   isIframe = false;
   loggedIn = false;
   userName = "";

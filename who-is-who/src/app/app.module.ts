@@ -29,7 +29,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     AppComponent,
     MainSearchBoxComponent,
     ResultListComponent,
-    ResultComponent,
+    ResultComponent, 
     AzureElementsComponent,
   ],
   imports: [
