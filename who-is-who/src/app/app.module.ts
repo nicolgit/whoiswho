@@ -20,8 +20,6 @@ import { MainSearchBoxComponent } from './components/main-search-box/main-search
 import { ResultListComponent } from './components/result-list/result-list.component';
 import { ResultComponent } from './components/result/result.component';
 
-import { AzureElementsComponent } from './components/relatedItems/azureelements/azureelements.component';
-
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
@@ -30,7 +28,6 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     MainSearchBoxComponent,
     ResultListComponent,
     ResultComponent, 
-    AzureElementsComponent,
   ],
   imports: [
     BrowserModule,
