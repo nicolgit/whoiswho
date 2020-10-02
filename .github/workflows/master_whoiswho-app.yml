@@ -30,6 +30,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'whoiswho-app'
-        slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_864a55be4a914bfc904739b6dc6e5053 }}
         package: ./who-is-who/dist/who-is-who
