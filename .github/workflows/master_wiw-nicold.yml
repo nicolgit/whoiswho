@@ -30,4 +30,4 @@ jobs:
         app-name: 'wiw-nicold'
         slot-name: 'production'  
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_642a7cc9ade2475687ea7adf024d9fe1 }}
-        package: ./who-is-who/dist/
+        package: ./who-is-who/dist/who-is-who
