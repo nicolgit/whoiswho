@@ -23,6 +23,11 @@ import { AzureElementsComponent} from './components/relateditems/azureelements/a
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
+function getRedirectUri()
+{
+  return window.location.origin + "/";
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +69,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
       auth: {
         clientId: 'c45b71f2-8b57-43c0-8c8e-bcf7a00fa946', // This is your client ID
         authority: 'https://login.microsoftonline.com/common/', // This is your tenant ID
-        redirectUri: 'http://localhost:4200/'// This is your redirect URI
+        redirectUri: getRedirectUri() // 'http://localhost:4200/'// This is your redirect URI
       },
       cache: {
         cacheLocation: 'localStorage',
@@ -102,5 +107,6 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+ }
 
