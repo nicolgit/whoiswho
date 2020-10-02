@@ -1,10 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - wiw-nicold
+name: Build and deploy Node.js app to Azure Web App - whoiswho-app
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   build-and-deploy:
@@ -23,11 +25,10 @@ jobs:
         npm install
         npm run build --if-present
       working-directory: ./who-is-who/
-
+      
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'wiw-nicold'
-        slot-name: 'production'  
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_642a7cc9ade2475687ea7adf024d9fe1 }}
+        app-name: 'whoiswho-app'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_864a55be4a914bfc904739b6dc6e5053 }}
         package: ./who-is-who/dist/who-is-who
