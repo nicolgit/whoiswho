@@ -37,11 +37,26 @@ namespace WhoIsWho.DataLoader.Core
             CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(storageConnectionString);
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
             CloudTable table = tableClient.GetTableReference(tableName);
-            var created = await table.CreateIfNotExistsAsync();
-            if (created)
-                logger.LogInformation($"Created table {tableName}");
-            else
-                logger.LogInformation($"Table {tableName} already exists");
+            await table.DeleteIfExistsAsync();
+            bool created = false;
+            while (!created)
+            {
+                try
+                {
+                    if (await table.CreateIfNotExistsAsync())
+                        Console.WriteLine("Created Table named: {0}", tableName);
+                    else
+                        Console.WriteLine("Table {0} already exists", tableName);
+                    created = true;
+                }
+                catch (Exception e)
+                {
+                    int retry = 2;
+                    Console.WriteLine($"ERROR: {e.Message}");
+                    Console.WriteLine($"retry in {retry} sec");
+                    await Task.Delay(1000 * retry);
+                }
+            }
             return table;
         }
 
@@ -50,7 +65,7 @@ namespace WhoIsWho.DataLoader.Core
             CloudStorageAccount storageAccount;
             try
             {
-                storageAccount =  CloudStorageAccount.Parse(storageConnectionString);
+                storageAccount = CloudStorageAccount.Parse(storageConnectionString);
             }
             catch (FormatException)
             {

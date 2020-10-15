@@ -1,19 +1,21 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using Newtonsoft.Json;
 using System;
 
 namespace WhoIsWho.DataLoader.Models
 {
     public class WhoIsWhoEntity : TableEntity
     {
-        public WhoIsWhoEntity(string type, string id)
+        public WhoIsWhoEntity()
+        {
+        }
+        public WhoIsWhoEntity(string partitionKey, string id)
         {
             RowKey = id;
-            PartitionKey = type.ToString();
-            Type = type;
-            TimeStamp = DateTime.Now;
+            PartitionKey = partitionKey.ToString();
+            Type = partitionKey;
         }
 
-        public DateTime TimeStamp { get; set; }
         public string DeepLink { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
@@ -30,5 +32,10 @@ namespace WhoIsWho.DataLoader.Models
         public string ParentRowKey { get; set; }
         public string ChildPartitionKey { get; set; }
         public string ChildRowKey { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.None);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Management.Authorization;
+using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.Subscription;
 using Microsoft.Azure.Management.Subscription.Models;
 using Microsoft.Azure.Services.AppAuthentication;
@@ -9,9 +10,12 @@ using Microsoft.Rest.Azure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WhoIsWho.DataLoader.Azure.Models;
 using WhoIsWho.DataLoader.Core;
 using WhoIsWho.DataLoader.Models;
+using SubscriptionClient = Microsoft.Azure.Management.Subscription.SubscriptionClient;
 
 namespace WhoIsWho.DataLoader.Azure.Loaders
 {
@@ -21,6 +25,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
         SubscriptionClient subscriptionClient;
         AuthorizationManagementClient authorizationManagementClient;
+        ResourceManagementClient resourceManagementClient;
 
         List<SubscriptionModel> currentSubscriptions = new List<SubscriptionModel>();
 
@@ -35,6 +40,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             ServiceClientCredentials serviceClientCreds = new TokenCredentials(aadToken);
             subscriptionClient = new SubscriptionClient(serviceClientCreds);
             authorizationManagementClient = new AuthorizationManagementClient(serviceClientCreds);
+            resourceManagementClient = new ResourceManagementClient(serviceClientCreds);
         }
 
         public override string LoaderIdentifier => nameof(ARMDataLoader);
@@ -44,35 +50,116 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             await InitializeClientsWithCredentialsAsync();
             await LoadSubscriptionsAsync();
             await LoadRoleAssignmentsAsync();
-
+            await LoadResourceGroups();
+            await LoadResourcesAsync();
         }
 
         private async Task LoadSubscriptionsAsync()
         {
             var subscriptions = GetIterator(await subscriptionClient.Subscriptions.ListAsync(), async x => await subscriptionClient.Subscriptions.ListNextAsync(x));
+
             await foreach (var currentSubscription in subscriptions)
             {
                 currentSubscriptions.Add(currentSubscription);
+
+                var subscription = new WhoIsWhoEntity(AzureItemType.Subscription.ToString(), currentSubscription.SubscriptionId)
+                {
+                    Name = currentSubscription.DisplayName,
+                };
+                await base.InsertOrMergeEntityAsync(subscription);
             }
+
         }
 
 
         private async Task LoadRoleAssignmentsAsync()
         {
+            var iter = GetIterator(await authorizationManagementClient.RoleDefinitions.ListAsync(string.Empty), async x => await authorizationManagementClient.RoleDefinitions.ListNextAsync(x));
+            var roles = await iter.ToListAsync();
+
             foreach (var currentSubscription in currentSubscriptions)
             {
+                authorizationManagementClient.SubscriptionId = currentSubscription.SubscriptionId;
                 var assignments = GetIterator(await authorizationManagementClient.RoleAssignments.ListAsync(), async x => await authorizationManagementClient.RoleAssignments.ListNextAsync(x));
                 await foreach (var currentAssignment in assignments)
                 {
-                    currentSubscriptions.Add(currentSubscription);
+                    var currentRoleDescription = roles.Find(x => x.Id == currentAssignment.RoleDefinitionId.Substring(currentAssignment.RoleDefinitionId.IndexOf("/providers/Microsoft.Authorization/roleDefinitions"))).RoleName;
+                    string assignmentType;
+                    string childPartitionKey;
+                    if (Regex.IsMatch(currentAssignment.Scope, @"\/subscriptions\/(?s)(.*)\/resourceGroups\/(?s)(.*)"))
+                    {
+                        assignmentType = AzureItemType.UserInResourceGroup.ToString();
+                        childPartitionKey = AzureItemType.ResourceGroup.ToString();
+                    }
+                    else if (Regex.IsMatch(currentAssignment.Scope, @"\/subscriptions\/(?s)(.*)"))
+                    {
+                        assignmentType = AzureItemType.UserInSubscription.ToString();
+                        childPartitionKey = AzureItemType.Subscription.ToString();
+                    }
+                    else
+                    {
+                        assignmentType = AzureItemType.UserInSubscription.ToString();//TO DO: Evaluate other kind of assignments (ex.user in resource)
+                        childPartitionKey = AzureItemType.Subscription.ToString();
+                    }
+
+                    var userInSubscription = new WhoIsWhoEntity(assignmentType, currentAssignment.Id.Substring(currentAssignment.Id.LastIndexOf("/") + 1))
+                    {
+                        Name = currentRoleDescription,
+                        ParentPartitionKey = AzureItemType.User.ToString(),
+                        ParentRowKey = currentAssignment.PrincipalId,
+                        ChildPartitionKey = childPartitionKey,
+                        ChildRowKey = currentSubscription.SubscriptionId
+                    };
+                    await base.InsertOrMergeEntityAsync(userInSubscription);
                 }
-
             }
-
-            var d = new WhoIsWhoEntity("Test", "1");
-            await base.InsertOrMergeEntityAsync(d);
         }
 
+        private async Task LoadResourceGroups()
+        {
+            foreach (var currentSubscription in currentSubscriptions)
+            {
+                resourceManagementClient.SubscriptionId = currentSubscription.SubscriptionId;
+                var resourceGroups = GetIterator(await resourceManagementClient.ResourceGroups.ListAsync(), async x => await resourceManagementClient.ResourceGroups.ListNextAsync(x));
+                await foreach (var currentResourceGroup in resourceGroups)
+                {
+                    var resourceGroup = new WhoIsWhoEntity(AzureItemType.ResourceGroup.ToString(), currentResourceGroup.Name)//TO DO: Define right RG Key (full not supported in azure table)
+                    {
+                        Name = currentResourceGroup.Name,
+                    };
+                    await base.InsertOrMergeEntityAsync(resourceGroup);
+
+                    var resourceGroupinSubscription = new WhoIsWhoEntity(AzureItemType.ResourceGroupInSubscription.ToString(), currentResourceGroup.Name + "_" + currentSubscription.SubscriptionId)//TODO: Evaluate the right RowKey
+                    {
+                        ParentPartitionKey = AzureItemType.ResourceGroup.ToString(),
+                        ParentRowKey = currentResourceGroup.Name,
+                        ChildPartitionKey = AzureItemType.Subscription.ToString(),
+                        ChildRowKey = currentSubscription.SubscriptionId
+                    };
+                    await base.InsertOrMergeEntityAsync(resourceGroupinSubscription);
+                }
+            }
+        }
+
+        private async Task LoadResourcesAsync()
+        {
+            foreach (var currentSubscription in currentSubscriptions)
+            {
+                resourceManagementClient.SubscriptionId = currentSubscription.SubscriptionId;
+                var resources = GetIterator(await resourceManagementClient.Resources.ListAsync(), async x => await resourceManagementClient.Resources.ListNextAsync(x));
+                await foreach (var currentResource in resources)
+                {
+                    var resource = new WhoIsWhoEntity(AzureItemType.Resource.ToString(), currentResource.Id.Substring(currentResource.Id.LastIndexOf("/") + 1))
+                    {
+                        Name = currentResource.Name,
+                        ResourceType = currentResource.Type
+                    };
+                    await base.InsertOrMergeEntityAsync(resource);
+
+                    //TODO: Add Resource in resourcegroup record
+                }
+            }
+        }
 
         async IAsyncEnumerable<T> GetIterator<T>(IPage<T> firstPage, Func<string, Task<IPage<T>>> getNextPage)
         {
