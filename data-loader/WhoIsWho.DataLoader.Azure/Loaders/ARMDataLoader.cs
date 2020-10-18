@@ -84,39 +84,48 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
                 await foreach (var currentAssignment in assignments)
                 {
                     var currentRoleDescription = roles.Find(x => x.Id == currentAssignment.RoleDefinitionId.Substring(currentAssignment.RoleDefinitionId.IndexOf("/providers/Microsoft.Authorization/roleDefinitions"))).RoleName;
-                    string assignmentType;
-                    string childPartitionKey;
-                    if (Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?s)(.*)\/providers\/(?s)(.*)"))
+                    string assignmentType = string.Empty;
+                    string childPartitionKey = string.Empty;
+                    string childRowKey = string.Empty;
+                    var resourceMatch = Regex.Match(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?<ResourceGroup>(?s)(.*))\/providers\/(?s)(.*)");
+                    if (resourceMatch.Success)
                     {
                         assignmentType = AzureItemType.UserInResource.ToString();
                         childPartitionKey = AzureItemType.Resource.ToString();
-                    }
-                    else if (Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?s)(.*)"))
-                    {
-                        assignmentType = AzureItemType.UserInResourceGroup.ToString();
-                        childPartitionKey = AzureItemType.ResourceGroup.ToString();
-                    }
-                    else if (Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)"))
-                    {
-                        assignmentType = AzureItemType.UserInSubscription.ToString();
-                        childPartitionKey = AzureItemType.Subscription.ToString();
+                        childRowKey = FormatResourceKey(currentSubscription.SubscriptionId, resourceMatch.Groups["ResourceGroup"].Value, currentAssignment.Scope.Substring(currentAssignment.Scope.LastIndexOf("/") + 1));
                     }
                     else
                     {
-                        //Fallback to user in subscription: evaluate other scopes
-                        assignmentType = AzureItemType.UserInSubscription.ToString();
-                        childPartitionKey = AzureItemType.Subscription.ToString();
+                        var resourceGroupMatch = Regex.Match(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?<ResourceGroup>(?s)(.*))");
+                        if (resourceGroupMatch.Success)
+                        {
+                            assignmentType = AzureItemType.UserInResourceGroup.ToString();
+                            childPartitionKey = AzureItemType.ResourceGroup.ToString();
+                            childRowKey = FormatResourceGroupKey(currentSubscription.SubscriptionId, resourceGroupMatch.Groups["ResourceGroup"].Value);
+                        }
+                        else if (Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)"))
+                        {
+                            assignmentType = AzureItemType.UserInSubscription.ToString();
+                            childPartitionKey = AzureItemType.Subscription.ToString();
+                            childRowKey = currentSubscription.SubscriptionId;
+                        }
+                        else
+                        {
+                            //TO DO: Evaluate other scopes (example user in management groups or gloabal)
+                        }
                     }
-
-                    var userInSubscription = new WhoIsWhoEntity(assignmentType, currentAssignment.Id.Substring(currentAssignment.Id.LastIndexOf("/") + 1))
+                    if (!string.IsNullOrWhiteSpace(assignmentType))
                     {
-                        Name = currentRoleDescription,
-                        ParentPartitionKey = AzureItemType.User.ToString(),
-                        ParentRowKey = currentAssignment.PrincipalId,
-                        ChildPartitionKey = childPartitionKey,
-                        ChildRowKey = currentSubscription.SubscriptionId
-                    };
-                    await base.InsertOrMergeEntityAsync(userInSubscription);
+                        var userInSubscription = new WhoIsWhoEntity(assignmentType, currentAssignment.Id.Substring(currentAssignment.Id.LastIndexOf("/") + 1))
+                        {
+                            Name = currentRoleDescription,
+                            ParentPartitionKey = AzureItemType.User.ToString(),
+                            ParentRowKey = currentAssignment.PrincipalId,
+                            ChildPartitionKey = childPartitionKey,
+                            ChildRowKey = childRowKey
+                        };
+                        await base.InsertOrMergeEntityAsync(userInSubscription);
+                    }
                 }
             }
         }
@@ -129,16 +138,16 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
                 var resourceGroups = GetIterator(await resourceManagementClient.ResourceGroups.ListAsync(), async x => await resourceManagementClient.ResourceGroups.ListNextAsync(x));
                 await foreach (var currentResourceGroup in resourceGroups)
                 {
-                    var resourceGroup = new WhoIsWhoEntity(AzureItemType.ResourceGroup.ToString(), FormatResourceGroupKey(currentSubscription.SubscriptionId, currentResourceGroup.Name))//TO DO: Verify if the RG Key (full not supported in azure table)
+                    var resourceGroup = new WhoIsWhoEntity(AzureItemType.ResourceGroup.ToString(), FormatResourceGroupKey(currentSubscription.SubscriptionId, currentResourceGroup.Name))
                     {
                         Name = currentResourceGroup.Name,
                     };
                     await base.InsertOrMergeEntityAsync(resourceGroup);
 
-                    var resourceGroupinSubscription = new WhoIsWhoEntity(AzureItemType.ResourceGroupInSubscription.ToString(), currentResourceGroup.Name + "_" + currentSubscription.SubscriptionId)//TODO: Evaluate the right RowKey
+                    var resourceGroupinSubscription = new WhoIsWhoEntity(AzureItemType.ResourceGroupInSubscription.ToString(), FormatResourceGroupKey(currentSubscription.SubscriptionId, currentResourceGroup.Name))
                     {
                         ParentPartitionKey = AzureItemType.ResourceGroup.ToString(),
-                        ParentRowKey = currentResourceGroup.Name,
+                        ParentRowKey = FormatResourceGroupKey(currentSubscription.SubscriptionId, currentResourceGroup.Name),
                         ChildPartitionKey = AzureItemType.Subscription.ToString(),
                         ChildRowKey = currentSubscription.SubscriptionId
                     };
@@ -155,21 +164,23 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
                 var resources = GetIterator(await resourceManagementClient.Resources.ListAsync(), async x => await resourceManagementClient.Resources.ListNextAsync(x));
                 await foreach (var currentResource in resources)
                 {
+                    var resourceIdComponents = Regex.Match(currentResource.Id.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?<ResourceGroup>(?s)(.*))\/providers\/(?s)(.*)");
+                    var resourceGroupName = resourceIdComponents.Groups["ResourceGroup"].Value;
+
                     var resourceId = currentResource.Id.Substring(currentResource.Id.LastIndexOf("/") + 1);
-                    var resource = new WhoIsWhoEntity(AzureItemType.Resource.ToString(), resourceId)
+                    var resourceKey = FormatResourceKey(currentSubscription.SubscriptionId, resourceGroupName, resourceId);
+                    var resource = new WhoIsWhoEntity(AzureItemType.Resource.ToString(), resourceKey)
                     {
                         Name = currentResource.Name,
                         ResourceType = currentResource.Type
                     };
                     await base.InsertOrMergeEntityAsync(resource);
 
-                    var regexMatch = Regex.Match(currentResource.Id.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?<ResourceGroup>(?s)(.*))\/providers\/(?s)(.*)");
-                    var resourceGroupName = regexMatch.Groups["ResourceGroup"].Value;
 
-                    var resourceInRG = new WhoIsWhoEntity(AzureItemType.ResourceInResourceGroup.ToString(), currentResource.Id.Substring(currentResource.Id.LastIndexOf("/") + 1))
+                    var resourceInRG = new WhoIsWhoEntity(AzureItemType.ResourceInResourceGroup.ToString(), resourceKey)
                     {
                         ParentPartitionKey = AzureItemType.Resource.ToString(),
-                        ParentRowKey = resourceId,
+                        ParentRowKey = resourceKey,
                         ChildPartitionKey = AzureItemType.ResourceGroup.ToString(),
                         ChildRowKey = FormatResourceGroupKey(currentSubscription.SubscriptionId, resourceGroupName)
                     };
@@ -197,6 +208,11 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
         string FormatResourceGroupKey(string subscription, string resourceGroup)
         {
             return $"{subscription}_{resourceGroup}";
+        }
+
+        string FormatResourceKey(string subscription, string resourceGroup, string resourceId)
+        {
+            return $"{subscription}_{resourceGroup}_{resourceId}";
         }
 
     }
