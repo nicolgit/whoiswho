@@ -86,19 +86,25 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
                     var currentRoleDescription = roles.Find(x => x.Id == currentAssignment.RoleDefinitionId.Substring(currentAssignment.RoleDefinitionId.IndexOf("/providers/Microsoft.Authorization/roleDefinitions"))).RoleName;
                     string assignmentType;
                     string childPartitionKey;
-                    if (Regex.IsMatch(currentAssignment.Scope, @"\/subscriptions\/(?s)(.*)\/resourceGroups\/(?s)(.*)"))
+                    if (Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?s)(.*)\/providers\/(?s)(.*)"))
+                    {
+                        assignmentType = AzureItemType.UserInResource.ToString();
+                        childPartitionKey = AzureItemType.Resource.ToString();
+                    }
+                    else if(Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)\/resourcegroups\/(?s)(.*)"))
                     {
                         assignmentType = AzureItemType.UserInResourceGroup.ToString();
                         childPartitionKey = AzureItemType.ResourceGroup.ToString();
                     }
-                    else if (Regex.IsMatch(currentAssignment.Scope, @"\/subscriptions\/(?s)(.*)"))
+                    else if (Regex.IsMatch(currentAssignment.Scope.ToLower(), @"\/subscriptions\/(?s)(.*)"))
                     {
                         assignmentType = AzureItemType.UserInSubscription.ToString();
                         childPartitionKey = AzureItemType.Subscription.ToString();
                     }
                     else
                     {
-                        assignmentType = AzureItemType.UserInSubscription.ToString();//TO DO: Evaluate other kind of assignments (ex.user in resource)
+                        //Fallback to user in subscription: evaluate other scopes
+                        assignmentType = AzureItemType.UserInSubscription.ToString();
                         childPartitionKey = AzureItemType.Subscription.ToString();
                     }
 
