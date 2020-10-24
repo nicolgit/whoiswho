@@ -18,12 +18,14 @@ namespace WhoIsWho.DataLoader.Models
 
         public string DeepLink { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+		public string Description { get; set; }
+		public string Type { get; set; }
         public string GroupType { get; set; }
         public string ResourceType { get; set; }
         public string Department { get; set; }
         public string Mail { get; set; }
         public string Surname { get; set; }
+        public string GivenName { get; set; }
         public string UserType { get; set; }
 
 
