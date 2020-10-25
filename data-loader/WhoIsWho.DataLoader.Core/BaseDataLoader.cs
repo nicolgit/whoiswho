@@ -55,8 +55,8 @@ namespace WhoIsWho.DataLoader.Core
 				catch (Exception e)
 				{
 					int retry = 2;
-					Console.WriteLine($"ERROR: {e.Message}");
-					Console.WriteLine($"retry in {retry} sec");
+					logger.LogError("ERROR: {errorMessage}", e.Message);
+					logger.LogInformation("Retry in {retry} sec", retry);
 					await Task.Delay(1000 * retry);
 				}
 			}
@@ -120,6 +120,12 @@ namespace WhoIsWho.DataLoader.Core
 
 
 			List<TableOperation> ops = entities.Select(e => TableOperation.InsertOrMerge(e)).ToList();
+			List<TableBatchResult> res = await ExecuteBatchOperations(ops);
+			return res.SelectMany(r => r.Select(rr => rr.Result as WhoIsWhoEntity));
+		}
+
+		private async Task<List<TableBatchResult>> ExecuteBatchOperations(List<TableOperation> ops)
+		{
 			List<TableBatchResult> res = new List<TableBatchResult>();
 			int off = 0;
 			while (off < ops.Count)
@@ -148,8 +154,8 @@ namespace WhoIsWho.DataLoader.Core
 
 				off += len;
 			}
-			return res.SelectMany(r => r.Select(rr => rr.Result as WhoIsWhoEntity));
-		}
 
+			return res;
+		}
 	}
 }
