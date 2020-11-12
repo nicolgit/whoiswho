@@ -276,3 +276,11 @@ __pycache__/
 
 # Azure Function Local Settings
 local.settings.json
+
+#Azurite stuff
+__azurite_db_*.json
+__blobstorage__/
+__queuestorage__/
+
+#vscode stuff
+.vscode/
