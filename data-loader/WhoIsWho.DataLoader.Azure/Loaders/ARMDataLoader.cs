@@ -29,7 +29,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
         List<SubscriptionModel> currentSubscriptions = new List<SubscriptionModel>();
 
-        public ARMDataLoader(IConfiguration configuration, ILogger<ARMDataLoader> logger) : base(configuration, logger)
+        public ARMDataLoader(IConfiguration configuration, ILogger<ARMDataLoader> logger) : base(configuration, logger, nameof(ARMDataLoader))
         {
             this.logger = logger;
         }
@@ -42,8 +42,6 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             authorizationManagementClient = new AuthorizationManagementClient(serviceClientCreds);
             resourceManagementClient = new ResourceManagementClient(serviceClientCreds);
         }
-
-        public override string LoaderIdentifier => nameof(ARMDataLoader);
 
         public override async Task LoadData()
         {

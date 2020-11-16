@@ -10,12 +10,11 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
     {
         private readonly ILogger logger;
 
-        public AADDataLoader(IConfiguration configuration, ILogger<AADDataLoader> logger) : base(configuration, logger)
+        public AADDataLoader(IConfiguration configuration, ILogger<AADDataLoader> logger) : base(configuration, logger, nameof(AADDataLoader))
         {
             this.logger = logger;
         }
 
-        public override string LoaderIdentifier => nameof(AADDataLoader);
 
         public override async Task LoadData()
         {
