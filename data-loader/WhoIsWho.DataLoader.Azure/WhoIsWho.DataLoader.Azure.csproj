@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.9" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.22" />
     <PackageReference Include="System.Linq.Async" Version="4.1.1" />
+    <PackageReference Include="Bogus" Version="29.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WhoIsWho.DataLoader.Core\WhoIsWho.DataLoader.Core.csproj" />

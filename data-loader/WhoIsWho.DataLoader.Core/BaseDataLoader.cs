@@ -44,16 +44,16 @@ namespace WhoIsWho.DataLoader.Core
                 try
                 {
                     if (await table.CreateIfNotExistsAsync())
-                        Console.WriteLine("Created Table named: {0}", tableName);
+                        logger.LogInformation("Created Table named: {0}", tableName);
                     else
-                        Console.WriteLine("Table {0} already exists", tableName);
+                        logger.LogInformation("Table {0} already exists", tableName);
                     created = true;
                 }
                 catch (Exception e)
                 {
-                    int retry = 2;
-                    Console.WriteLine($"ERROR: {e.Message}");
-                    Console.WriteLine($"retry in {retry} sec");
+                    int retry = 4;
+                    logger.LogInformation($"ERROR: {e.Message}");
+                    logger.LogInformation($"retry in {retry} sec");
                     await Task.Delay(1000 * retry);
                 }
             }

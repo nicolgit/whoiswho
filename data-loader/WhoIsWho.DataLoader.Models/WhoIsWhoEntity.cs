@@ -25,7 +25,7 @@ namespace WhoIsWho.DataLoader.Models
         public string Mail { get; set; }
         public string Surname { get; set; }
         public string UserType { get; set; }
-
+        public string ImgUrl { get; set; }
 
         //Relation fields
         public string ParentPartitionKey { get; set; }

@@ -19,24 +19,13 @@ namespace WhoIsWho.DataLoader.Azure
         }
 
         [FunctionName("FakeLoader")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
-        {
-            int number = 0;
-            bool isParsable = Int32.TryParse(req.Query["number"], out number);
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
+        {           
+            log.LogInformation($"Execution started at: {DateTime.Now}");
+            await fakeLoader.LoadData();
+            log.LogInformation($"Execution ended at: {DateTime.Now}");
 
-            if (number > 0)
-            {
-                log.LogInformation($"Execution started at: {DateTime.Now}");
-                fakeLoader.Number= number;
-                await fakeLoader.LoadData();
-                log.LogInformation($"Execution ended at: {DateTime.Now}");
-
-                return new OkObjectResult($"{number} objects created successfully");
-            }
-            else
-            {
-                return new BadRequestObjectResult("Please pass a number on the query string to create fake items");
-            }
+            return new OkObjectResult($"fake objects created successfully");
         }
     }
 }
