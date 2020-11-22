@@ -47,6 +47,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             LoadResourceTypes();
             await LoadUsersAsync();
             await LoadTags();
+            await LoadGroups();
         }
 
         private void LoadRBACRoles()
@@ -109,7 +110,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             }
         }
 
-         private async Task LoadTags()
+        private async Task LoadTags()
         {
             var rand = new Bogus.Randomizer();
 
@@ -129,6 +130,53 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
                 tags.Add(wiw);
                 
                 logger.LogInformation($"Tag added successfully {wiw.ToString()}");
+            }
+        }
+
+        private async Task LoadGroups()
+        {
+            var groupType = new[] { "Mail Enabled", "Security" };
+
+            var rand = new Bogus.Randomizer();
+
+            var fakeGroups= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Group}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"Group {f.Commerce.ProductName()} {f.UniqueIndex}")
+                .RuleFor(o => o.Type, f => $"{AzureItemType.Group}")
+                .RuleFor(o => o.GroupType, f => f.PickRandom(groupType))
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath())
+                .RuleFor(o=> o.ImgUrl, f=>f.Image.PicsumUrl());
+
+            var fakeUserInGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.UserInGroup}");
+
+
+            int max = QUANTITY;
+            for (int i=0; i<max; i++)
+            {
+                var wiw = fakeGroups.Generate();
+                wiw = await InsertOrMergeEntityAsync(wiw);
+                groups.Add(wiw);
+
+                logger.LogInformation($"Group added successfully {wiw.ToString()}");
+
+                int usersInGroup = rand.Int(3,5);
+                for (int j=0; j<usersInGroup; j++)
+                {
+                    var uig = fakeUserInGroup.Generate();
+                    uig.ParentPartitionKey = wiw.PartitionKey;
+                    uig.ParentRowKey = wiw.RowKey;
+
+                    uig = await InsertOrMergeEntityAsync(uig);
+                    logger.LogInformation($"User In Group {uig.ToString()}");
+                }
             }
         }
     }

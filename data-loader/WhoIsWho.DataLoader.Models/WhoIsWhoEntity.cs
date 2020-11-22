@@ -33,10 +33,11 @@ namespace WhoIsWho.DataLoader.Models
         public string ChildPartitionKey { get; set; }
         public string ChildRowKey { get; set; }
 
-        public override string ToString()
+        public string ToString(bool verbose = false)
         {
-            return $"{PartitionKey}|{RowKey} - {Name}";
-            //return JsonConvert.SerializeObject(this, FormattingNone);
+            return verbose ?
+             JsonConvert.SerializeObject(this, Formatting.None) :
+             $"{PartitionKey}|{RowKey} - {Name} - {ParentPartitionKey}{ParentRowKey}|{ChildPartitionKey}{ChildRowKey}";
         }
     }
 }
