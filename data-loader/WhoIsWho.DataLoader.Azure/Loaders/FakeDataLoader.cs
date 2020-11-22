@@ -1,11 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Rest;
-using Microsoft.Rest.Azure;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WhoIsWho.DataLoader.Azure.Models;
 using WhoIsWho.DataLoader.Core;
@@ -16,8 +12,8 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 {
     public class FakeDataLoader : BaseDataLoader
     {
-        private const int QUANTITY = 5;
-        private const int QUANTITY_USERS = 10;
+        private const int QUANTITY = 2;
+        private const int QUANTITY_USERS = 4;
         
         private readonly ILogger logger;
 
@@ -49,6 +45,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             await LoadTags();
             await LoadGroups();
             await LoadSubscriptions();
+            await LoadResourceGroups();
         }
 
         private void LoadRBACRoles()
@@ -260,6 +257,102 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
                     tig = await InsertOrMergeEntityAsync(tig);
                     logger.LogInformation($"Tag In Subscription {tig.ToString()}");
                 }
+            }
+        }
+        private async Task LoadResourceGroups()
+        {
+            var rand = new Bogus.Randomizer();
+
+            var fakeResourceGroups= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"rg {f.Commerce.Color()} {f.UniqueIndex}")
+                .RuleFor(o => o.Type, f => $"{AzureItemType.ResourceGroup}")
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
+
+            var fakeUserInResourceGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.UserInResourceGroup}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeGroupInResourceGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(groups).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(groups).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.GroupInResourceGroup}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeTagInResourceGroup = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(tags).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(tags).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.TagInResourceGroup}");
+
+            var fakeResourceGroupInSubscription = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceGroupInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ParentPartitionKey, f => f.PickRandom(subscriptions).PartitionKey)
+                .RuleFor(o => o.ParentRowKey, f => f.PickRandom(subscriptions).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.ResourceGroupInSubscription}");
+
+            int max = QUANTITY;
+            for (int i=0; i<max; i++)
+            {
+                var wiw = fakeResourceGroups.Generate();
+                wiw = await InsertOrMergeEntityAsync(wiw);
+                resourceGroups.Add(wiw);
+
+                logger.LogInformation($"ResourceGroup added successfully {wiw.ToString()}");
+
+                int usersInResourceGroup = rand.Int(3,5);
+                for (int j=0; j<usersInResourceGroup; j++)
+                {
+                    var fui = fakeUserInResourceGroup.Generate();
+                    fui.ParentPartitionKey = wiw.PartitionKey;
+                    fui.ParentRowKey = wiw.ParentRowKey;
+
+                    fui = await InsertOrMergeEntityAsync(fui);
+                    logger.LogInformation($"User In ResourceGroup {fui.ToString()}");
+                }
+
+                int groupsInResourceGroup = rand.Int(3,5);
+                for (int j=0; j<groupsInResourceGroup; j++)
+                {
+                    var frg = fakeGroupInResourceGroup.Generate();
+                    frg.ParentPartitionKey = wiw.PartitionKey;
+                    frg.ParentRowKey = wiw.ParentRowKey;
+
+                    frg = await InsertOrMergeEntityAsync(frg);
+                    logger.LogInformation($"Group In ResourceGroup {frg.ToString()}");
+                }
+
+                int tagsInResourceGroup = rand.Int(3,5);
+                for (int j=0; j<tagsInResourceGroup; j++)
+                {
+                    var tig = fakeTagInResourceGroup.Generate();
+                    tig.ParentPartitionKey = wiw.PartitionKey;
+                    tig.ParentRowKey = wiw.ParentRowKey;
+
+                    tig = await InsertOrMergeEntityAsync(tig);
+                    logger.LogInformation($"Tag In ResourceGroup {tig.ToString()}");
+                }
+
+                var uig = fakeResourceGroupInSubscription.Generate();
+                uig.ChildPartitionKey = wiw.PartitionKey;
+                uig.ChildRowKey = wiw.ParentRowKey;
+
+                uig = await InsertOrMergeEntityAsync(uig);
+                logger.LogInformation($"subscription <-> resource group {uig.ToString()}");
             }
         }
     }
