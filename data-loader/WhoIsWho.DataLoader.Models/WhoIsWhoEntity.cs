@@ -35,7 +35,8 @@ namespace WhoIsWho.DataLoader.Models
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this, Formatting.None);
+            return $"{PartitionKey}|{RowKey} - {Name}";
+            //return JsonConvert.SerializeObject(this, FormattingNone);
         }
     }
 }

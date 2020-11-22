@@ -46,6 +46,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             LoadRBACRoles();
             LoadResourceTypes();
             await LoadUsersAsync();
+            await LoadTags();
         }
 
         private void LoadRBACRoles()
@@ -108,5 +109,27 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             }
         }
 
+         private async Task LoadTags()
+        {
+            var rand = new Bogus.Randomizer();
+
+            var fakeTags = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Tag}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"CLID:{rand.Replace("##-####-####")}")
+                .RuleFor(o => o.Type, f => $"{AzureItemType.Tag}");
+            
+            int max = QUANTITY;
+            for (int i=0; i<max; i++)
+            {
+                var wiw = fakeTags.Generate();
+
+                wiw = await InsertOrMergeEntityAsync(wiw);
+                tags.Add(wiw);
+                
+                logger.LogInformation($"Tag added successfully {wiw.ToString()}");
+            }
+        }
     }
 }

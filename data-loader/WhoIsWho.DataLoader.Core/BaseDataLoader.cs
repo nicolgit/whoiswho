@@ -52,8 +52,7 @@ namespace WhoIsWho.DataLoader.Core
                 catch (Exception e)
                 {
                     int retry = 4;
-                    logger.LogInformation($"ERROR: {e.Message}");
-                    logger.LogInformation($"retry in {retry} sec");
+                    logger.LogInformation($"CreateTableAsync ERROR: {e.Message} - retry in {retry} sec");
                     await Task.Delay(1000 * retry);
                 }
             }
