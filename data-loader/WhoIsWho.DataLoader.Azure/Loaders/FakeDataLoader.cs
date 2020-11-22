@@ -47,6 +47,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             await LoadSubscriptions();
             await LoadResourceGroups();
             await LoadAzureResources();
+            await LoadApplications();
         }
 
         private void LoadRBACRoles()
@@ -452,6 +453,87 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
                 rg = await InsertOrMergeEntityAsync(rg);
                 logger.LogInformation($"Tag In Resource {rg.ToString()}");
+            }
+        }
+
+        private async Task LoadApplications()
+        {
+            var rand = new Bogus.Randomizer();
+
+            var fakeApplication= new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Application}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.Name, f => $"{f.Commerce.Product()} {Guid.NewGuid()}")
+                .RuleFor(o => o.Type, f => $"{AzureItemType.Application}")
+                .RuleFor(o=> o.DeepLink, f=>f.Internet.UrlWithPath());
+
+            var fakeUserInApplication = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.UserInApplication}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+
+            var fakeGroupInApplication = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(groups).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(groups).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.GroupInApplication}")
+                .RuleFor(o => o.Name, f => f.PickRandom(roles));
+            
+            var fakeTagInApplication = new Faker<WhoIsWhoEntity>()
+                .StrictMode(false)
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
+                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(tags).PartitionKey)
+                .RuleFor(o => o.ChildRowKey, f => f.PickRandom(tags).RowKey)
+                .RuleFor(o => o.Type, f => $"{AzureItemType.TagInApplication}");
+
+            int max = QUANTITY;
+            for (int i=0; i<max; i++)
+            {
+                var wiw = fakeApplication.Generate();
+                wiw = await InsertOrMergeEntityAsync(wiw);
+
+                logger.LogInformation($"Application added successfully {wiw.ToString()}");
+
+                int usersInApplication = rand.Int(3,5);
+                for (int j=0; j<usersInApplication; j++)
+                {
+                    var uig = fakeUserInApplication.Generate();
+                    uig.ParentPartitionKey = wiw.PartitionKey;
+                    uig.ParentRowKey = wiw.RowKey;
+
+                    uig = await InsertOrMergeEntityAsync(uig);
+                    logger.LogInformation($"User In Application {uig.ToString()}");
+                }
+
+                int groupsInApplication = rand.Int(3,5);
+                for (int j=0; j<groupsInApplication; j++)
+                {
+                    var uig = fakeGroupInApplication.Generate();
+                    uig.ParentPartitionKey = wiw.PartitionKey;
+                    uig.ParentRowKey = wiw.RowKey;
+
+                    uig = await InsertOrMergeEntityAsync(uig);
+                    logger.LogInformation($"Group In Application {uig.ToString()}");
+                }
+
+                int tagsInApplication = rand.Int(3,5);
+                for (int j=0; j<tagsInApplication; j++)
+                {
+                    var tig = fakeTagInApplication.Generate();
+                    tig.ParentPartitionKey = wiw.PartitionKey;
+                    tig.ParentRowKey = wiw.RowKey;
+
+                    tig = await InsertOrMergeEntityAsync(tig);
+                    logger.LogInformation($"Group In Application {tig.ToString()}");
+                }
             }
         }
     }
