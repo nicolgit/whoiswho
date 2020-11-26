@@ -4,6 +4,9 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
+    "GraphClient:client_id": "",
+    "GraphClient:tenant_id": "",
+    "GraphClient:client_secret": "",
     "ARMLoaderCronTimer": "0 30 9 * * *",
     "AADLoaderCronTimer": "0 30 9 * * *",
     "FakeLoaderCronTimer": "0 30 9 * * *"
