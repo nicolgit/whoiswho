@@ -25,10 +25,8 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
         private List<WhoIsWhoEntity> resources = new List<WhoIsWhoEntity>();
         private List<string> roles;
         private List<string> resourceTypes;
-
-        public override string LoaderIdentifier => nameof(FakeDataLoader);
         
-        public FakeDataLoader(IConfiguration configuration, ILogger<ARMDataLoader> logger) : base(configuration, logger)
+        public FakeDataLoader(IConfiguration configuration, ILogger<ARMDataLoader> logger) : base(configuration, logger, nameof(FakeDataLoader))
         {
             this.logger = logger;
         }
