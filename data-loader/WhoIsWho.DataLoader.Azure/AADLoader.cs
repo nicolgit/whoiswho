@@ -16,7 +16,7 @@ namespace WhoIsWho.DataLoader.Azure
         }
 
         [FunctionName("AADLoader")]
-        public async Task Run([TimerTrigger("%AADLoaderCronTimer%", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("%AADLoaderCronTimer%")] TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Execution started at: {DateTime.UtcNow}");
 

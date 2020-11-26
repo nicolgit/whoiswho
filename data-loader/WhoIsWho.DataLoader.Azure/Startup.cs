@@ -17,7 +17,7 @@ namespace WhoIsWho.DataLoader.Azure
 			{
 				builder.Services.AddSingleton<AADDataLoader>();
 				builder.Services.AddSingleton<ARMDataLoader>();
-
+				builder.Services.AddSingleton<FakeDataLoader>();
 				var servProv = builder.Services.BuildServiceProvider();
 				IConfiguration config = servProv.GetRequiredService<IConfiguration>();
 

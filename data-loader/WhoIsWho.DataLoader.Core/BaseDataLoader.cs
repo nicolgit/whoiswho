@@ -10,58 +10,81 @@ using WhoIsWho.DataLoader.Models;
 
 namespace WhoIsWho.DataLoader.Core
 {
-	public abstract class BaseDataLoader : IBaseDataLoader
-	{
-		public const string TableSuffix = "Source";
-		public const string StorageConnectionKey = "StorageConnectionString";
+    public abstract class BaseDataLoader : TableStoragePersistance, IBaseDataLoader
+    {
+        public const string TableSourceSuffix = "Source";
+        public const string StorageConnectionKey = "StorageConnectionString";
 
 		private readonly IConfiguration configuration;
 		private readonly ILogger logger;
 		private CloudTable CurrentTable;
 
-		public BaseDataLoader(IConfiguration configuration, ILogger logger)
-		{
-			this.configuration = configuration;
-			this.logger = logger;
-		}
+        public BaseDataLoader(IConfiguration configuration, ILogger logger) : base(logger)
+        {
+            this.configuration = configuration;
+            this.logger = logger;
+        }
 
-		public abstract string LoaderIdentifier { get; }
-		public abstract Task LoadData();
+        public BaseDataLoader(IConfiguration configuration, ILogger logger, string LoaderIdentifier) : this(configuration, logger)
+        {
+            this.LoaderIdentifier = LoaderIdentifier;
+        }
 
-		public async Task EnsureTableExists()
-		{
-			if (CurrentTable == null)
-				CurrentTable = await CreateTableAsync(LoaderIdentifier + TableSuffix);
-		}
+        public BaseDataLoader(IConfiguration configuration, ILogger logger, string LoaderIdentifier, string TableSuffix, bool recreateStructure) : this(configuration, logger, LoaderIdentifier)
+        {
+            this.SuffixToUse = TableSuffix;
+            this.RecreateStructure = recreateStructure;
+        }
 
-		private async Task<CloudTable> CreateTableAsync(string tableName)
-		{
-			string storageConnectionString = configuration[StorageConnectionKey];
-			CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(storageConnectionString);
-			CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
-			CloudTable table = tableClient.GetTableReference(tableName);
-			await table.DeleteIfExistsAsync();
-			bool created = false;
-			while (!created)
-			{
-				try
-				{
-					if (await table.CreateIfNotExistsAsync())
-						Console.WriteLine("Created Table named: {0}", tableName);
-					else
-						Console.WriteLine("Table {0} already exists", tableName);
-					created = true;
-				}
-				catch (Exception e)
-				{
-					int retry = 2;
-					logger.LogError("ERROR: {errorMessage}", e.Message);
-					logger.LogInformation("Retry in {retry} sec", retry);
-					await Task.Delay(1000 * retry);
-				}
-			}
-			return table;
-		}
+        public string LoaderIdentifier { get; }
+
+        public string SuffixToUse { get; set; } = TableSourceSuffix;
+
+        public bool RecreateStructure { get; set; } = true;
+
+        public abstract Task LoadData();
+
+        public async Task EnsureTableExists()
+        {
+            if (CurrentTable == null)
+                CurrentTable = await CreateTableAsync(FormatTableName(LoaderIdentifier, SuffixToUse));
+        }
+
+        public static string FormatTableName(string tableIdentified, string suffixToUse)
+        {
+            return tableIdentified + suffixToUse;
+        }
+
+        private async Task<CloudTable> CreateTableAsync(string tableName)
+        {
+            string storageConnectionString = configuration[StorageConnectionKey];
+            CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(storageConnectionString);
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
+            CloudTable table = tableClient.GetTableReference(tableName);
+            if (RecreateStructure)
+            {
+                await table.DeleteIfExistsAsync();
+            }
+            bool created = false;
+            while (!created)
+            {
+                try
+                {
+                    if (await table.CreateIfNotExistsAsync())
+                        logger.LogInformation("Created Table named: {0}", tableName);
+                    else
+                        logger.LogInformation("Table {0} already exists", tableName);
+                    created = true;
+                }
+                catch (Exception e)
+                {
+                    int retry = 4;
+                    logger.LogInformation($"CreateTableAsync ERROR: {e.Message} - retry in {retry} sec");
+                    await Task.Delay(1000 * retry);
+                }
+            }
+            return table;
+        }
 
 		private CloudStorageAccount CreateStorageAccountFromConnectionString(string storageConnectionString)
 		{

@@ -24,7 +24,6 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             this.graphClient = graphclient;
         }
 
-        public override string LoaderIdentifier => nameof(AADDataLoader);
 
         public override async Task LoadData()
         {
