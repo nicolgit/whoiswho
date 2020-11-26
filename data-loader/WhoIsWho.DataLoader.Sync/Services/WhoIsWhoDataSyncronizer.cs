@@ -28,6 +28,7 @@ namespace WhoIsWho.DataLoader.Sync.Services
 
         public override async Task LoadData()
         {
+            await this.EnsureTableExistsAsync();
             var alreadyExistentID = await _reader.ReadDataAsync(BaseDataLoader.FormatTableName(_sourceTable, SyncSuffix), new TableQuery<TableEntity>().Select(new[] { "RowKey" })).Select(x => (x.PartitionKey, x.RowKey)).ToListAsync();
 
 

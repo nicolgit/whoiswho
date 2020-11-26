@@ -22,7 +22,7 @@ namespace WhoIsWho.DataLoader.Sync
         }
 
         [FunctionName("WhoIsWhoSync")]
-        public async Task Run([TimerTrigger("%WhoIsWhoSyncTimer%", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("%WhoIsWhoSyncTimer%")] TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Execution started at: {DateTime.Now}");
 

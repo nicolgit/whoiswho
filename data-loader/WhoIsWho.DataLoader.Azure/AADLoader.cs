@@ -18,11 +18,11 @@ namespace WhoIsWho.DataLoader.Azure
         [FunctionName("AADLoader")]
         public async Task Run([TimerTrigger("%AADLoaderCronTimer%")] TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"Execution started at: {DateTime.Now}");
+            log.LogInformation($"Execution started at: {DateTime.UtcNow}");
 
             await aadLoader.LoadData();
 
-            log.LogInformation($"Execution ended at: {DateTime.Now}");
+            log.LogInformation($"Execution ended at: {DateTime.UtcNow}");
         }
     }
 }
