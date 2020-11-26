@@ -25,7 +25,7 @@ namespace WhoIsWho.DataLoader.Models
         public string Mail { get; set; }
         public string Surname { get; set; }
         public string UserType { get; set; }
-
+        public string ImgUrl { get; set; }
 
         //Relation fields
         public string ParentPartitionKey { get; set; }
@@ -33,9 +33,11 @@ namespace WhoIsWho.DataLoader.Models
         public string ChildPartitionKey { get; set; }
         public string ChildRowKey { get; set; }
 
-        public override string ToString()
+        public string ToString(bool verbose = false)
         {
-            return JsonConvert.SerializeObject(this, Formatting.None);
+            return verbose ?
+             JsonConvert.SerializeObject(this, Formatting.None) :
+             $"{PartitionKey}|{RowKey} - {Name} - {ParentPartitionKey}{ParentRowKey}|{ChildPartitionKey}{ChildRowKey}";
         }
     }
 }
