@@ -22,8 +22,8 @@ namespace WhoIsWho.DataLoader.Azure.Models
         Application,
         UserInApplication,
         GroupInApplication,
-        ResourceGroupInSubscription, // to be implemented
-        ResourceInResourceGroup, // to be implemented
+        ResourceGroupInSubscription,
+        ResourceInResourceGroup, 
         TagInResource,
         TagInResourceGroup,
         TagInSubscription,
