@@ -15,8 +15,8 @@ namespace WhoIsWho.DataLoader.Azure
             this.armLoader = armLoader;
         }
 
-        //[FunctionName("ARMLoader")]
-        public async Task Run([TimerTrigger("0 */5 * * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+        [FunctionName("ARMLoader")]
+        public async Task Run([TimerTrigger("%ARMLoaderCronTimer%")] TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"Execution started at: {DateTime.Now}");
 

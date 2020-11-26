@@ -19,13 +19,13 @@ namespace WhoIsWho.DataLoader.Azure
         }
 
         [FunctionName("FakeLoader")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, ILogger log)
-        {           
+        public async Task Run([TimerTrigger("%FakeLoaderCronTimer%")] TimerInfo myTimer, ILogger log)
+        {
             log.LogInformation($"Execution started at: {DateTime.Now}");
-            await fakeLoader.LoadData();
-            log.LogInformation($"Execution ended at: {DateTime.Now}");
 
-            return new OkObjectResult($"fake objects created successfully");
+            await fakeLoader.LoadData();
+
+            log.LogInformation($"Execution ended at: {DateTime.Now}");
         }
     }
 }
