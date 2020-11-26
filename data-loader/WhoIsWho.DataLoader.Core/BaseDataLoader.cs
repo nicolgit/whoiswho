@@ -44,7 +44,7 @@ namespace WhoIsWho.DataLoader.Core
 
         public abstract Task LoadData();
 
-        public async Task EnsureTableExists()
+        public async Task EnsureTableExistsAsync()
         {
             if (CurrentTable == null)
                 CurrentTable = await CreateTableAsync(FormatTableName(LoaderIdentifier, SuffixToUse));
@@ -85,31 +85,10 @@ namespace WhoIsWho.DataLoader.Core
             }
             return table;
         }
-
-		private CloudStorageAccount CreateStorageAccountFromConnectionString(string storageConnectionString)
-		{
-			CloudStorageAccount storageAccount;
-			try
-			{
-				storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-			}
-			catch (FormatException)
-			{
-				logger.LogInformation("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid - then restart the application.");
-				throw;
-			}
-			catch (ArgumentException)
-			{
-				logger.LogInformation("Invalid storage account information provided. Please confirm the AccountName and AccountKey are valid - then restart the application.");
-				throw;
-			}
-
-			return storageAccount;
-		}
-
+		
 		public async Task<WhoIsWhoEntity> InsertOrMergeEntityAsync(WhoIsWhoEntity entity)
 		{
-			await EnsureTableExists();
+			await EnsureTableExistsAsync();
 			if (entity == null) throw new ArgumentNullException("entity");
 			try
 			{
@@ -139,15 +118,15 @@ namespace WhoIsWho.DataLoader.Core
 			if (!entities.All(e => e.PartitionKey == firstPk))
 				throw new InvalidOperationException("All the entities must belong to the same PartitionKey.");
 
-			await EnsureTableExists();
+			await EnsureTableExistsAsync();
 
 
 			List<TableOperation> ops = entities.Select(e => TableOperation.InsertOrMerge(e)).ToList();
-			List<TableBatchResult> res = await ExecuteBatchOperations(ops);
+			List<TableBatchResult> res = await ExecuteBatchOperationsAsync(ops);
 			return res.SelectMany(r => r.Select(rr => rr.Result as WhoIsWhoEntity));
 		}
 
-		private async Task<List<TableBatchResult>> ExecuteBatchOperations(List<TableOperation> ops)
+		private async Task<List<TableBatchResult>> ExecuteBatchOperationsAsync(List<TableOperation> ops)
 		{
 			List<TableBatchResult> res = new List<TableBatchResult>();
 			int off = 0;
@@ -179,6 +158,22 @@ namespace WhoIsWho.DataLoader.Core
 			}
 
 			return res;
+		}
+
+		public async Task PartialUpdateBatchAsync(IList<(string partitonKey, string rowKey)> itemIDs, Dictionary<string, EntityProperty> properties)
+		{
+			var batchs = itemIDs.Select(e =>
+			{
+				var entity = new DynamicTableEntity(e.partitonKey, e.rowKey);
+				entity.ETag = "*";
+				foreach (var item in properties)
+				{
+					entity.Properties.Add(item.Key, item.Value);
+				}
+				return TableOperation.Merge(entity);
+			}).ToList();
+
+			await ExecuteBatchOperationsAsync(batchs);
 		}
 	}
 }

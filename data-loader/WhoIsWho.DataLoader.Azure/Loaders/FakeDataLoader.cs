@@ -12,8 +12,8 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 {
     public class FakeDataLoader : BaseDataLoader
     {
-        private const int QUANTITY = 2;
-        private const int QUANTITY_USERS = 4;
+        private const int QUANTITY = 1;
+        private const int QUANTITY_USERS = 2;
         
         private readonly ILogger logger;
 
@@ -35,7 +35,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
         {
             Randomizer.Seed = new Random(1972);
 
-            await base.EnsureTableExists();
+            await base.EnsureTableExistsAsync();
 
             LoadRBACRoles();
             LoadResourceTypes();
