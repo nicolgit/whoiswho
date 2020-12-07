@@ -20,7 +20,7 @@ namespace WhoIsWho.DataLoader.Azure
         {
             log.LogInformation($"Execution started at: {DateTime.Now}");
 
-            await armLoader.LoadData();
+            await armLoader.ExecutLoadDataAsync();
 
             log.LogInformation($"Execution ended at: {DateTime.Now}");
         }

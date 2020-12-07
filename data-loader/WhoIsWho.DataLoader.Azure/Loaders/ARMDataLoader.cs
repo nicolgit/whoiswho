@@ -43,7 +43,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             resourceManagementClient = new ResourceManagementClient(serviceClientCreds);
         }
 
-        public override async Task LoadData()
+        public override async Task LoadDataAsync()
         {
             await InitializeClientsWithCredentialsAsync();
             await LoadSubscriptionsAsync();

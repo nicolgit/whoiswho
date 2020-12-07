@@ -31,7 +31,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
             this.logger = logger;
         }
         
-        public override async Task LoadData()
+        public override async Task LoadDataAsync()
         {
             Randomizer.Seed = new Random(1972);
 

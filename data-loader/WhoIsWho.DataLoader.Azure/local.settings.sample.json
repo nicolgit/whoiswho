@@ -9,6 +9,7 @@
     "GraphClient:client_secret": "",
     "ARMLoaderCronTimer": "0 30 9 * * *",
     "AADLoaderCronTimer": "0 30 9 * * *",
-    "FakeLoaderCronTimer": "0 30 9 * * *"
+    "FakeLoaderCronTimer": "0 30 9 * * *",
+    "DataLoaderSyncUrl": "http://localhost:7073/api/WhoIsWhoSync?loader={0}"
   }
 }
