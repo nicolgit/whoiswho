@@ -27,10 +27,10 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 		}
 
 
-		public override async Task LoadData()
-		{
-			var users = await GetUsers().ConfigureAwait(false);
-			var groups = await GetGroups().ConfigureAwait(false);
+        public override async Task LoadDataAsync()
+        {
+            var users = await GetUsers().ConfigureAwait(false);
+            var groups = await GetGroups().ConfigureAwait(false);
 
 			var usersInGroup = await GetUsersInGroup(users).ConfigureAwait(false);
 			var groupsInGroup = await GetGroupsInGroup(groups).ConfigureAwait(false);

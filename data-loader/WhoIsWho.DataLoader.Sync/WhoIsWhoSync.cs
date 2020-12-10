@@ -1,10 +1,10 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WhoIsWho.DataLoader.Core;
 using WhoIsWho.DataLoader.Sync.Services;
 
 namespace WhoIsWho.DataLoader.Sync
@@ -12,23 +12,38 @@ namespace WhoIsWho.DataLoader.Sync
     public class WhoIsWhoSync
     {
 
-        private readonly IEnumerable<WhoIsWhoDataSyncronizer> _dataSyncronizers;
-        private readonly IWhoIsWhoDataReader _dataReader;
+        private readonly IWhoIsWhoDataSyncronizer _dataSyncronizer;
 
-        public WhoIsWhoSync(IEnumerable<WhoIsWhoDataSyncronizer> syncronizers, IWhoIsWhoDataReader dataReader)
+        public WhoIsWhoSync(IWhoIsWhoDataSyncronizer syncronizer)
         {
-            this._dataSyncronizers = syncronizers;
-            this._dataReader = dataReader;
+            this._dataSyncronizer = syncronizer;
         }
 
         [FunctionName("WhoIsWhoSync")]
-        public async Task Run([TimerTrigger("%WhoIsWhoSyncTimer%")] TimerInfo myTimer, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, ILogger log)
         {
-            log.LogInformation($"Execution started at: {DateTime.Now}");
+            var loader = req.Query["loader"];
+            log.LogInformation($"Execution requested at: {DateTime.Now}");
 
-            await Task.WhenAll(_dataSyncronizers.Select(x => x.LoadData()));
+            //This task will not be monitored except that for logging information: consider to use Durable Function in order to implement the 202/Status pattern
+            var task = new TaskFactory().StartNew(async () =>
+                {
+                    try
+                    {
+                        await _dataSyncronizer.ExecuteDataSyncronizationAsync(loader);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError(ex, ex.Message);
+                    }
+                    
+                    log.LogInformation($"Execution ended at: {DateTime.Now}");
+                }
+            );
 
-            log.LogInformation($"Execution ended at: {DateTime.Now}");
+            log.LogInformation($"Syncronization accepted at: {DateTime.Now}");
+
+            return new AcceptedResult();
         }
     }
 }

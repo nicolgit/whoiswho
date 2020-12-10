@@ -21,16 +21,7 @@ namespace WhoIsWho.DataLoader.Sync
             if (builder != null)
             {
                 builder.Services.AddAutoMapper(typeof(WhoIsWhoEntityProfile));
-                var sourceTables = builder.GetContext().Configuration["SourceTableToSync"].Split(',');
-                foreach (var table in sourceTables)
-                {
-                    builder.Services.AddScoped(x => new WhoIsWhoDataSyncronizer(
-                    x.GetRequiredService<IConfiguration>(),
-                    x.GetRequiredService<ILogger<WhoIsWhoDataSyncronizer>>(),
-                    x.GetRequiredService<IWhoIsWhoDataReader>(),
-                    x.GetRequiredService<IMapper>(),
-                    table));
-                }
+                builder.Services.AddTransient<IWhoIsWhoDataSyncronizer, WhoIsWhoDataSyncronizer>();
                 builder.Services.AddScoped<IWhoIsWhoDataReader, WhoIsWhoDataReader>();
             }
         }

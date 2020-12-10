@@ -6,7 +6,7 @@ namespace WhoIsWho.DataLoader.Core
     public interface IBaseDataLoader
     {
         string LoaderIdentifier { get; }
-        Task LoadData();
+        Task LoadDataAsync();
         Task<WhoIsWhoEntity> InsertOrMergeEntityAsync(WhoIsWhoEntity entity);
     }
 }
