@@ -5,5 +5,10 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
     "APPINSIGHTS_INSTRUMENTATIONKEY": ""
-  }
+  },
+  "Host": {
+    "LocalHttpPort": 7073,
+    "CORS": "*",
+    "CORSCredentials": false
+  }​​
 }
