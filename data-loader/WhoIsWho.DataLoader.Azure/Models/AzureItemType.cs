@@ -27,6 +27,7 @@ namespace WhoIsWho.DataLoader.Azure.Models
         TagInResource,
         TagInResourceGroup,
         TagInSubscription,
-        TagInApplication
+        TagInApplication,
+        GroupInGroup
     };
 }
