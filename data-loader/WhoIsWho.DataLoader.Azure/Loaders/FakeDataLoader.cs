@@ -12,8 +12,8 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 {
     public class FakeDataLoader : BaseDataLoader
     {
-        private const int QUANTITY = 10;
-        private const int QUANTITY_USERS = 50;
+        private const int QUANTITY = 20;
+        private const int QUANTITY_USERS = 150;
         
         private readonly ILogger logger;
 
