@@ -1,0 +1,22 @@
+{
+    "@odata.context": "https://whoiswho-engine.search.windows.net/$metadata#datasources/$entity",
+    "@odata.etag": "\"0x8D8ACEA9732F763\"",
+    "name": "whoiswhodataconnection",
+    "description": null,
+    "type": "azuretable",
+    "subtype": null,
+    "credentials": {
+      "connectionString": "DefaultEndpointsProtocol=https;AccountName=whoiswhostaging;AccountKey=..."
+    },
+    "container": {
+      "name": "FakeDataLoaderSync",
+      "query": null
+    },
+    "dataChangeDetectionPolicy": null,
+    "dataDeletionDetectionPolicy": {
+      "@odata.type": "#Microsoft.Azure.Search.SoftDeleteColumnDeletionDetectionPolicy",
+      "softDeleteColumnName": "IsDeleted",
+      "softDeleteMarkerValue": "true"
+    },
+    "encryptionKey": null
+  }

@@ -1,18 +1,20 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",  
     "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "AzureWebJobs.ARMLoader.Disabled": "false",
+    "AzureWebJobs.FakeLoader.Disabled": "false",
+    "AzureWebJobs.AADLoader.Disabled": "false",
     "GraphClient:client_id": "",
     "GraphClient:tenant_id": "",
     "GraphClient:client_secret": "",
     "ARMLoaderCronTimer": "0 30 9 * * *",
     "AADLoaderCronTimer": "0 30 9 * * *",
     "FakeLoaderCronTimer": "0 30 9 * * *",
-    "DataLoaderSyncUrl": "http://localhost:7073/api/WhoIsWhoSync?loader={0}",
-    "AzureWebJobs.ARMLoader.Disabled": "true",
-    "AzureWebJobs.FakeLoader.Disabled": "false",
-    "AzureWebJobs.AADLoader.Disabled": "true"
+    "DataLoaderSyncUrl": "http://localhost:7073/api/WhoIsWhoSync?loader={0}"
   }
 }
