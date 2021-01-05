@@ -12,15 +12,16 @@ export class Result {
   row2: string;
   row3: string;
   
+  partition: string;
   key: string;
 }
 
 @Component({
-  selector: 'related-azure-elements',
-  templateUrl: './azureelements.component.html',
-  styleUrls: [ '../../../stylesCommon.css', './azureelements.component.css']
+  selector: 'related-generic-elements',
+  templateUrl: './genericelements.component.html',
+  styleUrls: [ '../../../stylesCommon.css', './genericelements.component.css']
 })
-export class AzureElementsComponent implements OnInit {
+export class GenericElementsComponent implements OnInit {
 
   constructor(private SearchService:AzureSearchService,
     private IconService:AzureIconService,
@@ -34,40 +35,28 @@ export class AzureElementsComponent implements OnInit {
   }
 
   @Input() Name: string;
-  @Input() FilterCorelationType: string;
-  @Input() FilterElementType:string;
-  @Input() FilterElementTypeId:string;
+  @Input() CorelationType: string;
+  @Input() KeyIs: string;
   
-  private _parentValue;
-  @Input() 
-  set ParentValue (pv:string) {    
-    this._parentValue = pv;
-    this.RefreshUI();
-  }
-  get ParentValue():string {
-    return this._parentValue;
-  }
-
-  private _parentType;
+  private _partitionKey;
   @Input()
-  set ParentType (pt:string) {
-    this._parentType = pt;
+  set PartitionKey (pt:string) {
+    this._partitionKey = pt;
     this.RefreshUI();
   }
-  get ParentType():string {
-    return this._parentType;
+  get PartitionKey():string {
+    return this._partitionKey;
   }
 
-  private _parentKey;
+  private _rowKey;
   @Input()
-  set ParentKey (pt:string) {
-    this._parentKey = pt;
+  set RowKey (pt:string) {
+    this._rowKey = pt;
     this.RefreshUI();
   }
-  get ParentKey():string {
-    return this._parentKey;
+  get RowKey():string {
+    return this._rowKey;
   }
-
 
   errorMessage: string;
   iconSVG: SafeHtml;
@@ -99,19 +88,21 @@ export class AzureElementsComponent implements OnInit {
     var caller = this;
     caller.searchResults = [];
 
-    if (this._parentKey == null || this._parentType == null || this._parentValue == null)
-      {
-        // parameters still not ready
-        return;
-      }
-    
-      if (this._parentType == this.FilterElementType)
-      {
-        // not applicable
-        return;
-      }
-    
-    var filters = caller.FilterCorelationType + " and " + caller.ParentKey + " eq '" + caller.ParentValue + "'";
+    if (this.CorelationType==null || caller.RowKey==null || caller.PartitionKey==null)
+      return;
+
+    var filters = "";
+    switch (caller.KeyIs)
+    {
+      case 'Child':
+          filters ="Type eq '" + caller.CorelationType + "' and ChildRowKey eq '" + caller.RowKey + "' and ChildPartitionKey eq '" + caller.PartitionKey + "'";
+        break;
+      case 'Parent':
+          filters ="Type eq '" + caller.CorelationType + "' and ParentRowKey eq '" + caller.RowKey + "' and ParentPartitionKey eq '" + caller.PartitionKey + "'";
+        break;
+      default:
+        throw "ERROR - CorelationType not valid('" + caller.CorelationType + "')";
+    }
 
     this.SearchService.ResultsByFilters(filters).subscribe( {
       next(sr) {
@@ -119,41 +110,23 @@ export class AzureElementsComponent implements OnInit {
           var s = new Result();
 
           s.key = element.Key
+          s.partition = element.PartitionKey
           s.row1 = "?";
           s.row2 = element.Name;
           s.row3 = "";
 
           var id = "";
-
-          /*
-          switch (caller.FilterElementType) {
-            case 'Subscription':
-              id = element.SubscriptionId;
+          
+          var filters2 = "";
+          switch (caller.KeyIs)
+          {
+            case 'Child':
+                filters2 ="RowKey eq '" + element.ParentRowKey + "' and PartitionKey eq '" + element.ParentPartitionKey + "'";
               break;
-            case 'ResourceGroup':
-              id = element.ResourceGroupId;
+            case 'Parent':
+                filters2 ="RowKey eq '" + element.ChildRowKey + "' and PartitionKey eq '" + element.ChildPartitionKey + "'";
               break;
-            case 'Resource':
-              id = element.ResourceId;
-              break;
-            case 'Group':
-              id = element.GroupId;
-              break;
-            case 'Application':
-              id = element.ApplicationId;
-              break;
-            case 'User':
-              id = element.UserId;
-              break;
-            case 'Tag':
-              id = element.TagId;
-              break;
-            default:
-              throw "ElementType not managed yet! ('" + caller.FilterElementType + "')";
           }
-          */
-         
-          var filters2 = "Type eq '" + caller.FilterElementType + "' and RowKey eq '" + id + "'";
 
           caller.SearchService.ResultsByFilters(filters2).subscribe( { 
             next(sr) {             
@@ -186,7 +159,8 @@ export class AzureElementsComponent implements OnInit {
               console.log('error ResultByKey: ', msg.message);
             }
           });
-
+        
+         
           caller.searchResults.push(s);
         });
       },

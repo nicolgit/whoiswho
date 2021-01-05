@@ -1,0 +1,25 @@
+<div *ngIf="hasData">
+    <h1 style="color:red;"><b>{{ errorMessage }}</b></h1>
+  
+    <mat-divider class="divider-class"></mat-divider>
+
+    <h1>{{ Name }}</h1>
+        <div fxLayoutAlign="start" fxLayout="row wrap" >
+            <mat-card *ngFor="let result of searchResults" class="azuresvc-card" style="margin-right: 12px; margin-bottom: 12px;">
+                <mat-card-header>
+                    <div  mat-card-avatar [innerHTML]="result.iconSVG"></div>
+                    <mat-card-title>{{ result.row1 }}</mat-card-title>
+                    <mat-card-subtitle>{{ result.row2 }}</mat-card-subtitle>
+                    <mat-card-subtitle>{{ result.row3 }}</mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button (click)="go(result.key);" style="background-color: lightseagreen;" >Drill into</button>
+                    <button mat-button (click)="goDeeplink('to be implemented');" style="background-color: azure;">SEE ON AZURE</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+</div>
+

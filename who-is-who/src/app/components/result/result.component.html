@@ -29,31 +29,26 @@
     </mat-card>
 
     <related-generic-elements 
-        Name="Azure AD Related Groups" 
+        Name="Users in Resource" 
 
-        [ChildPartitionKey]="partitionKey"
-        [ChildRowKey]="rowKey"
-        
-        CorelationType = "UserInGroup"
-        ></related-generic-elements>
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
 
-    <related-generic-elements 
-        Name="Azure Related Resources" 
-
-        [ChildPartitionKey]="partitionKey"
-        [ChildRowKey]="rowKey"
-        
         CorelationType = "UserInResource"
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="Azure AD Related Groups" 
+        Name="Resource managed by User" 
 
-        [ChildPartitionKey]="partitionKey"
-        [ChildRowKey]="rowKey"
-        
-        CorelationType = "UserInGroup"
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "UserInResource"
         ></related-generic-elements>
+
+
 
 
     <!-- SUBSCRIPTIONS -->
