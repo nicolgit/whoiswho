@@ -28,6 +28,34 @@
         </mat-card-actions>
     </mat-card>
 
+    <related-generic-elements 
+        Name="Azure AD Related Groups" 
+
+        [ChildPartitionKey]="partitionKey"
+        [ChildRowKey]="rowKey"
+        
+        CorelationType = "UserInGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="Azure Related Resources" 
+
+        [ChildPartitionKey]="partitionKey"
+        [ChildRowKey]="rowKey"
+        
+        CorelationType = "UserInResource"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="Azure AD Related Groups" 
+
+        [ChildPartitionKey]="partitionKey"
+        [ChildRowKey]="rowKey"
+        
+        CorelationType = "UserInGroup"
+        ></related-generic-elements>
+
+
     <!-- SUBSCRIPTIONS -->
     <related-azure-elements 
         [ParentType]="resourceType"
