@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Channel;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -16,12 +18,14 @@ namespace WhoIsWho.DataLoader.Sync.Services
         private readonly IWhoIsWhoDataReader _reader;
         private const string SyncSuffix = "Sync";
         private readonly IMapper _mapper;
+        private readonly TelemetryClient _telemetryClient;
 
-        public WhoIsWhoDataSyncronizer(IConfiguration configuration, ILogger<WhoIsWhoDataSyncronizer> logger, IWhoIsWhoDataReader reader, IMapper mapper) : base(configuration, logger, SyncSuffix, false)
+        public WhoIsWhoDataSyncronizer(IConfiguration configuration, ILogger<WhoIsWhoDataSyncronizer> logger, IWhoIsWhoDataReader reader, IMapper mapper, TelemetryClient telemetryClient) : base(configuration, logger, SyncSuffix, false)
         {
             _logger = logger;
             _reader = reader;
             _mapper = mapper;
+            _telemetryClient = telemetryClient;
         }
 
         public async Task ExecuteDataSyncronizationAsync(string loaderIdentifier)
@@ -32,25 +36,43 @@ namespace WhoIsWho.DataLoader.Sync.Services
 
         public override async Task LoadDataAsync()
         {
+            long countUpdated = 0;
+            long countAdded = 0;
             await this.EnsureTableExistsAsync();
             var alreadyExistentID = await _reader.ReadDataAsync(FormatTableName(LoaderIdentifier, SyncSuffix), new TableQuery<TableEntity>().Select(new[] { "RowKey" })).Select(x => (x.PartitionKey, x.RowKey)).ToListAsync();
 
-            _logger.LogDebug($"Read {alreadyExistentID.Count} existent items to sync for the loader {LoaderIdentifier}");
+            _logger.LogInformation($"Read {alreadyExistentID.Count} existent items to sync for the loader {LoaderIdentifier}");
 
             await foreach (var item in _reader.ReadDataAsync(FormatTableName(LoaderIdentifier, TableSourceSuffix), new TableQuery<WhoIsWhoEntity>()))
             {
-                alreadyExistentID.Remove((item.PartitionKey, item.RowKey));
+                var alreadyExistent = alreadyExistentID.Remove((item.PartitionKey, item.RowKey));
                 WhoIsWhoSyncedEntity currentEntity = _mapper.Map<WhoIsWhoSyncedEntity>(item);
-                await this.InsertOrMergeEntityAsync(currentEntity);
+                var entity = await this.InsertOrMergeEntityAsync(currentEntity);
+
+                if (alreadyExistent)
+                    countUpdated++;
+                else
+                    countAdded++;
+
+                _logger.LogDebug($"Item with PartitionKey:{item.PartitionKey} and RowKey:{item.RowKey} {(alreadyExistent ? "updated" : "added")} successfully");
             }
 
-            _logger.LogDebug($"Detected {alreadyExistentID.Count} items to be deleted for the loader {LoaderIdentifier}");
+            _telemetryClient.TrackMetric($"{LoaderIdentifier}Added", countAdded);
+            _telemetryClient.TrackMetric($"{LoaderIdentifier}Updated", countUpdated);
+
+            _logger.LogInformation($"Detected {alreadyExistentID.Count} items to be deleted for the loader {LoaderIdentifier}");
 
             var groupForPartition = alreadyExistentID.GroupBy(x => x.PartitionKey);
             foreach (var group in groupForPartition)
             {
                 await this.PartialUpdateBatchAsync(group.ToList(), new Dictionary<string, EntityProperty> { { nameof(WhoIsWhoSyncedEntity.IsDeleted), new EntityProperty(true) } });
+
+                foreach (var item in group)
+                {
+                    _logger.LogDebug($"Item with PartitionKey:{item.PartitionKey} and RowKey:{item.RowKey} deleted successfully");
+                }
             }
+            _telemetryClient.TrackMetric($"{LoaderIdentifier}Deleted", groupForPartition.Sum(x => x.Count()));
         }
     }
 }

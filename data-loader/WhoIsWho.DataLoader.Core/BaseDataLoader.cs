@@ -65,8 +65,13 @@ namespace WhoIsWho.DataLoader.Core
             try
             {
                 var urlToNotify = string.Format(Environment.GetEnvironmentVariable(DataLoaderSyncUrl), LoaderIdentifier);
+
+                logger.LogInformation($"Notifying data syncronization");
+
                 var res = await _httpClient.GetAsync(urlToNotify);
                 res.EnsureSuccessStatusCode();
+
+                logger.LogInformation($"Data syncronization request accepted");
             }
             catch (Exception ex)
             {

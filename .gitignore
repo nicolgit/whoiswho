@@ -3,3 +3,4 @@
 ################################################################################
 
 /data-loader/WhoIsWho.DataLoader.Azure/Properties/ServiceDependencies/func-whoiswho-we-001 - Zip Deploy/profile.arm.json
+/data-loader/WhoIsWho.DataLoader.Sync/Properties/ServiceDependencies/func-whoiswho-datasync-we-001 - Zip Deploy/profile.arm.json
