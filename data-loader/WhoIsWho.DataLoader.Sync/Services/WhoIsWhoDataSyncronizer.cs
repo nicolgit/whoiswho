@@ -39,11 +39,11 @@ namespace WhoIsWho.DataLoader.Sync.Services
             long countUpdated = 0;
             long countAdded = 0;
             await this.EnsureTableExistsAsync();
-            var alreadyExistentID = await _reader.ReadDataAsync(FormatTableName(LoaderIdentifier, SyncSuffix), new TableQuery<TableEntity>().Select(new[] { "RowKey" })).Select(x => (x.PartitionKey, x.RowKey)).ToListAsync();
+            var alreadyExistentID = await _reader.ReadDataAsync(LoaderIdentifier, FormatTableName(LoaderIdentifier, SyncSuffix), new TableQuery<TableEntity>().Select(new[] { "RowKey" })).Select(x => (x.PartitionKey, x.RowKey)).ToListAsync();
 
             _logger.LogInformation($"Read {alreadyExistentID.Count} existent items to sync for the loader {LoaderIdentifier}");
 
-            await foreach (var item in _reader.ReadDataAsync(FormatTableName(LoaderIdentifier, TableSourceSuffix), new TableQuery<WhoIsWhoEntity>()))
+            await foreach (var item in _reader.ReadDataAsync(LoaderIdentifier, FormatTableName(LoaderIdentifier, TableSourceSuffix), new TableQuery<WhoIsWhoEntity>()))
             {
                 var alreadyExistent = alreadyExistentID.Remove((item.PartitionKey, item.RowKey));
                 WhoIsWhoSyncedEntity currentEntity = _mapper.Map<WhoIsWhoSyncedEntity>(item);

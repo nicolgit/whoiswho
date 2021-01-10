@@ -1,22 +1,31 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WhoIsWho.DataLoader.Core
 {
     public class TableStoragePersistance
     {
-
+        public const string StorageDefaultConnectionKey = "StorageConnectionString";
         private readonly ILogger logger;
+        private readonly IConfiguration configuration;
 
-        public TableStoragePersistance(ILogger logger)
+        public TableStoragePersistance(IConfiguration configuration, ILogger logger)
         {
             this.logger = logger;
+            this.configuration = configuration;
         }
 
-        public CloudStorageAccount CreateStorageAccountFromConnectionString(string storageConnectionString)
+
+        public string GetConnectionString(string loaderIdentifier)
+        {
+            var loaderIdentifierConnectionString = configuration[$"{StorageDefaultConnectionKey}:{loaderIdentifier}"];
+            if (!string.IsNullOrWhiteSpace(loaderIdentifierConnectionString)) return loaderIdentifierConnectionString;
+            return configuration[StorageDefaultConnectionKey];
+        }
+
+        public CloudStorageAccount InitializeStorageAccountFromConnectionString(string storageConnectionString)
         {
             CloudStorageAccount storageAccount;
             try
