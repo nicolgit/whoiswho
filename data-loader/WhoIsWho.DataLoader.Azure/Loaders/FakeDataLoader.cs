@@ -64,7 +64,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
         private void LoadResourceTypes()
         {
-            var local = new[] { "AppService", "Virtual Machine", "SQL Azure", "Search Service", "BOT Service", "Cosmos DB","Data Lake"};
+            var local = new[] { "AppService", "Virtual Machine", "SQL Azure", "Search Service", "Azure Kubernetes Service", "BOT Service", "Cosmos DB","Data Lake"};
             
             resourceTypes = new List<string>();
 
@@ -84,7 +84,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeUsers= new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.User}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.User}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => f.Name.FirstName())
                 .RuleFor(o => o.Type, f => $"{AzureItemType.User}")
@@ -114,7 +114,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeTags = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Tag}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Tag}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => $"CLID:{rand.Replace("##-####-####")}")
                 .RuleFor(o => o.Type, f => $"{AzureItemType.Tag}");
@@ -139,7 +139,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeGroups= new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Group}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Group}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => $"Group {f.Commerce.ProductName()} {f.UniqueIndex}")
                 .RuleFor(o => o.Type, f => $"{AzureItemType.Group}")
@@ -149,9 +149,9 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeUserInGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInGroup}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.User}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.UserInGroup}");
 
@@ -184,7 +184,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeSubscriptions= new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Subscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Subscription}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => $"subscription {f.Commerce.ProductMaterial()} {f.UniqueIndex}")
                 .RuleFor(o => o.Type, f => $"{AzureItemType.Subscription}")
@@ -192,27 +192,27 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeUserInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInSubscription}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.User}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.UserInSubscription}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInSubscription}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(groups).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Group}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(groups).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.GroupInSubscription}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
              var fakeTagInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInSubscription}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(tags).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Tag}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(tags).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.TagInSubscription}");
 
@@ -265,7 +265,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeResourceGroups= new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceGroup}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => $"rg {f.Commerce.Color()} {f.UniqueIndex}")
                 .RuleFor(o => o.Type, f => $"{AzureItemType.ResourceGroup}")
@@ -273,35 +273,35 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeUserInResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInResourceGroup}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.User}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.UserInResourceGroup}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInResourceGroup}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(groups).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Group}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(groups).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.GroupInResourceGroup}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeTagInResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInResourceGroup}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(tags).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Tag}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(tags).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.TagInResourceGroup}");
 
             var fakeResourceGroupInSubscription = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceGroupInSubscription}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceGroupInSubscription}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ParentPartitionKey, f => f.PickRandom(subscriptions).PartitionKey)
+                .RuleFor(o => o.ParentPartitionKey, f => $"{AzureItemType.Subscription}")
                 .RuleFor(o => o.ParentRowKey, f => f.PickRandom(subscriptions).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.ResourceGroupInSubscription}");
 
@@ -362,7 +362,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeResource= new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Resource}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Resource}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => $"res {f.Commerce.ProductName()} {f.UniqueIndex}")
                 .RuleFor(o => o.Type, f => $"{AzureItemType.Resource}")
@@ -371,25 +371,25 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeUserInResource = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInResource}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInResource}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.User}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.UserInResource}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInResource = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInResource}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInResource}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(groups).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Group }")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(groups).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.GroupInResource}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeTagInResources = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInResource}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInResource}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(tags).PartitionKey)
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(tags).RowKey)
@@ -397,9 +397,9 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeResourceInResourceGroup = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceInResourceGroup}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.ResourceInResourceGroup}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ParentPartitionKey, f => f.PickRandom(resourceGroups).PartitionKey)
+                .RuleFor(o => o.ParentPartitionKey, f => $"{AzureItemType.ResourceGroup}")
                 .RuleFor(o => o.ParentRowKey, f => f.PickRandom(resourceGroups).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.ResourceInResourceGroup}");
 
@@ -460,7 +460,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeApplication= new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Application}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.Application}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
                 .RuleFor(o => o.Name, f => $"{f.Commerce.Product()} {Guid.NewGuid()}")
                 .RuleFor(o => o.Type, f => $"{AzureItemType.Application}")
@@ -468,27 +468,27 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 
             var fakeUserInApplication = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.UserInApplication}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(users).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.User}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(users).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.UserInApplication}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
 
             var fakeGroupInApplication = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.GroupInApplication}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(groups).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Group}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(groups).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.GroupInApplication}")
                 .RuleFor(o => o.Name, f => f.PickRandom(roles));
             
             var fakeTagInApplication = new Faker<WhoIsWhoEntity>()
                 .StrictMode(false)
-                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInApplication}{f.UniqueIndex % 10}")
+                .RuleFor(o => o.PartitionKey, f => $"{AzureItemType.TagInApplication}")
                 .RuleFor(o => o.RowKey, f => $"{f.UniqueIndex}")
-                .RuleFor(o => o.ChildPartitionKey, f => f.PickRandom(tags).PartitionKey)
+                .RuleFor(o => o.ChildPartitionKey, f => $"{AzureItemType.Tag}")
                 .RuleFor(o => o.ChildRowKey, f => f.PickRandom(tags).RowKey)
                 .RuleFor(o => o.Type, f => $"{AzureItemType.TagInApplication}");
 

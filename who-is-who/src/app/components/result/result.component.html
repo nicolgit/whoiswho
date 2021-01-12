@@ -29,7 +29,7 @@
     </mat-card>
 
     <related-generic-elements 
-        Name="Users in Resource" 
+        Name="Direct User Assignments (UserInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -39,7 +39,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="Resource managed by User" 
+        Name="User's managed Azure Resources (UserInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -48,7 +48,27 @@
         CorelationType = "UserInResource"
         ></related-generic-elements>
 
+    <related-generic-elements 
+        Name="Group's managed Azure Resources (GroupInResource)" 
 
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "GroupInResource"
+        ></related-generic-elements>
+
+        <related-generic-elements 
+        Name="Direct Group Assignments (GroupInResource)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "GroupInResource"
+        ></related-generic-elements>
+
+    
 
 
     <!-- SUBSCRIPTIONS -->
