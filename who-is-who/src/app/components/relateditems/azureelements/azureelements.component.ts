@@ -124,34 +124,6 @@ export class AzureElementsComponent implements OnInit {
           s.row3 = "";
 
           var id = "";
-
-          /*
-          switch (caller.FilterElementType) {
-            case 'Subscription':
-              id = element.SubscriptionId;
-              break;
-            case 'ResourceGroup':
-              id = element.ResourceGroupId;
-              break;
-            case 'Resource':
-              id = element.ResourceId;
-              break;
-            case 'Group':
-              id = element.GroupId;
-              break;
-            case 'Application':
-              id = element.ApplicationId;
-              break;
-            case 'User':
-              id = element.UserId;
-              break;
-            case 'Tag':
-              id = element.TagId;
-              break;
-            default:
-              throw "ElementType not managed yet! ('" + caller.FilterElementType + "')";
-          }
-          */
          
           var filters2 = "Type eq '" + caller.FilterElementType + "' and RowKey eq '" + id + "'";
 

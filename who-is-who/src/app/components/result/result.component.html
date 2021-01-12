@@ -39,7 +39,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="User's managed Azure Resources (UserInResource)" 
+        Name="This Resource is managed by the following users (UserInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -49,7 +49,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="Group's managed Azure Resources (GroupInResource)" 
+        Name="This Resource is managed by the following groups (GroupInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -58,8 +58,8 @@
         CorelationType = "GroupInResource"
         ></related-generic-elements>
 
-        <related-generic-elements 
-        Name="Direct Group Assignments (GroupInResource)" 
+    <related-generic-elements 
+        Name="This group manages the following Azure Resources (GroupInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -68,254 +68,260 @@
         CorelationType = "GroupInResource"
         ></related-generic-elements>
 
+    <related-generic-elements 
+        Name="This Subscription is managed by the following users (UserInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "UserInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This User manages the following Azure Subscriptions (UserInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "UserInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This Subscription is managed by the following groups (GroupInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "GroupInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This group manages the following Azure Subscriptions (GroupInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "GroupInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This Subscription contains the following resource groups (ResourceGroupInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "ResourceGroupInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This resource group belong to the following Azure Subscription (ResourceGroupInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "ResourceGroupInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This subscription have the following tags (TagInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "TagInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This tag is associated to the following Azure subscriptions (TagInSubscription)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "TagInSubscription"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This resource group is managed by the following users (UserInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "UserInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This user manages to the following Azure resource groups (UserInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "UserInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This resource group is managed by the following groups (GroupInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "GroupInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This group manages to the following Azure resource groups (GroupInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "GroupInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This resource group contains the following Azure resources (ResourceInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "ResourceInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This Azure resource is inside the following ResourceGroup (ResourceInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "ResourceInResourceGroup"
+        ></related-generic-elements>
+    
+    <related-generic-elements 
+        Name="This resource group is associated to the following tags (TagInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "TagInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This tag is associated to the following Azure resource groups (TagInResourceGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "TagInResourceGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This resourceis associated to the following tags (TagInResource)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "TagInResource"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This tag is associated to the following Azure resources (TagInResource)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "TagInResource"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This group contains the following users (UserInGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "UserInGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This user is inside the following groups (UserInGroup)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "UserInGroup"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This Azure Application is managed by the following users (UserInApplication)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "UserInApplication"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This user manages the following Azure AD applications (UserInApplication)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "UserInApplication"
+        ></related-generic-elements>
+    
+    <related-generic-elements 
+        Name="This Azure Application is managed by the following groups (GroupInApplication)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Parent"
+
+        CorelationType = "GroupInApplication"
+        ></related-generic-elements>
+
+    <related-generic-elements 
+        Name="This group manages the following Azure AD applications (GroupInApplication)" 
+
+        [PartitionKey]="partitionKey"
+        [RowKey]="rowKey"
+        KeyIs="Child"
+
+        CorelationType = "GroupInApplication"
+        ></related-generic-elements>
+        
+    
+    <!-- ************************************************************************************** -->    
+
+
+
+    
+    
+ 
+
     
 
-
-    <!-- SUBSCRIPTIONS -->
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Subscription's Users" 
-        
-        FilterCorelationType="Type eq 'UserInSubscription'" 
-        FilterElementType="User"
-        FilterElementTypeId="UserId" 
-        ></related-azure-elements>
     
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
 
-        Name="Subscription's Groups" 
-        
-        FilterCorelationType="Type eq 'GroupInSubscription'" 
-        FilterElementType="Group"
-        FilterElementTypeId="GroupId" 
-        ></related-azure-elements>
-
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Subscription's ResourceGroups" 
-        
-        FilterCorelationType="Type eq 'ResourceGroupInSubscription'" 
-        FilterElementType="ResourceGroup"
-        FilterElementTypeId="ResourceGroupId" 
-        ></related-azure-elements>
-
-        <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Subscription's Tags" 
-        
-        FilterCorelationType="Type eq 'TagInSubscription'" 
-        FilterElementType="Tag"
-        FilterElementTypeId="TagId" 
-        ></related-azure-elements>
     
-    <!-- ResourceGroup -->
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="ResourceGroup's Subscription" 
-        
-        FilterCorelationType="Type eq 'ResourceGroupInSubscription'" 
-        FilterElementType="Subscription"
-        FilterElementTypeId="SubscriptionId" 
-        ></related-azure-elements>
-
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="ResourceGroup's Users" 
-        
-        FilterCorelationType="Type eq 'UserInResourceGroup'" 
-        FilterElementType="User"
-        FilterElementTypeId="UserId" 
-        ></related-azure-elements>
-    
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="ResourceGroup's Groups" 
-        
-        FilterCorelationType="Type eq 'GroupInResourceGroup'" 
-        FilterElementType="Group"
-        FilterElementTypeId="GroupId" 
-        ></related-azure-elements>
-    
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="ResourceGroup's Resources" 
-        
-        FilterCorelationType="Type eq 'ResourceInResourceGroup'" 
-        FilterElementType="Resource"
-        FilterElementTypeId="ResourceId" 
-        ></related-azure-elements>
-
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="ResourceGroup's Tags" 
-        
-        FilterCorelationType="Type eq 'TagInResourceGroup'" 
-        FilterElementType="Tag"
-        FilterElementTypeId="TagId" 
-        ></related-azure-elements>
-    
-<!-- Resource -->
-<related-azure-elements 
-    [ParentType]="resourceType"
-    [ParentKey]="typeIdColumn"
-    [ParentValue]="rowKey"
-
-    Name="ResourceGroup's Resources" 
-    
-    FilterCorelationType="Type eq 'ResourceInResourceGroup'" 
-    FilterElementType="ResourceGroup"
-    FilterElementTypeId="ResourceGroupId" 
-    ></related-azure-elements>
-
-<related-azure-elements 
-    [ParentType]="resourceType"
-    [ParentKey]="typeIdColumn"
-    [ParentValue]="rowKey"
-
-    Name="Resource's Users" 
-    
-    FilterCorelationType="Type eq 'UserInResource'" 
-    FilterElementType="User"
-    FilterElementTypeId="UserId" 
-    ></related-azure-elements>
-
-<related-azure-elements 
-    [ParentType]="resourceType"
-    [ParentKey]="typeIdColumn"
-    [ParentValue]="rowKey"
-
-    Name="Resource's Groups" 
-    
-    FilterCorelationType="Type eq 'GroupInResource'" 
-    FilterElementType="Group"
-    FilterElementTypeId="GroupId" 
-    ></related-azure-elements>
-
-
-<related-azure-elements 
-    [ParentType]="resourceType"
-    [ParentKey]="typeIdColumn"
-    [ParentValue]="rowKey"
-
-    Name="Resource's Tags" 
-    
-    FilterCorelationType="Type eq 'TagInResource'" 
-    FilterElementType="Tag"
-    FilterElementTypeId="TagId" 
-    ></related-azure-elements>
-
-    <!-- USER -->
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Related Groups" 
-        
-        FilterCorelationType="Type eq 'UserInGroup'" 
-        FilterElementType="Group"
-        FilterElementTypeId="GroupId" 
-        ></related-azure-elements>
-
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Related Azure AD Applications" 
-        
-        FilterCorelationType="Type eq 'UserInApplication'" 
-        FilterElementType="Application"
-        FilterElementTypeId="ApplicationId" 
-        ></related-azure-elements>
-    
-        <related-azure-elements #subscriptions 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Related Azure Subscriptions" 
-        
-        FilterCorelationType="Type eq 'UserInSubscription'" 
-        FilterElementType="Subscription"
-        FilterElementTypeId="SubscriptionId" 
-        ></related-azure-elements>
-    
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Related Azure ResourceGroups" 
-        
-        FilterCorelationType="Type eq 'UserInResourceGroup'" 
-        FilterElementType="ResourceGroup"
-        FilterElementTypeId="ResourceGroupId" 
-        ></related-azure-elements>
-
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Related Azure Resource" 
-        
-        FilterCorelationType="Type eq 'UserInResource'" 
-        FilterElementType="Resource"
-        FilterElementTypeId="ResourceId" 
-        ></related-azure-elements>
-    
-    <!-- Group -->
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Group's users" 
-        
-        FilterCorelationType="Type eq 'UserInGroup'" 
-        FilterElementType="User"
-        FilterElementTypeId="UserId" 
-        ></related-azure-elements>
-
-    <related-azure-elements 
-        [ParentType]="resourceType"
-        [ParentKey]="typeIdColumn"
-        [ParentValue]="rowKey"
-
-        Name="Group's Azure AD Applications"
-        
-        FilterCorelationType="Type eq 'GroupInApplication'" 
-        FilterElementType="Application"
-        FilterElementTypeId="ApplicationId" 
-        ></related-azure-elements>
     
         <related-azure-elements 
         [ParentType]="resourceType"
