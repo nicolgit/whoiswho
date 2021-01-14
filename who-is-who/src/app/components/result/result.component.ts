@@ -91,9 +91,5 @@ export class ResultComponent implements OnInit {
   public hasValue (item:string)
   {
     return item != null;
-  }
-
-
-
-  
+  }  
 }

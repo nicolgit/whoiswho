@@ -19,7 +19,6 @@ import { MsalModule, MsalInterceptor, MsalService } from '@azure/msal-angular';
 import { MainSearchBoxComponent } from './components/main-search-box/main-search-box.component';
 import { ResultListComponent } from './components/result-list/result-list.component';
 import { ResultComponent } from './components/result/result.component';
-import { AzureElementsComponent} from './components/relateditems/azureelements/azureelements.component';
 import { GenericElementsComponent} from './components/relateditems/genericelements/genericelements.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -35,7 +34,6 @@ function getRedirectUri()
     MainSearchBoxComponent,
     ResultListComponent,
     ResultComponent, 
-    AzureElementsComponent,
     GenericElementsComponent
   ],
   imports: [

@@ -29,7 +29,7 @@
     </mat-card>
 
     <related-generic-elements 
-        Name="Direct User Assignments (UserInResource)" 
+        Name="This Active Directory User can manage the following Azure Resources (UserInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -39,7 +39,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Resource is managed by the following users (UserInResource)" 
+        Name="This Azure Resource is managed by the following Active Directory Users (UserInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -49,7 +49,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Resource is managed by the following groups (GroupInResource)" 
+        Name="This Azure Resource is managed by the following Azure Active Directory Groups (GroupInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -59,7 +59,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This group manages the following Azure Resources (GroupInResource)" 
+        Name="This Azure Active Director Group manages the following Azure Resources (GroupInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -69,7 +69,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Subscription is managed by the following users (UserInSubscription)" 
+        Name="This Azure Subscription is managed by the following Azure Active Directory Users (UserInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -79,7 +79,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This User manages the following Azure Subscriptions (UserInSubscription)" 
+        Name="This Azure Active Directory User manages the following Azure Subscriptions (UserInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -89,7 +89,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Subscription is managed by the following groups (GroupInSubscription)" 
+        Name="This Azure Subscription is managed by the following Azure Active Directory Groups (GroupInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -99,7 +99,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This group manages the following Azure Subscriptions (GroupInSubscription)" 
+        Name="This Azure Active Directory Group manages the following Azure Subscriptions (GroupInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -109,7 +109,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Subscription contains the following resource groups (ResourceGroupInSubscription)" 
+        Name="This Azure Subscription contains the following Azure Resource Groups (ResourceGroupInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -119,7 +119,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This resource group belong to the following Azure Subscription (ResourceGroupInSubscription)" 
+        Name="This Azure Resource Group belong to the following Azure Subscription (ResourceGroupInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -129,7 +129,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This subscription have the following tags (TagInSubscription)" 
+        Name="This Azure Subscription have the following Azure Tags (TagInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -139,7 +139,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This tag is associated to the following Azure subscriptions (TagInSubscription)" 
+        Name="This Azure Tag is associated to the following Azure subscriptions (TagInSubscription)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -149,7 +149,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This resource group is managed by the following users (UserInResourceGroup)" 
+        Name="This Azure Resource Group is managed by the following Azure Active Directory Users (UserInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -159,7 +159,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This user manages to the following Azure resource groups (UserInResourceGroup)" 
+        Name="This Azure Active Directory User manages to the following Azure Resource Groups (UserInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -169,7 +169,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This resource group is managed by the following groups (GroupInResourceGroup)" 
+        Name="This Azure Resource Group is managed by the following Azure Active Directory Groups (GroupInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -179,7 +179,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This group manages to the following Azure resource groups (GroupInResourceGroup)" 
+        Name="This Azure Active Directory Group manages to the following Azure Resource Groups (GroupInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -189,7 +189,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This resource group contains the following Azure resources (ResourceInResourceGroup)" 
+        Name="This Azure Resource Group contains the following Azure Resources (ResourceInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -199,7 +199,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Azure resource is inside the following ResourceGroup (ResourceInResourceGroup)" 
+        Name="This Azure Resource is inside the following Azure Resource Group (ResourceInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -209,7 +209,7 @@
         ></related-generic-elements>
     
     <related-generic-elements 
-        Name="This resource group is associated to the following tags (TagInResourceGroup)" 
+        Name="This Azure Resource Group is associated to the following Azure Tags (TagInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -219,7 +219,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This tag is associated to the following Azure resource groups (TagInResourceGroup)" 
+        Name="This Azure Tag is associated to the following Azure Resource Groups (TagInResourceGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -229,7 +229,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This resourceis associated to the following tags (TagInResource)" 
+        Name="This Azure Resource is associated to the following Azure Tags (TagInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -239,7 +239,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This tag is associated to the following Azure resources (TagInResource)" 
+        Name="This Azure Tag is associated to the following Azure Resources (TagInResource)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -249,7 +249,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This group contains the following users (UserInGroup)" 
+        Name="This Azure Active Directory Group contains the following Azure Active Directory Users (UserInGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -259,7 +259,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This user is inside the following groups (UserInGroup)" 
+        Name="This Azure Active Directory User is inside the following Azure Active Directory Groups (UserInGroup)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -269,7 +269,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Azure Application is managed by the following users (UserInApplication)" 
+        Name="This Azure Application is managed by the following Azure Active Directory Users (UserInApplication)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -279,7 +279,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This user manages the following Azure AD applications (UserInApplication)" 
+        Name="This Azure Active Directory User manages the following Azure Active Directory Applications (UserInApplication)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -289,7 +289,7 @@
         ></related-generic-elements>
     
     <related-generic-elements 
-        Name="This Azure Application is managed by the following groups (GroupInApplication)" 
+        Name="This Azure Application is managed by the following Azure Active Directory Groups (GroupInApplication)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -299,7 +299,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This group manages the following Azure AD applications (GroupInApplication)" 
+        Name="This Azure Active Directory Group manages the following Azure Active Directory Applications (GroupInApplication)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -309,7 +309,7 @@
         ></related-generic-elements>
     
     <related-generic-elements 
-        Name="This Azure AD Application has associated the following Azure tags (TagInApplication)" 
+        Name="This Azure Active Directory Application has associated the following Azure Tags (TagInApplication)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
@@ -319,7 +319,7 @@
         ></related-generic-elements>
 
     <related-generic-elements 
-        Name="This Azure tag is associated to the following Azure AD applications (TagInApplication)" 
+        Name="This Azure Tag is associated to the following Azure Active Directory Applications (TagInApplication)" 
 
         [PartitionKey]="partitionKey"
         [RowKey]="rowKey"
