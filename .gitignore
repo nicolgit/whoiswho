@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/data-loader/WhoIsWho.DataLoader.Azure/Properties/ServiceDependencies/func-whoiswho-we-001 - Zip Deploy/profile.arm.json
+/data-loader/WhoIsWho.DataLoader.Sync/Properties/ServiceDependencies/func-whoiswho-datasync-we-001 - Zip Deploy/profile.arm.json

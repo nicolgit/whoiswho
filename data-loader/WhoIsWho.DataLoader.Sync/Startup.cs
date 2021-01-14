@@ -23,6 +23,7 @@ namespace WhoIsWho.DataLoader.Sync
                 builder.Services.AddAutoMapper(typeof(WhoIsWhoEntityProfile));
                 builder.Services.AddTransient<IWhoIsWhoDataSyncronizer, WhoIsWhoDataSyncronizer>();
                 builder.Services.AddScoped<IWhoIsWhoDataReader, WhoIsWhoDataReader>();
+                builder.Services.AddApplicationInsightsTelemetry();
             }
         }
     }

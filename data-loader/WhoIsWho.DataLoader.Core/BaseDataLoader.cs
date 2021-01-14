@@ -14,7 +14,6 @@ namespace WhoIsWho.DataLoader.Core
     public abstract class BaseDataLoader : TableStoragePersistance, IBaseDataLoader
     {
         public const string TableSourceSuffix = "Source";
-        public const string StorageConnectionKey = "StorageConnectionString";
         private const string DataLoaderSyncUrl = "DataLoaderSyncUrl";
 
         private readonly IConfiguration configuration;
@@ -22,7 +21,7 @@ namespace WhoIsWho.DataLoader.Core
         private CloudTable CurrentTable;
         private HttpClient _httpClient = new HttpClient();
 
-        public BaseDataLoader(IConfiguration configuration, ILogger logger) : base(logger)
+        private BaseDataLoader(IConfiguration configuration, ILogger logger) : base(configuration, logger)
         {
             this.configuration = configuration;
             this.logger = logger;
@@ -65,8 +64,13 @@ namespace WhoIsWho.DataLoader.Core
             try
             {
                 var urlToNotify = string.Format(Environment.GetEnvironmentVariable(DataLoaderSyncUrl), LoaderIdentifier);
+
+                logger.LogInformation($"Notifying data syncronization");
+
                 var res = await _httpClient.GetAsync(urlToNotify);
                 res.EnsureSuccessStatusCode();
+
+                logger.LogInformation($"Data syncronization request accepted");
             }
             catch (Exception ex)
             {
@@ -82,8 +86,8 @@ namespace WhoIsWho.DataLoader.Core
 
         private async Task<CloudTable> CreateTableAsync(string tableName)
         {
-            string storageConnectionString = configuration[StorageConnectionKey];
-            CloudStorageAccount storageAccount = CreateStorageAccountFromConnectionString(storageConnectionString);
+            string storageConnectionString = base.GetConnectionString(LoaderIdentifier);
+            CloudStorageAccount storageAccount = InitializeStorageAccountFromConnectionString(storageConnectionString);
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
             CloudTable table = tableClient.GetTableReference(tableName);
             if (RecreateStructure)

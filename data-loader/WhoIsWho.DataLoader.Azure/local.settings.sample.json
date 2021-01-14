@@ -3,8 +3,9 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",  
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "StorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
+    "StorageConnectionString:ARMLoader": "DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net",
     "APPINSIGHTS_INSTRUMENTATIONKEY": "",
     "AzureWebJobs.ARMLoader.Disabled": "false",
     "AzureWebJobs.FakeLoader.Disabled": "false",
