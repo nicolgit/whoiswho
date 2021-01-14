@@ -25,8 +25,11 @@ export class ResultComponent implements OnInit {
     }
 
   key: string;
+  partitionKey:string;
   rowKey:string;
+
   type:string;
+  
   errorMessage: string;
   resourceType: string;
   iconSVG: SafeHtml;
@@ -70,6 +73,7 @@ export class ResultComponent implements OnInit {
             caller.department = element.Department;
             caller.lastupdate = element.Timestamp.toString();
             caller.deeplink = element.DeepLink;
+            caller.partitionKey = element.PartitionKey;
             caller.rowKey = element.RowKey;
             caller.ImgUrl = element.ImgUrl;
             caller.userType = element.UserType;
@@ -87,9 +91,5 @@ export class ResultComponent implements OnInit {
   public hasValue (item:string)
   {
     return item != null;
-  }
-
-
-
-  
+  }  
 }

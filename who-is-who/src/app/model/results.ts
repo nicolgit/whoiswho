@@ -18,13 +18,12 @@ export interface Value {
     Surname?: string;
     UserType?: string;
     DeepLink?: string;
-    ResourceGroupId?: string;
-    ResourceId?: string;
-    SubscriptionId?: string;
-    UserId:string;
-    GroupId?: string;
-    ApplicationId?: string;
     ImgUrl?: string;
     ResourceType?:string;
     TagId?:string;
+
+    ParentPartitionKey?:string;
+    ParentRowKey?:string;
+    ChildPartitionKey?:string;
+    ChildRowKey?:string;
 }
