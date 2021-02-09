@@ -401,11 +401,11 @@
                                     "appSettings": [
                                         {
                                             "name": "AzureWebJobsStorage",
-                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(variables('storageAccounts_whoiswho_name'),'2019-06-01').keys[0].value)]"
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
                                         },
                                         {
                                             "name": "StorageConnectionString",
-                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(variables('storageAccounts_whoiswho_name'),'2019-06-01').keys[0].value)]"
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
                                         },
                                         {
                                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -460,11 +460,11 @@
                                     "appSettings": [
                                         {
                                             "name": "AzureWebJobsStorage",
-                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(variables('storageAccounts_whoiswho_name'),'2019-06-01').keys[0].value)]"
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
                                         },
                                         {
                                             "name": "StorageConnectionString",
-                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(variables('storageAccounts_whoiswho_name'),'2019-06-01').keys[0].value)]"
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
                                         },
                                         {
                                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
