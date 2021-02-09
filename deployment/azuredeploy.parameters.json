@@ -10,6 +10,9 @@
         },
         "resourcesName": {
             "value": "who-is-who"
+        },
+        "storageAccountName":{
+            "value": "sawhoiswho"
         }
     }
 }

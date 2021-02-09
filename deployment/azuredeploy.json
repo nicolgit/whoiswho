@@ -13,13 +13,17 @@
         "resourcesName": {
             "defaultValue": "who-is-who",
             "type": "String"
+        },
+        "storageAccountName": {
+            "defaultValue": "sawhoiswho",
+            "type": "String"
         }
     },
     "variables": {
         "sites_whoiswho_app_name": "[concat('app-', parameters('resourcesName'))]",
         "searchServices_whoiswho_engine_name": "[concat('srch-', parameters('resourcesName'))]",
         "appinsight_whoiswho_name": "[concat('appi-', parameters('resourcesName'))]",
-        "storageAccounts_whoiswho_name": "[concat('st-', parameters('resourcesName'))]",
+        "storageAccounts_whoiswho_name": "[concat(parameters('storageAccountName'),uniqueString(subscription().subscriptionId))]",
         "serverfarms_whoiswho_name": "[concat('plan-', parameters('resourcesName'))]",
         "func_whoiswho_azuredataloader_name": "[concat('func-', parameters('resourcesName'),'-azureloader')]",
         "func_whoiswho_datasync_name": "[concat('func-', parameters('resourcesName'),'-datasync')]"
@@ -52,7 +56,7 @@
                             "type": "Microsoft.Storage/storageAccounts",
                             "apiVersion": "2020-08-01-preview",
                             "name": "[variables('storageAccounts_whoiswho_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "sku": {
                                 "name": "Standard_LRS",
                                 "tier": "Standard"
@@ -87,7 +91,7 @@
                             "type": "microsoft.insights/components",
                             "apiVersion": "2018-05-01-preview",
                             "name": "[variables('appinsight_whoiswho_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "kind": "web",
                             "properties": {
                                 "Application_Type": "web",
@@ -102,7 +106,7 @@
                             "type": "Microsoft.Search/searchServices",
                             "apiVersion": "2020-08-01",
                             "name": "[variables('searchServices_whoiswho_engine_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "sku": {
                                 "name": "free"
                             },
@@ -120,7 +124,7 @@
                             "type": "Microsoft.Web/serverfarms",
                             "apiVersion": "2018-02-01",
                             "name": "[variables('serverfarms_whoiswho_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "sku": {
                                 "name": "B1",
                                 "tier": "Basic",
@@ -210,7 +214,7 @@
                             "type": "Microsoft.Web/sites",
                             "apiVersion": "2018-11-01",
                             "name": "[variables('sites_whoiswho_app_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]"
                             ],
@@ -248,7 +252,7 @@
                             "type": "Microsoft.Web/sites/config",
                             "apiVersion": "2018-11-01",
                             "name": "[concat(variables('sites_whoiswho_app_name'), '/web')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/sites', variables('sites_whoiswho_app_name'))]"
                             ],
@@ -323,7 +327,7 @@
                             "type": "Microsoft.Web/sites/hostNameBindings",
                             "apiVersion": "2018-11-01",
                             "name": "[concat(variables('sites_whoiswho_app_name'), '/', variables('sites_whoiswho_app_name'), '.azurewebsites.net')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/sites', variables('sites_whoiswho_app_name'))]"
                             ],
@@ -368,7 +372,7 @@
                             "type": "Microsoft.Web/sites",
                             "apiVersion": "2018-11-01",
                             "name": "[variables('func_whoiswho_datasync_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
                                 "[resourceId('microsoft.insights/components', variables('appinsight_whoiswho_name'))]",
@@ -427,7 +431,7 @@
                             "type": "Microsoft.Web/sites",
                             "apiVersion": "2018-11-01",
                             "name": "[variables('func_whoiswho_azuredataloader_name')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
                                 "[resourceId('microsoft.insights/components', variables('appinsight_whoiswho_name'))]",
@@ -486,7 +490,7 @@
                             "type": "Microsoft.Web/sites/config",
                             "apiVersion": "2018-11-01",
                             "name": "[concat(variables('func_whoiswho_datasync_name'), '/web')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/sites', variables('func_whoiswho_datasync_name'))]"
                             ],
@@ -567,7 +571,7 @@
                             "type": "Microsoft.Web/sites/config",
                             "apiVersion": "2018-11-01",
                             "name": "[concat(variables('func_whoiswho_azuredataloader_name'), '/web')]",
-                            "location": "[resourceGroup().location]",
+                            "location": "[parameters('rgLocation')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Web/sites', variables('func_whoiswho_azuredataloader_name'))]"
                             ],
