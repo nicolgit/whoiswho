@@ -60,7 +60,7 @@ jobs:
       - name: Download WhoIsWho Frontend Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
-          workflow: Build WhoIsWho
+          workflow: build-who-is-who.yml
           name: WhoIsWho.SPA
           branch: master
           path: ./artifacts/whoiswhospa
@@ -75,7 +75,7 @@ jobs:
       - name: Download AzureDataLoader Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
-          workflow: Build WhoIsWho
+          workflow: build-who-is-who.yml
           name: WhoIsWho.DataLoader.Azure
           branch: master
           path: ./artifacts/azuredataloader
@@ -89,7 +89,7 @@ jobs:
       - name: Download WhoIsWhoDataSync Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
-          workflow: Build WhoIsWho
+          workflow: build-who-is-who.yml
           name: WhoIsWho.DataSync
           branch: master
           path: ./artifacts/datasync
