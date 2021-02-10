@@ -7,6 +7,22 @@ on:
         description: 'Azure Service Principal JSON'     
         required: true
         default: ''
+      rgName:
+        description: 'Resource Group Name'     
+        required: true
+        default: 'rg-whoiswho'
+      rgLocation:
+        description: 'Resource Location'     
+        required: true
+        default: 'westeurope'
+      resourcesName:
+        description: 'Resources Name Main Identifier'     
+        required: true
+        default: 'who-is-who'
+      storageAccountName:
+        description: 'Storage Account Name'     
+        required: true
+        default: 'sawhoiswho'
 
 jobs:
   deploy-whoiswho:
@@ -29,10 +45,10 @@ jobs:
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: |
-            rgName=rg-whoiswhogian 
-            rgLocation=westeurope
-            resourcesName=who-is-who
-            storageAccountName=sawhoiswho
+            rgName=${{ github.event.inputs.rgName }}
+            rgLocation=${{ github.event.inputs.rgLocation }}
+            resourcesName=${{ github.event.inputs.resourcesName }}
+            storageAccountName=${{ github.event.inputs.storageAccountName }}
         
       - run: echo ${{ steps.deployarm.outputs.containerName }}
    
