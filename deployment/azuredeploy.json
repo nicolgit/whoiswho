@@ -695,7 +695,20 @@
                             }
                         }
                     ],
-                    "outputs": {}
+                    "outputs": {
+                        "whoiswho_app_name": {
+                            "type": "string",
+                            "value": "[variables('sites_whoiswho_app_name')]"
+                        },
+                        "whoiswho_azuredataloader_name": {
+                            "type": "string",
+                            "value": "[variables('func_whoiswho_azuredataloader_name')]"
+                        },
+                        "whoiswho_datasync_name": {
+                            "type": "string",
+                            "value": "[variables('func_whoiswho_datasync_name')]"
+                        }
+                    }
                 }
             }
         }
