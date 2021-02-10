@@ -8,7 +8,7 @@ on:
         required: true
         default: ''
       subscriptionID:
-        description: 'Azure Subscription'     
+        description: 'Azure Subscription ID'     
         required: true
         default: ''
       rgName:
