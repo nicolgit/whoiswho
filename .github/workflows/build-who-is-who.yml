@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build WhoIsWho Frontend (JS/Angular):
+  Build-WhoIsWho-Frontend:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -28,7 +28,7 @@ jobs:
         if-no-files-found: error
         retention-days: 90
 
-  Build Azure Data Loader (.NET):
+  Build-AzureDataLoader:
     runs-on: ubuntu-latest
     steps:
      - uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
         if-no-files-found: error
         retention-days: 90 
 
-  Build WhoIsWho DataSync:
+  Build-WhoIsWho-DataSync:
     runs-on: ubuntu-latest
     steps:
      - uses: actions/checkout@v2
