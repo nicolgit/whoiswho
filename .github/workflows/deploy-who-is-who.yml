@@ -55,7 +55,7 @@ jobs:
             resourcesName=${{ github.event.inputs.resourcesName }}
             storageAccountName=${{ github.event.inputs.storageAccountName }}
         
-      - run: echo ${{ steps.deployarm.outputs.containerName }}
+      - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
    
       - name: Download WhoIsWho Frontend Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
@@ -70,7 +70,7 @@ jobs:
         with:
           app-name: ${{ steps.deployarm.outputs.whoiswho_app_name }}
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_864a55be4a914bfc904739b6dc6e5053 }}
-          package: ./who-is-who/dist/who-is-who
+          package: ./artifacts/whoiswhospa
 
       - name: Download AzureDataLoader Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
