@@ -19,15 +19,7 @@
             "type": "String"
         }
     },
-    "variables": {
-        "sites_whoiswho_app_name": "[concat('app-', parameters('resourcesName'))]",
-        "searchServices_whoiswho_engine_name": "[concat('srch-', parameters('resourcesName'))]",
-        "appinsight_whoiswho_name": "[concat('appi-', parameters('resourcesName'))]",
-        "storageAccounts_whoiswho_name": "[concat(parameters('storageAccountName'),uniqueString(subscription().subscriptionId))]",
-        "serverfarms_whoiswho_name": "[concat('plan-', parameters('resourcesName'))]",
-        "func_whoiswho_azuredataloader_name": "[concat('func-', parameters('resourcesName'),'-azureloader')]",
-        "func_whoiswho_datasync_name": "[concat('func-', parameters('resourcesName'),'-datasync')]"
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
@@ -38,19 +30,51 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2019-10-01",
             "name": "WhoIsWhoDeploy",
             "resourceGroup": "[parameters('rgName')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
             ],
             "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "inner"
+                },
                 "mode": "Incremental",
+                "parameters": {
+                    "rgLocation": {
+                        "value": "[parameters('rgLocation')]"
+                    },
+                    "resourcesName": {
+                        "value": "[parameters('resourcesName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[parameters('storageAccountName')]"
+                    }
+                },
                 "template": {
                     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {},
-                    "variables": {},
+                    "variables": {
+                        "sites_whoiswho_app_name": "[concat('app-', parameters('resourcesName'))]",
+                        "searchServices_whoiswho_engine_name": "[concat('srch-', parameters('resourcesName'))]",
+                        "appinsight_whoiswho_name": "[concat('appi-', parameters('resourcesName'))]",
+                        "storageAccounts_whoiswho_name": "[concat(parameters('storageAccountName'),uniqueString(subscription().subscriptionId))]",
+                        "serverfarms_whoiswho_name": "[concat('plan-', parameters('resourcesName'))]",
+                        "func_whoiswho_azuredataloader_name": "[concat('func-', parameters('resourcesName'),'-azureloader')]",
+                        "func_whoiswho_datasync_name": "[concat('func-', parameters('resourcesName'),'-datasync')]"
+                    },
+                    "parameters": {
+                        "rgLocation": {
+                            "type": "String"
+                        },
+                        "resourcesName": {
+                            "type": "String"
+                        },
+                        "storageAccountName": {
+                            "type": "String"
+                        }
+                    },
                     "resources": [
                         {
                             "type": "Microsoft.Storage/storageAccounts",
@@ -149,7 +173,7 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "sku": {
                                 "name": "Standard_LRS",
@@ -169,7 +193,7 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "sku": {
                                 "name": "Standard_LRS",
@@ -189,7 +213,7 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "properties": {
                                 "cors": {
@@ -202,7 +226,7 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "properties": {
                                 "cors": {
@@ -216,7 +240,7 @@
                             "name": "[variables('sites_whoiswho_app_name')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]"
                             ],
                             "kind": "app,linux",
                             "properties": {
@@ -233,7 +257,7 @@
                                         "hostType": "Repository"
                                     }
                                 ],
-                                "serverFarmId": "[resourceId(parameters('rgName'),'Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
                                 "reserved": true,
                                 "isXenon": false,
                                 "hyperV": false,
@@ -254,7 +278,7 @@
                             "name": "[concat(variables('sites_whoiswho_app_name'), '/web')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/sites', variables('sites_whoiswho_app_name'))]"
+                                "[resourceId('Microsoft.Web/sites', variables('sites_whoiswho_app_name'))]"
                             ],
                             "properties": {
                                 "numberOfWorkers": 1,
@@ -329,7 +353,7 @@
                             "name": "[concat(variables('sites_whoiswho_app_name'), '/', variables('sites_whoiswho_app_name'), '.azurewebsites.net')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/sites', variables('sites_whoiswho_app_name'))]"
+                                "[resourceId('Microsoft.Web/sites', variables('sites_whoiswho_app_name'))]"
                             ],
                             "properties": {
                                 "siteName": "whoiswho-app",
@@ -341,8 +365,8 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default/whoiswhocontaine')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_whoiswho_name'), 'default')]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "properties": {
                                 "defaultEncryptionScope": "$account-encryption-key",
@@ -355,8 +379,8 @@
                             "apiVersion": "2019-06-01",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default/FakeDataLoaderSource')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_whoiswho_name'), 'default')]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ]
                         },
                         {
@@ -364,8 +388,8 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default/FakeDataLoaderSync')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_whoiswho_name'), 'default')]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', variables('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ]
                         },
                         {
@@ -374,9 +398,9 @@
                             "name": "[variables('func_whoiswho_datasync_name')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
-                                "[resourceId(parameters('rgName'),'microsoft.insights/components', variables('appinsight_whoiswho_name'))]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
+                                "[resourceId('microsoft.insights/components', variables('appinsight_whoiswho_name'))]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "kind": "functionapp,linux",
                             "properties": {
@@ -393,7 +417,7 @@
                                         "hostType": "Repository"
                                     }
                                 ],
-                                "serverFarmId": "[resourceId(parameters('rgName'),'Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
                                 "reserved": false,
                                 "isXenon": false,
                                 "hyperV": false,
@@ -433,9 +457,9 @@
                             "name": "[variables('func_whoiswho_azuredataloader_name')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
-                                "[resourceId(parameters('rgName'),'microsoft.insights/components', variables('appinsight_whoiswho_name'))]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
+                                "[resourceId('microsoft.insights/components', variables('appinsight_whoiswho_name'))]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "kind": "functionapp,linux",
                             "properties": {
@@ -452,7 +476,7 @@
                                         "hostType": "Repository"
                                     }
                                 ],
-                                "serverFarmId": "[resourceId(parameters('rgName'),'Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_whoiswho_name'))]",
                                 "reserved": false,
                                 "isXenon": false,
                                 "hyperV": false,
@@ -492,7 +516,7 @@
                             "name": "[concat(variables('func_whoiswho_datasync_name'), '/web')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/sites', variables('func_whoiswho_datasync_name'))]"
+                                "[resourceId('Microsoft.Web/sites', variables('func_whoiswho_datasync_name'))]"
                             ],
                             "properties": {
                                 "numberOfWorkers": 1,
@@ -573,7 +597,7 @@
                             "name": "[concat(variables('func_whoiswho_azuredataloader_name'), '/web')]",
                             "location": "[parameters('rgLocation')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/sites', variables('func_whoiswho_azuredataloader_name'))]"
+                                "[resourceId('Microsoft.Web/sites', variables('func_whoiswho_azuredataloader_name'))]"
                             ],
                             "properties": {
                                 "numberOfWorkers": 1,
@@ -655,7 +679,7 @@
                             "name": "[concat(variables('func_whoiswho_datasync_name'), '/', variables('func_whoiswho_datasync_name'), '.azurewebsites.net')]",
                             "location": "West Europe",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/sites', variables('func_whoiswho_datasync_name'))]"
+                                "[resourceId('Microsoft.Web/sites', variables('func_whoiswho_datasync_name'))]"
                             ],
                             "properties": {
                                 "siteName": "[variables('func_whoiswho_datasync_name')]",
@@ -668,7 +692,7 @@
                             "name": "[concat(variables('func_whoiswho_azuredataloader_name'), '/', variables('func_whoiswho_azuredataloader_name'), '.azurewebsites.net')]",
                             "location": "West Europe",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Web/sites', variables('func_whoiswho_azuredataloader_name'))]"
+                                "[resourceId('Microsoft.Web/sites', variables('func_whoiswho_azuredataloader_name'))]"
                             ],
                             "properties": {
                                 "siteName": "[variables('func_whoiswho_azuredataloader_name')]",
@@ -680,8 +704,8 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default/azure-webjobs-hosts')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_whoiswho_name'), 'default')]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "properties": {
                                 "defaultEncryptionScope": "$account-encryption-key",
@@ -694,8 +718,8 @@
                             "apiVersion": "2020-08-01-preview",
                             "name": "[concat(variables('storageAccounts_whoiswho_name'), '/default/azure-webjobs-secrets')]",
                             "dependsOn": [
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_whoiswho_name'), 'default')]",
-                                "[resourceId(parameters('rgName'),'Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
+                                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_whoiswho_name'))]"
                             ],
                             "properties": {
                                 "defaultEncryptionScope": "$account-encryption-key",
