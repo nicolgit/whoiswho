@@ -1,0 +1,96 @@
+name: Deploy WhoIsWho
+
+on:
+  workflow_dispatch:
+   inputs:
+      azurePrincipal:
+        description: 'Azure Service Principal JSON'     
+        required: true
+        default: ''
+      subscriptionID:
+        description: 'Azure Subscription ID'     
+        required: true
+        default: ''
+      rgName:
+        description: 'Resource Group Name'     
+        required: true
+        default: 'rg-whoiswho'
+      rgLocation:
+        description: 'Resource Location'     
+        required: true
+        default: 'westeurope'
+      resourcesName:
+        description: 'Resources Name Main Identifier'     
+        required: true
+        default: 'who-is-who'
+      storageAccountName:
+        description: 'Storage Account Name'     
+        required: true
+        default: 'sawhoiswho'
+
+jobs:
+  deploy-whoiswho:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: azure/login@v1
+        with:
+          creds: ${{ github.event.inputs.azurePrincipal }}
+      
+      - name: Deploy Azure Resource Manager (ARM) Template
+        id: deployarm
+        uses: Azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ github.event.inputs.subscriptionID }}
+          region: ${{ github.event.inputs.rgLocation }}
+          template: ./deployment/azuredeploy.json
+          deploymentMode: Incremental
+          parameters: |
+            rgName=${{ github.event.inputs.rgName }}
+            rgLocation=${{ github.event.inputs.rgLocation }}
+            resourcesName=${{ github.event.inputs.resourcesName }}
+            storageAccountName=${{ github.event.inputs.storageAccountName }}
+        
+      - run: echo ${{ steps.deployarm.outputs.containerName }}
+   
+      - name: Download WhoIsWho Frontend Artifact
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: WhoIsWho.SPA
+          path: ./artifacts/whoiswhospa
+   
+      - name: Deploy WhoIsWho Frontend
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.deployarm.outputs.whoiswho_app_name }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_864a55be4a914bfc904739b6dc6e5053 }}
+          package: ./who-is-who/dist/who-is-who
+
+      - name: Download AzureDataLoader Artifact
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: WhoIsWho.DataLoader.Azure
+          path: ./artifacts/azuredataloader
+
+      - name: Deploy AzureDataLoader Function
+        uses: Azure/functions-action@v1.3.1
+        with:
+          app-name: ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }}
+          package: ./artifacts/azuredataloader
+          
+      - name: Download AzureDataLoader Artifact
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: WhoIsWho.DataSync
+          path: ./artifacts/datasync
+
+      - name: Deploy AzureDataLoader Function
+        uses: Azure/functions-action@v1.3.1
+        with:
+          app-name: ${{ steps.deployarm.outputs.whoiswho_datasync_name }}
+          package: ./artifacts/datasync
+      
