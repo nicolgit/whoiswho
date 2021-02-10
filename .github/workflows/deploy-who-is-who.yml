@@ -7,6 +7,10 @@ on:
         description: 'Azure Service Principal JSON'     
         required: true
         default: ''
+      subscriptionID:
+        description: 'Azure Subscription'     
+        required: true
+        default: ''
       rgName:
         description: 'Resource Group Name'     
         required: true
@@ -41,7 +45,8 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
-          subscriptionId: 6af5f213-1a15-46ee-8387-bf82fad9816b 
+          subscriptionId: ${{ github.event.inputs.subscriptionID }}
+          region: ${{ github.event.inputs.rgLocation }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: |
