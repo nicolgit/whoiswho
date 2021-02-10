@@ -62,6 +62,7 @@ jobs:
         with:
           workflow: Build WhoIsWho
           name: WhoIsWho.SPA
+          branch: master
           path: ./artifacts/whoiswhospa
    
       - name: Deploy WhoIsWho Frontend
@@ -76,6 +77,7 @@ jobs:
         with:
           workflow: Build WhoIsWho
           name: WhoIsWho.DataLoader.Azure
+          branch: master
           path: ./artifacts/azuredataloader
 
       - name: Deploy AzureDataLoader Function
@@ -89,6 +91,7 @@ jobs:
         with:
           workflow: Build WhoIsWho
           name: WhoIsWho.DataSync
+          branch: master
           path: ./artifacts/datasync
 
       - name: Deploy AzureDataLoader Function
