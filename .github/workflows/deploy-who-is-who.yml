@@ -41,6 +41,7 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
+          subscriptionId: 6af5f213-1a15-46ee-8387-bf82fad9816b 
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: |
