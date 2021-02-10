@@ -49,7 +49,7 @@ jobs:
           region: ${{ github.event.inputs.rgLocation }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
-          parameters: |
+          parameters:
             rgName=${{ github.event.inputs.rgName }}
             rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
