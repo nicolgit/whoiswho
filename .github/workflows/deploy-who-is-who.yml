@@ -2,6 +2,11 @@ name: Deploy WhoIsWho
 
 on:
   workflow_dispatch:
+   inputs:
+      azurePrincipal:
+        description: 'Azure Service Principal JSON'     
+        required: true
+        default: ''
 
 jobs:
   deploy-whoiswho:
@@ -13,7 +18,7 @@ jobs:
       
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ github.event.inputs.azurePrincipal }}
       
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
