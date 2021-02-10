@@ -58,8 +58,9 @@ jobs:
       - run: echo ${{ steps.deployarm.outputs.containerName }}
    
       - name: Download WhoIsWho Frontend Artifact
-        uses: actions/download-artifact@v2.0.8
+        uses: dawidd6/action-download-artifact@v2.11.0
         with:
+          workflow: Build WhoIsWho
           name: WhoIsWho.SPA
           path: ./artifacts/whoiswhospa
    
@@ -71,8 +72,9 @@ jobs:
           package: ./who-is-who/dist/who-is-who
 
       - name: Download AzureDataLoader Artifact
-        uses: actions/download-artifact@v2.0.8
+        uses: dawidd6/action-download-artifact@v2.11.0
         with:
+          workflow: Build WhoIsWho
           name: WhoIsWho.DataLoader.Azure
           path: ./artifacts/azuredataloader
 
@@ -81,10 +83,11 @@ jobs:
         with:
           app-name: ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }}
           package: ./artifacts/azuredataloader
-          
-      - name: Download AzureDataLoader Artifact
-        uses: actions/download-artifact@v2.0.8
+  
+      - name: Download WhoIsWhoDataSync Artifact
+        uses: dawidd6/action-download-artifact@v2.11.0
         with:
+          workflow: Build WhoIsWho
           name: WhoIsWho.DataSync
           path: ./artifacts/datasync
 
