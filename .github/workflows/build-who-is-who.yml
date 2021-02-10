@@ -1,30 +1,65 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Build WhoIsWho
 
-# Controls when the action will run. 
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  Build WhoIsWho Frontend (JS/Angular):
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@master
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Set up Node.js version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+      working-directory: ./who-is-who/
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: WhoIsWho.SPA
+        path: ./who-is-who/dist/who-is-who/*
+        if-no-files-found: error
+        retention-days: 90
+
+  Build Azure Data Loader (.NET):
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v2
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v1
+       with:
+        dotnet-version: 3.1.x
+     - name: Publish
+       run: dotnet publish ./data-loader/WhoIsWho.DataLoader.Azure/WhoIsWho.DataLoader.Azure.csproj --configuration Release --output ./output/azuredataloader
+     - name: Upload a Build Artifact
+       uses: actions/upload-artifact@v2.2.2
+       with:
+        name: WhoIsWho.DataLoader.Azure
+        path: ./output/azuredataloader/*
+        if-no-files-found: error
+        retention-days: 90 
+
+  Build WhoIsWho DataSync:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v2
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v1
+       with:
+        dotnet-version: 3.1.x
+     - name: Publish
+       run: dotnet publish ./data-loader/WhoIsWho.DataLoader.Sync/WhoIsWho.DataLoader.Sync.csproj --configuration Release --output ./output/datasync
+     - name: Upload a Build Artifact
+       uses: actions/upload-artifact@v2.2.2
+       with:
+        name: WhoIsWho.DataSync
+        path: ./output/datasync/*
+        if-no-files-found: error
+        retention-days: 90 
