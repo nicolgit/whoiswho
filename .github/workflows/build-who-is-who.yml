@@ -1,0 +1,65 @@
+name: Build WhoIsWho
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Build-WhoIsWho-Frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Set up Node.js version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build --if-present
+      working-directory: ./who-is-who/
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: WhoIsWho.SPA
+        path: ./who-is-who/dist/who-is-who/*
+        if-no-files-found: error
+        retention-days: 90
+
+  Build-AzureDataLoader:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v2
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v1
+       with:
+        dotnet-version: 3.1.x
+     - name: Publish
+       run: dotnet publish ./data-loader/WhoIsWho.DataLoader.Azure/WhoIsWho.DataLoader.Azure.csproj --configuration Release --output ./output/azuredataloader
+     - name: Upload a Build Artifact
+       uses: actions/upload-artifact@v2.2.2
+       with:
+        name: WhoIsWho.DataLoader.Azure
+        path: ./output/azuredataloader/*
+        if-no-files-found: error
+        retention-days: 90 
+
+  Build-WhoIsWho-DataSync:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v2
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v1
+       with:
+        dotnet-version: 3.1.x
+     - name: Publish
+       run: dotnet publish ./data-loader/WhoIsWho.DataLoader.Sync/WhoIsWho.DataLoader.Sync.csproj --configuration Release --output ./output/datasync
+     - name: Upload a Build Artifact
+       uses: actions/upload-artifact@v2.2.2
+       with:
+        name: WhoIsWho.DataSync
+        path: ./output/datasync/*
+        if-no-files-found: error
+        retention-days: 90 

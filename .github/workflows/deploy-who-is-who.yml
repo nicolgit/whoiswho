@@ -55,6 +55,7 @@ jobs:
             resourcesName=${{ github.event.inputs.resourcesName }}
             storageAccountName=${{ github.event.inputs.storageAccountName }}
         
+
       - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
    
       - name: Download WhoIsWho Frontend Artifact
