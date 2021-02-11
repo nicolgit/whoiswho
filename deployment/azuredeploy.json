@@ -293,7 +293,7 @@
                                 "httpLoggingEnabled": false,
                                 "logsDirectorySizeLimit": 35,
                                 "detailedErrorLoggingEnabled": false,
-                                "publishingUsername": "$whoiswho-app",
+                                "publishingUsername": "[concat('$',parameters('sites_whoiswho_app_name'))]",
                                 "azureStorageAccounts": {},
                                 "scmType": "GitHubAction",
                                 "use32BitWorkerProcess": true,
