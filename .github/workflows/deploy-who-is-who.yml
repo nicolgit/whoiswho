@@ -41,6 +41,7 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
+          subscriptionId: fd2e7838-f820-4753-b087-68daf0e54383
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
