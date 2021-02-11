@@ -2,27 +2,27 @@ name: Deploy WhoIsWho
 
 on:
   workflow_dispatch:
-   inputs:
+    inputs:
       azureSecretName:
-        description: 'Azure Secret Name'     
+        description: "Azure Secret Name - Service Principal"
         required: true
-        default: 'whoiswho_deployment_playground'
+        default: "whoiswho_deployment_playground"
       rgName:
-        description: 'Resource Group Name'     
+        description: "Resource Group Name"
         required: true
-        default: 'whoiswho-deployment-playground'
+        default: "whoiswho-deployment-playground"
       rgLocation:
-        description: 'Resource Location'     
+        description: "Resource Location"
         required: true
-        default: 'westeurope'
+        default: "westeurope"
       resourcesName:
-        description: 'Resources Name Main Identifier'     
+        description: "Resources Name Main Identifier"
         required: true
-        default: 'who-is-who-deployment-playground'
+        default: "who-is-who-deployment-playground"
       storageAccountName:
-        description: 'Storage Account Name'     
+        description: "Storage Account Name"
         required: true
-        default: 'sawiswhpg'
+        default: "sawiswhpg"
 
 jobs:
   deploy-whoiswho:
@@ -31,28 +31,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets[github.event.inputs.azureSecretName] }}
-      
+
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          subscriptionId: fd2e7838-f820-4753-b087-68daf0e54383
+          subscriptionId: ${{ secrets[github.event.inputs.azureSecretName].subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
-          parameters:
-            rgLocation=${{ github.event.inputs.rgLocation }}
+          parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
             storageAccountName=${{ github.event.inputs.storageAccountName }}
-        
 
       - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
-   
+
       - name: Download WhoIsWho Frontend Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
@@ -60,7 +58,7 @@ jobs:
           name: WhoIsWho.SPA
           branch: master
           path: ./artifacts/whoiswhospa
-   
+
       - name: Deploy WhoIsWho Frontend
         uses: azure/webapps-deploy@v2
         with:
@@ -80,7 +78,7 @@ jobs:
         with:
           app-name: ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }}
           package: ./artifacts/azuredataloader
-  
+
       - name: Download WhoIsWhoDataSync Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
@@ -94,4 +92,3 @@ jobs:
         with:
           app-name: ${{ steps.deployarm.outputs.whoiswho_datasync_name }}
           package: ./artifacts/datasync
-      
