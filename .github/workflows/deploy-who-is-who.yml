@@ -6,15 +6,11 @@ on:
       azureSecretName:
         description: 'Azure Secret Name'     
         required: true
-        default: ''
-      subscriptionID:
-        description: 'Azure Subscription ID'     
-        required: true
-        default: ''
+        default: 'whoiswho_deployment_playground'
       rgName:
         description: 'Resource Group Name'     
         required: true
-        default: 'rg-whoiswho'
+        default: 'whoiswho-deployment-playground'
       rgLocation:
         description: 'Resource Location'     
         required: true
@@ -22,11 +18,11 @@ on:
       resourcesName:
         description: 'Resources Name Main Identifier'     
         required: true
-        default: 'who-is-who'
+        default: 'who-is-who-deployment-playground'
       storageAccountName:
         description: 'Storage Account Name'     
         required: true
-        default: 'sawhoiswho'
+        default: 'sawiswhpg'
 
 jobs:
   deploy-whoiswho:
@@ -44,13 +40,11 @@ jobs:
         id: deployarm
         uses: Azure/arm-deploy@v1
         with:
-          scope: subscription
-          subscriptionId: ${{ github.event.inputs.subscriptionID }}
-          region: ${{ github.event.inputs.rgLocation }}
+          scope: resourcegroup
+          resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters:
-            rgName=${{ github.event.inputs.rgName }}
             rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
             storageAccountName=${{ github.event.inputs.storageAccountName }}
