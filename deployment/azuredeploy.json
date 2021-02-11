@@ -77,7 +77,7 @@
             "name": "[variables('searchServices_whoiswho_engine_name')]",
             "location": "[parameters('rgLocation')]",
             "sku": {
-                "name": "free"
+                "name": "basic"
             },
             "properties": {
                 "replicaCount": 1,
