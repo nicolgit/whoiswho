@@ -1,0 +1,742 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "String"
+        },
+        "rgLocation": {
+            "type": "String"
+        },
+        "resourcesName": {
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "sites_whoiswho_app_name": "[concat('app-', parameters('resourcesName'))]",
+        "searchServices_whoiswho_engine_name": "[concat('srch-', parameters('resourcesName'))]",
+        "appinsight_whoiswho_name": "[concat('appi-', parameters('resourcesName'))]",
+        "serverfarms_whoiswho_name": "[concat('plan-', parameters('resourcesName'))]",
+        "func_whoiswho_azuredataloader_name": "[concat('func-', parameters('resourcesName'),'-azureloader')]",
+        "func_whoiswho_datasync_name": "[concat('func-', parameters('resourcesName'),'-datasync')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('rgLocation')]",
+            "name": "[parameters('rgName')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "WhoIsWhoDeploy",
+            "resourceGroup": "[parameters('rgName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                    "rgLocation": {
+                        "value": "[parameters('rgLocation')]"
+                    },
+                    "storageAccounts_whoiswho_name": {
+                        "value": "[parameters('storageAccountName')]"
+                    },
+                    "sites_whoiswho_app_name": {
+                        "value": "[variables('sites_whoiswho_app_name')]"
+                    },
+                    "searchServices_whoiswho_engine_name": {
+                        "value": "[variables('searchServices_whoiswho_engine_name')]"
+                    },
+                    "appinsight_whoiswho_name": {
+                        "value": "[variables('appinsight_whoiswho_name')]"
+                    },
+                    "serverfarms_whoiswho_name": {
+                        "value": "[variables('serverfarms_whoiswho_name')]"
+                    },
+                    "func_whoiswho_azuredataloader_name": {
+                        "value": "[variables('func_whoiswho_azuredataloader_name')]"
+                    },
+                    "func_whoiswho_datasync_name": {
+                        "value": "[variables('func_whoiswho_datasync_name')]"
+                    }
+                },
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "variables": {},
+                    "parameters": {
+                        "rgLocation": {
+                            "type": "String"
+                        },
+                        "storageAccounts_whoiswho_name": {
+                            "type": "String"
+                        },
+                        "sites_whoiswho_app_name": {
+                            "type": "String"
+                        },
+                        "searchServices_whoiswho_engine_name": {
+                            "type": "String"
+                        },
+                        "appinsight_whoiswho_name": {
+                            "type": "String"
+                        },
+                        "serverfarms_whoiswho_name": {
+                            "type": "String"
+                        },
+                        "func_whoiswho_azuredataloader_name": {
+                            "type": "String"
+                        },
+                        "func_whoiswho_datasync_name": {
+                            "type": "String"
+                        }
+                    },
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[parameters('storageAccounts_whoiswho_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "sku": {
+                                "name": "Standard_LRS",
+                                "tier": "Standard"
+                            },
+                            "kind": "StorageV2",
+                            "properties": {
+                                "largeFileSharesState": "Disabled",
+                                "networkAcls": {
+                                    "bypass": "AzureServices",
+                                    "virtualNetworkRules": [],
+                                    "ipRules": [],
+                                    "defaultAction": "Allow"
+                                },
+                                "supportsHttpsTrafficOnly": true,
+                                "encryption": {
+                                    "services": {
+                                        "file": {
+                                            "keyType": "Account",
+                                            "enabled": true
+                                        },
+                                        "blob": {
+                                            "keyType": "Account",
+                                            "enabled": true
+                                        }
+                                    },
+                                    "keySource": "Microsoft.Storage"
+                                },
+                                "accessTier": "Hot"
+                            }
+                        },
+                        {
+                            "type": "microsoft.insights/components",
+                            "apiVersion": "2018-05-01-preview",
+                            "name": "[parameters('appinsight_whoiswho_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "kind": "web",
+                            "properties": {
+                                "Application_Type": "web",
+                                "Flow_Type": "Bluefield",
+                                "Request_Source": "rest",
+                                "RetentionInDays": 90,
+                                "publicNetworkAccessForIngestion": "Enabled",
+                                "publicNetworkAccessForQuery": "Enabled"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Search/searchServices",
+                            "apiVersion": "2020-08-01",
+                            "name": "[parameters('searchServices_whoiswho_engine_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "sku": {
+                                "name": "free"
+                            },
+                            "properties": {
+                                "replicaCount": 1,
+                                "partitionCount": 1,
+                                "hostingMode": "Default",
+                                "publicNetworkAccess": "Enabled",
+                                "networkRuleSet": {
+                                    "ipRules": []
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/serverfarms",
+                            "apiVersion": "2018-02-01",
+                            "name": "[parameters('serverfarms_whoiswho_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "sku": {
+                                "name": "B1",
+                                "tier": "Basic",
+                                "size": "B1",
+                                "family": "B",
+                                "capacity": 1
+                            },
+                            "kind": "linux",
+                            "properties": {
+                                "perSiteScaling": false,
+                                "maximumElasticWorkerCount": 1,
+                                "isSpot": false,
+                                "reserved": true,
+                                "isXenon": false,
+                                "hyperV": false,
+                                "targetWorkerCount": 0,
+                                "targetWorkerSizeId": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "sku": {
+                                "name": "Standard_LRS",
+                                "tier": "Standard"
+                            },
+                            "properties": {
+                                "cors": {
+                                    "corsRules": []
+                                },
+                                "deleteRetentionPolicy": {
+                                    "enabled": false
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/tableServices",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "properties": {
+                                "cors": {
+                                    "corsRules": []
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites",
+                            "apiVersion": "2018-11-01",
+                            "name": "[parameters('sites_whoiswho_app_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_whoiswho_name'))]"
+                            ],
+                            "kind": "app,linux",
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('sites_whoiswho_app_name'), '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('sites_whoiswho_app_name'), '.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_whoiswho_name'))]",
+                                "reserved": true,
+                                "isXenon": false,
+                                "hyperV": false,
+                                "siteConfig": {},
+                                "scmSiteAlsoStopped": false,
+                                "clientAffinityEnabled": false,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "containerSize": 0,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": true,
+                                "redundancyMode": "None"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('sites_whoiswho_app_name'), '/web')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('sites_whoiswho_app_name'))]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php",
+                                    "hostingstart.html"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "linuxFxVersion": "NODE|12-lts",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "remoteDebuggingVersion": "VS2019",
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "[concat('$',parameters('sites_whoiswho_app_name'))]",
+                                "azureStorageAccounts": {},
+                                "scmType": "GitHubAction",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": false,
+                                "appCommandLine": "pm2 serve /home/site/wwwroot --no-daemon --spa",
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": false
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "experiments": {
+                                    "rampUpRules": []
+                                },
+                                "autoHealEnabled": false,
+                                "localMySqlEnabled": false,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": false,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('sites_whoiswho_app_name'), '/', parameters('sites_whoiswho_app_name'), '.azurewebsites.net')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('sites_whoiswho_app_name'))]"
+                            ],
+                            "properties": {
+                                "siteName": "whoiswho-app",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default/whoiswhocontaine')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "properties": {
+                                "defaultEncryptionScope": "$account-encryption-key",
+                                "denyEncryptionScopeOverride": false,
+                                "publicAccess": "None"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+                            "apiVersion": "2019-06-01",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default/FakeDataLoaderSource')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', parameters('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ]
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default/FakeDataLoaderSync')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', parameters('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ]
+                        },
+                        {
+                            "type": "Microsoft.Web/sites",
+                            "apiVersion": "2018-11-01",
+                            "name": "[parameters('func_whoiswho_datasync_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_whoiswho_name'))]",
+                                "[resourceId('microsoft.insights/components', parameters('appinsight_whoiswho_name'))]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "kind": "functionapp,linux",
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('func_whoiswho_datasync_name'), '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('func_whoiswho_datasync_name'), '.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_whoiswho_name'))]",
+                                "reserved": false,
+                                "isXenon": false,
+                                "hyperV": false,
+                                "siteConfig": {
+                                    "appSettings": [
+                                        {
+                                            "name": "AzureWebJobsStorage",
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
+                                        },
+                                        {
+                                            "name": "StorageConnectionString",
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
+                                        },
+                                        {
+                                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                            "value": "[reference(resourceId('microsoft.insights/components/', parameters('appinsight_whoiswho_name')), '2015-05-01').InstrumentationKey]"
+                                        },
+                                        {
+                                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                                            "value": "dotnet"
+                                        }
+                                    ]
+                                },
+                                "scmSiteAlsoStopped": false,
+                                "clientAffinityEnabled": true,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "containerSize": 1536,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": false,
+                                "redundancyMode": "None"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites",
+                            "apiVersion": "2018-11-01",
+                            "name": "[parameters('func_whoiswho_azuredataloader_name')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_whoiswho_name'))]",
+                                "[resourceId('microsoft.insights/components', parameters('appinsight_whoiswho_name'))]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "kind": "functionapp,linux",
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('func_whoiswho_azuredataloader_name'), '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('func_whoiswho_azuredataloader_name'), '.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_whoiswho_name'))]",
+                                "reserved": false,
+                                "isXenon": false,
+                                "hyperV": false,
+                                "siteConfig": {
+                                    "appSettings": [
+                                        {
+                                            "name": "AzureWebJobsStorage",
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
+                                        },
+                                        {
+                                            "name": "StorageConnectionString",
+                                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_whoiswho_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name')),'2019-06-01').keys[0].value)]"
+                                        },
+                                        {
+                                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                            "value": "[reference(resourceId('microsoft.insights/components/', parameters('appinsight_whoiswho_name')), '2015-05-01').InstrumentationKey]"
+                                        },
+                                        {
+                                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                                            "value": "dotnet"
+                                        }
+                                    ]
+                                },
+                                "scmSiteAlsoStopped": false,
+                                "clientAffinityEnabled": true,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "containerSize": 1536,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": false,
+                                "redundancyMode": "None"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('func_whoiswho_datasync_name'), '/web')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('func_whoiswho_datasync_name'))]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "phpVersion": "5.6",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "remoteDebuggingVersion": "VS2019",
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "[concat('$',parameters('func_whoiswho_datasync_name'))]",
+                                "azureStorageAccounts": {},
+                                "scmType": "None",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": false,
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": false
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "experiments": {
+                                    "rampUpRules": []
+                                },
+                                "autoHealEnabled": false,
+                                "cors": {
+                                    "allowedOrigins": [
+                                        "https://functions.azure.com",
+                                        "https://functions-staging.azure.com",
+                                        "https://functions-next.azure.com"
+                                    ],
+                                    "supportCredentials": false
+                                },
+                                "localMySqlEnabled": false,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": false,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('func_whoiswho_azuredataloader_name'), '/web')]",
+                            "location": "[parameters('rgLocation')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('func_whoiswho_azuredataloader_name'))]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "phpVersion": "5.6",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "remoteDebuggingVersion": "VS2019",
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "[concat('$',parameters('func_whoiswho_azuredataloader_name'))]",
+                                "azureStorageAccounts": {},
+                                "scmType": "None",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": false,
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": false
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "experiments": {
+                                    "rampUpRules": []
+                                },
+                                "autoHealEnabled": false,
+                                "cors": {
+                                    "allowedOrigins": [
+                                        "https://functions.azure.com",
+                                        "https://functions-staging.azure.com",
+                                        "https://functions-next.azure.com"
+                                    ],
+                                    "supportCredentials": false
+                                },
+                                "localMySqlEnabled": false,
+                                "managedServiceIdentityId": 1003,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": false,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('func_whoiswho_datasync_name'), '/', parameters('func_whoiswho_datasync_name'), '.azurewebsites.net')]",
+                            "location": "West Europe",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('func_whoiswho_datasync_name'))]"
+                            ],
+                            "properties": {
+                                "siteName": "[parameters('func_whoiswho_datasync_name')]",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('func_whoiswho_azuredataloader_name'), '/', parameters('func_whoiswho_azuredataloader_name'), '.azurewebsites.net')]",
+                            "location": "West Europe",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('func_whoiswho_azuredataloader_name'))]"
+                            ],
+                            "properties": {
+                                "siteName": "[parameters('func_whoiswho_azuredataloader_name')]",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default/azure-webjobs-hosts')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "properties": {
+                                "defaultEncryptionScope": "$account-encryption-key",
+                                "denyEncryptionScopeOverride": false,
+                                "publicAccess": "None"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                            "apiVersion": "2020-08-01-preview",
+                            "name": "[concat(parameters('storageAccounts_whoiswho_name'), '/default/azure-webjobs-secrets')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccounts_whoiswho_name'), 'default')]",
+                                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_whoiswho_name'))]"
+                            ],
+                            "properties": {
+                                "defaultEncryptionScope": "$account-encryption-key",
+                                "denyEncryptionScopeOverride": false,
+                                "publicAccess": "None"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "whoiswho_app_name": {
+            "type": "string",
+            "value": "[variables('sites_whoiswho_app_name')]"
+        },
+        "whoiswho_azuredataloader_name": {
+            "type": "string",
+            "value": "[variables('func_whoiswho_azuredataloader_name')]"
+        },
+        "whoiswho_datasync_name": {
+            "type": "string",
+            "value": "[variables('func_whoiswho_datasync_name')]"
+        }
+    }
+}
