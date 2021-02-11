@@ -3,10 +3,14 @@ name: Deploy WhoIsWho
 on:
   workflow_dispatch:
     inputs:
-      azureSecretName:
+      azureSecretNameServicePrincipal:
         description: "Azure Secret Name - Service Principal"
         required: true
         default: "whoiswho_deployment_playground"
+      azureSecretNameSubscription:
+        description: "Azure Secret Name - Subscription"
+        required: true
+        default: "whoiswho_deployment_playground_subscription"
       rgName:
         description: "Resource Group Name"
         required: true
@@ -34,14 +38,14 @@ jobs:
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets[github.event.inputs.azureSecretName] }}
+          creds: ${{ secrets[github.event.inputs.azureSecretNameServicePrincipal] }}
 
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets[github.event.inputs.azureSecretName].subscriptionId }}
+          subscriptionId: ${{ secrets[github.event.inputs.azureSecretNameSubscription] }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
