@@ -38,7 +38,7 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 2. Launch manually the GitHub action named 'Deploy WhoIsWho' with the following parameters:
 
-| Parameter| Value |
+| Parameter &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | Value |
 | --- | --- |
 | Azure Secret Name - Service Principal | The name of the GitHub secret that stores the App Registration output JSON |
 | Azure Secret Name - Subscription | The name of the GitHub secret that stores the the subscription id |
