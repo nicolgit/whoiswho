@@ -1,11 +1,10 @@
-# whoiswho
-azure WhoIsWho portal
+# Who Is Who
+![Build WhoIsWho](https://github.com/nicolgit/whoiswho/workflows/Build%20WhoIsWho/badge.svg)
+Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active Directory and elements of other systems.
+You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
-[Build WhoIsWho](https://github.com/nicolgit/whoiswho/workflows/Build%20WhoIsWho/badge.svg)
-
-
-# Deployment
-## Setup Azure Prerequisites
+## Deployment
+### Setup Azure Prerequisites
 1. Create a Resource Group on Azure
 2. Create an App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
 
@@ -27,7 +26,7 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 ```
 3. Add the previous created App Registration with the Contributor role on the created Resource Group.
 
-## Deploy Infrastracture and Apps
+### Deploy Infrastracture and Apps
 
 1. Create the following GitHub secrets:
 
