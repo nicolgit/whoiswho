@@ -1,5 +1,6 @@
 # Who Is Who
 ![Build WhoIsWho](https://github.com/nicolgit/whoiswho/workflows/Build%20WhoIsWho/badge.svg)
+
 Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active Directory and elements of other systems.
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
