@@ -5,10 +5,6 @@
         <mat-icon class="icon">home</mat-icon>
           <span class="label">Home side</span>
       </a>
-      <a mat-list-item>
-        <mat-icon class="icon">dashboard</mat-icon>
-        <span class="label">Dashboard side</span>
-      </a>
       <a  mat-list-item type="button">
         <mat-icon class="icon">input</mat-icon>
         <span class="label">LogOut side</span>
@@ -42,16 +38,20 @@
                   </a>
                 </li>
               <li>
-                  <a [routerLink]="" (click)="logout()">
-                    <span class="label">{{userName}} - Logout</span>
-                    <mat-icon class="icon">input</mat-icon>
-                   </a>
+                <span class="label" style="display: block;">{{profile?.displayName}}</span>
               </li>
+              <li>
+                <button mat-raised-button *ngIf="!loggedIn" (click)="login()">Login</button>
+                <button mat-raised-button *ngIf="loggedIn" (click)="logout()">Logout</button>
+              </li>
+            
           </ul>
        </div>
       </mat-toolbar>
       <main>
-        <router-outlet></router-outlet> 
+        <div>
+          <router-outlet></router-outlet> 
+        </div>
       </main>
     </mat-sidenav-content>
   </mat-sidenav-container>
