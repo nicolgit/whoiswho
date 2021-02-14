@@ -14,7 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { MsalModule, MsalInterceptor, MsalService } from '@azure/msal-angular';
+import { MsalModule, MsalInterceptor, MsalService, MsalGuard } from '@azure/msal-angular';
 
 import { MainSearchBoxComponent } from './components/main-search-box/main-search-box.component';
 import { ResultListComponent } from './components/result-list/result-list.component';
@@ -39,37 +39,28 @@ function getRedirectUri()
   imports: [
     BrowserModule,
     RouterModule.forRoot([
-        { path: '', component:MainSearchBoxComponent },
+        { path: '', component:MainSearchBoxComponent, canActivate: [MsalGuard] },
         { path: 'search', 
           children: [
-            {
-              path: '',
-              component: ResultListComponent
-            },
-            {
-              path: ':search_for',
-              component: ResultListComponent
-            } 
+            { path: '', component: ResultListComponent, canActivate: [MsalGuard] },
+            { path: ':search_for', component: ResultListComponent, canActivate: [MsalGuard] } 
           ]
         },
         { path: 'result',
           children: [
-            {
-              path: '',
-              component: ResultComponent
-            },
-            {
-              path: ':key',
-              component: ResultComponent
-            } 
+            { path: '', component: ResultComponent },
+            { path: ':key', component: ResultComponent } 
           ]
-        }
+        },
       ]),
     MsalModule.forRoot({
       auth: {
         clientId: 'c45b71f2-8b57-43c0-8c8e-bcf7a00fa946', // This is your client ID
         authority: 'https://login.microsoftonline.com/common/', // This is your tenant ID
-        redirectUri: getRedirectUri() // 'http://localhost:4200/'// This is your redirect URI
+        validateAuthority: true,
+        redirectUri: getRedirectUri(), // 'http://localhost:4200/'// This is your redirect URI
+        postLogoutRedirectUri: "http://localhost:4200/",
+        navigateToLoginRequestUrl: true,
       },
       cache: {
         cacheLocation: 'localStorage',

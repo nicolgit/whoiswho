@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { HttpClient } from '@angular/common/http';
+import { Logger, CryptoUtils } from 'msal';
+
+import { AppStatics } from './model/appstatics';
+
 
 @Component({
   selector: 'app-root',
@@ -14,38 +18,20 @@ export class AppComponent implements OnInit {
     private http: HttpClient) { 
 
     }
-
-  private graphMeEndpoint = "https://graph.microsoft.com/v1.0/me";
-
-  title = 'Azure Apps management portal';
+  
+  title = "Azure Enterprise App's Search Engine";
   isIframe = false;
   loggedIn = false;
-  userName = "";
+  profile;
 
-  ngOnInit() { 
-    var caller = this;
-
+  ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
-    this.checkAccount();
 
-    if (this.loggedIn == false)
-    {
-      this.login();
-    }
-
-    this.authService.acquireTokenSilent({
-      scopes: this.authService.getScopesForEndpoint(this.graphMeEndpoint)
-    })
-
-    this.http.get(this.graphMeEndpoint).subscribe({
-      next(sr)
-      {
-        caller.userName = sr['displayName'];
-      }
-    });
+    this.checkoutAccount();
 
     this.broadcastService.subscribe('msal:loginSuccess', () => {
-      this.checkAccount();
+      this.checkoutAccount();
+      this.getProfile();
     });
 
     this.authService.handleRedirectCallback((authError, response) => {
@@ -54,21 +40,42 @@ export class AppComponent implements OnInit {
         return;
       }
 
-      console.log('Redirect Success: ', response.accessToken);
+      console.log('Redirect Success: ', response);
     });
+
+    this.authService.setLogger(new Logger((logLevel, message, piiEnabled) => {
+      console.log('MSAL Logging: ', message);
+    }, {
+      correlationId: CryptoUtils.createNewGuid(),
+      piiLoggingEnabled: false
+    }));
+
+    this.getProfile();
   }
 
-  login() {
-    this.authService.loginRedirect({
-      extraScopesToConsent: ["user.read", "openid", "profile"]
-    });
+  checkoutAccount() {
+    this.loggedIn = !!this.authService.getAccount() && this.profile!=null;
+  }
+
+  login() { 
+    const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+
+    if (isIE) {
+      this.authService.loginRedirect();
+    } else {
+      this.authService.loginPopup();
+    }
   }
 
   logout() {
     this.authService.logout();
   }
 
-  checkAccount() {
-    this.loggedIn = !!this.authService.getAccount();
+  getProfile() {
+    this.http.get(AppStatics.MSGRAPH_ME)
+      .toPromise().then(profile => {
+        this.profile = profile;
+        this.checkoutAccount();
+      });
   }
 }
