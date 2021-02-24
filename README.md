@@ -48,8 +48,11 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 | SecretName| Content |
 | --- | --- |
-| yourname_appregistration | Store inside the App Registration output JSON |
-| yourname_subscription | Store inside the subscription id |
+| yourname_appregistration | Store inside the App Registration output JSON for the deployment |
+| yourname_subscription | Store inside the subscription id for the deployment |
+| yourname_whoiswho_appId | Store inside the appId of the Service Principal create for the WhoIsWho identity |
+| yourname_whoiswho_password | Store inside the password of the Service Principal create for the WhoIsWho identity |
+| yourname_whoiswho_tenant |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
 
 2. Launch manually the GitHub action named 'Deploy WhoIsWho' with the following parameters:
 
@@ -57,7 +60,10 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 | --- | --- |
 | Azure Secret Name - Service Principal | The name of the GitHub secret that stores the App Registration output JSON |
 | Azure Secret Name - Subscription | The name of the GitHub secret that stores the the subscription id |
-| Resource Group Name | The name of resource group |
+| Azure Secret Name - WhoIsWho - AppId | The name of the GitHub secret that stores the WhoIsWho appId |
+| Azure Secret Name - WhoIsWho - Password | The name of the GitHub secret that stores the WhoIsWho password |
+| Azure Secret Name - WhoIsWho - Tenant | The name of the GitHub secret that stores the the WhoIsWho tenant |
+| Resource Group Name | The name of resource group where the WhoIsWho resources will be created|
 | Resource Location | The resources location |
 | Resources Name Main Identifier | The string that will identify uniquely all the Azure Resources that will be created, ex. if set to the value **'mywhoiswho'** deploy, the following resources will be created: app-**mywhoiswho**, appi-**mywhoiswho**, func-**mywhoiswho**-azureloader, func-**mywhoiswho**-datasync, plan-**mywhoiswho**, srch-**mywhoiswho**|
 | Storage Account Name | The name of the storage account that will be created and support the previous resources |
