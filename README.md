@@ -64,3 +64,6 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 3. Wait that the deploument will be completed
    
+## Usage 
+### First usage
+......
