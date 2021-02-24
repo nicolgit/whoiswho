@@ -2,10 +2,8 @@
 using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.Subscription;
 using Microsoft.Azure.Management.Subscription.Models;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Rest;
 using Microsoft.Rest.Azure;
 using System;
 using System.Collections.Generic;
@@ -15,7 +13,7 @@ using System.Threading.Tasks;
 using WhoIsWho.DataLoader.Azure.Models;
 using WhoIsWho.DataLoader.Core;
 using WhoIsWho.DataLoader.Models;
-using SubscriptionClient = Microsoft.Azure.Management.Subscription.SubscriptionClient;
+using ISubscriptionClient = Microsoft.Azure.Management.Subscription.ISubscriptionClient;
 
 namespace WhoIsWho.DataLoader.Azure.Loaders
 {
@@ -23,29 +21,22 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
     {
         private readonly ILogger logger;
 
-        SubscriptionClient subscriptionClient;
-        AuthorizationManagementClient authorizationManagementClient;
-        ResourceManagementClient resourceManagementClient;
+        private readonly ISubscriptionClient subscriptionClient;
+        private readonly IAuthorizationManagementClient authorizationManagementClient;
+        private readonly IResourceManagementClient resourceManagementClient;
 
         List<SubscriptionModel> currentSubscriptions = new List<SubscriptionModel>();
 
-        public ARMDataLoader(IConfiguration configuration, ILogger<ARMDataLoader> logger) : base(configuration, logger, nameof(ARMDataLoader))
+        public ARMDataLoader(IConfiguration configuration, ISubscriptionClient subClient, IAuthorizationManagementClient amClient, IResourceManagementClient rmClient, ILogger<ARMDataLoader> logger) : base(configuration, logger, nameof(ARMDataLoader))
         {
             this.logger = logger;
-        }
-
-        async Task InitializeClientsWithCredentialsAsync()
-        {
-            var aadToken = await (new AzureServiceTokenProvider()).GetAccessTokenAsync("https://management.core.windows.net/");
-            ServiceClientCredentials serviceClientCreds = new TokenCredentials(aadToken);
-            subscriptionClient = new SubscriptionClient(serviceClientCreds);
-            authorizationManagementClient = new AuthorizationManagementClient(serviceClientCreds);
-            resourceManagementClient = new ResourceManagementClient(serviceClientCreds);
+            this.subscriptionClient = subClient;
+            this.authorizationManagementClient = amClient;
+            this.resourceManagementClient = rmClient;
         }
 
         public override async Task LoadDataAsync()
         {
-            await InitializeClientsWithCredentialsAsync();
             await LoadSubscriptionsAsync();
             await LoadRoleAssignmentsAsync();
             await LoadResourceGroups();
