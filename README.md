@@ -4,17 +4,33 @@
 Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active Directory and elements of other systems.
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
+## Prerequisites
+You need to create an Azure AD App Registration that will represent the application identity during the execution. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. The same principal should be set with the right permission on Azure Ad.
+``` bash
+az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
+```
+and take note of the output JSON that should look like this:
+``` javascript
+{
+"appId": "xxxxxxx-d574-47c3-a84b-yyyyyyyyy",
+"password": "yourSecret",
+"displayName": "yourSubscriptionId",
+"tenant": "yourAADTenantId",
+}
+```
+
+From now you can assign the Application Identity identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
+
+
 ## Deployment
 ### Setup Azure Prerequisites
 1. Create a Resource Group on Azure
-2. Create an App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
+2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
 
 ``` bash
 az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scopes /subscriptions/{subscriptionID}/resourceGroups/{resourceGroupName} --sdk-auth
-
 ```
  and take note of the output JSON that should look like this:
-
 ``` javascript
 {
 "clientId": "xxxxxxx-d574-47c3-a84b-yyyyyyyyy",
@@ -49,5 +65,3 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 3. Wait that the deploument will be completed
    
-## Configure the application
-Coming soon....
