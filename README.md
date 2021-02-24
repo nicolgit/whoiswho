@@ -5,7 +5,7 @@ Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
 ## Prerequisites
-You need to create an Azure AD App Registration that will represent the application identity during the execution. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. The same principal should be set with the right permission on Azure Ad.
+You need to create an Azure AD Service Principal that will represent the application identity during the execution. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. The same principal should be set with the right permission on Azure Ad.
 ``` bash
 az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 ```
@@ -18,12 +18,11 @@ and take note of the output JSON that should look like this:
 "tenant": "yourAADTenantId",
 }
 ```
-
-From now you can assign the Application Identity identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
-
+From now you can assign the Azure AD Service Principal identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
 
 ## Deployment
-### Setup Azure Prerequisites
+### Create Resource Group and a Service Principal for deploy the resources
+You can deploy the solution via the ARM Template provided with this repo by executing the  GitHub Action named "Deploy WhoIsWho". You will ned to create an Azure Resource Group that will contain the resources and a Service Principal that will have the Contribution permission to it. You can use the following instructions: 
 1. Create a Resource Group on Azure
 2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
 
@@ -41,7 +40,6 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 "managementEndpointUrl": "[https://management.core.windows.net/](https://management.core.windows.net/)"
 }
 ```
-3. Add the previous created App Registration with the Contributor role on the created Resource Group.
 
 ### Deploy Infrastracture and Apps
 
