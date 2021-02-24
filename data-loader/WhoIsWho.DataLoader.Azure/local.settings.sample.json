@@ -10,7 +10,6 @@
     "AzureWebJobs.ARMLoader.Disabled": "false",
     "AzureWebJobs.FakeLoader.Disabled": "false",
     "AzureWebJobs.AADLoader.Disabled": "false",
-    "ServicePrincipal.UseManagedIdentity": false,
     "ServicePrincipal.ClientID": "",
     "ServicePrincipal.ClientSecret": "",
     "ServicePrincipal.TenantID": "",
