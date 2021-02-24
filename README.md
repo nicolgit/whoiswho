@@ -22,7 +22,7 @@ From now you can assign the Azure AD Service Principal identified by the display
 
 ## Deployment
 ### Create Resource Group and a Service Principal for deploy the resources
-You can deploy the solution via the ARM Template provided with this repo by executing the  GitHub Action named "Deploy WhoIsWho". You will ned to create an Azure Resource Group that will contain the resources and a Service Principal that will have the Contribution permission to it. You can use the following instructions: 
+You can deploy the solution via the ARM Template provided with this repo by executing the GitHub Action named "Deploy WhoIsWho". You will need to create an Azure Resource Group that will contain the resources and a Service Principal that will have the Contribution permission to it. You can use the following instructions: 
 1. Create a Resource Group on Azure
 2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
 
