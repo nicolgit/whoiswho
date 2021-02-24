@@ -4,7 +4,7 @@
 Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active Directory and elements of other systems.
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
-## Prerequisites - Set up the Service Principal used by the WhoIsWho
+## Prerequisites - Set up the Azure AD Service Principal used by the WhoIsWho
 You need to create an Azure AD Service Principal that will represent the application identity during the execution. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. The same principal should be set with the right permission on Azure Ad.
 ``` bash
 az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
