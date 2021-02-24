@@ -58,11 +58,11 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 | Parameter  | Value |
 | --- | --- |
-| Azure Secret Name - Service Principal | The name of the GitHub secret that stores the App Registration output JSON |
-| Azure Secret Name - Subscription | The name of the GitHub secret that stores the the subscription id |
-| Azure Secret Name - WhoIsWho - AppId | The name of the GitHub secret that stores the WhoIsWho appId |
-| Azure Secret Name - WhoIsWho - Password | The name of the GitHub secret that stores the WhoIsWho password |
-| Azure Secret Name - WhoIsWho - Tenant | The name of the GitHub secret that stores the the WhoIsWho tenant |
+| Azure Secret Name - Service Principal | The name of the secret 'yourname_appregistration' |
+| Azure Secret Name - Subscription | The name of the secret 'yourname_subscription' |
+| Azure Secret Name - WhoIsWho - AppId | The name of the secret 'yourname_whoiswho_appId' |
+| Azure Secret Name - WhoIsWho - Password | The name of the secret 'yourname_whoiswho_password' |
+| Azure Secret Name - WhoIsWho - Tenant |The name of the secret 'yourname_whoiswho_tenant' |
 | Resource Group Name | The name of resource group where the WhoIsWho resources will be created|
 | Resource Location | The resources location |
 | Resources Name Main Identifier | The string that will identify uniquely all the Azure Resources that will be created, ex. if set to the value **'mywhoiswho'** deploy, the following resources will be created: app-**mywhoiswho**, appi-**mywhoiswho**, func-**mywhoiswho**-azureloader, func-**mywhoiswho**-datasync, plan-**mywhoiswho**, srch-**mywhoiswho**|
