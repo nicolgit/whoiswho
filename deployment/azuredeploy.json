@@ -10,6 +10,15 @@
         },
         "storageAccountName": {
             "type": "String"
+        },
+        "whoiswho_identity_appid":{
+            "type": "String"
+        },
+        "whoiswho_identity_password":{
+            "type": "String"
+        },
+        "whoiswho_identity_tenant":{
+            "type": "String"
         }
     },
     "variables": {
@@ -408,6 +417,30 @@
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
                             "value": "dotnet"
+                        },
+                        {
+                            "name": "ServicePrincipal.ClientID",
+                            "value": "[parameters('whoiswho_identity_appid')]"
+                        },
+                        {
+                            "name": "ServicePrincipal.ClientSecret",
+                            "value": "[parameters('whoiswho_identity_password')]"
+                        },
+                        {
+                            "name": "ServicePrincipal.TenantID",
+                            "value": "[parameters('whoiswho_identity_tenant')]"
+                        },
+                        {
+                            "name": "ARMLoaderCronTimer",
+                            "value": "0 30 9 * * *"
+                        },
+                        {
+                            "name": "ADLoaderCronTimer",
+                            "value": "0 30 10 * * *"
+                        },
+                        {
+                            "name": "AzureWebJobs.FakeLoader.Disabled",
+                            "value": "true"
                         }
                     ]
                 },

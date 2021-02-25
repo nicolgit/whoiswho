@@ -3,13 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "rgLocation": {
-            "value": "westeurope"
+            "value": ""
         },
         "resourcesName": {
-            "value": "who-is-who"
+            "value": ""
         },
         "storageAccountName":{
-            "value": "sawhoiswhogian"
+            "value": ""
+        },
+        "whoiswho_identity_appid":{
+            "value": ""
+        },
+        "whoiswho_identity_password":{
+            "value": ""
+        },
+        "whoiswho_identity_tenant":{
+            "value": ""
         }
     }
 }
