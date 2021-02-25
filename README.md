@@ -48,11 +48,11 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 | SecretName| Content |
 | --- | --- |
-| yourname_deployment_identity_appregistration | Store inside the App Registration output JSON for the Deployment Identity |
-| yourname_deployment_identity_subscription | Store inside the subscription id for the Deployment Identity |
-| yourname_whoiswho_identity_appId | Store inside the appId of the Service Principal create for the WhoIsWho identity |
-| yourname_whoiswho_identity_password | Store inside the password of the Service Principal create for the WhoIsWho identity |
-| yourname_whoiswho_identity_tenant |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
+| deployment_identity_appregistration | Store inside the App Registration output JSON for the Deployment Identity |
+| deployment_identity_subscription | Store inside the subscription id for the Deployment Identity |
+| whoiswho_identity_appId | Store inside the appId of the Service Principal create for the WhoIsWho identity |
+| whoiswho_identity_password | Store inside the password of the Service Principal create for the WhoIsWho identity |
+| whoiswho_identity_tenant |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
 
 2. Launch manually the GitHub action named 'Deploy WhoIsWho' with the following parameters:
 
