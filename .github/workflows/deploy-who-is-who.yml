@@ -64,6 +64,9 @@ jobs:
           parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
             storageAccountName=${{ github.event.inputs.storageAccountName }}
+            whoiswho_identity_appid=${{ github.event.inputs.whoiswho_identity_appid }}
+            whoiswho_identity_password=${{ github.event.inputs.whoiswho_identity_password }}
+            whoiswho_identity_tenant=${{ github.event.inputs.whoiswho_identity_tenant }}
 
       - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
 
