@@ -3,14 +3,26 @@ name: Deploy WhoIsWho
 on:
   workflow_dispatch:
     inputs:
-      azureSecretNameServicePrincipal:
-        description: "Azure Secret Name - Service Principal"
+      deployment_identity_appregistration:
+        description: "SecretName - Deployment Identity App Registration"
         required: true
-        default: "whoiswho_deployment_playground"
-      azureSecretNameSubscription:
-        description: "Azure Secret Name - Subscription"
+        default: "deployment_identity_appregistration"
+      deployment_identity_subscription:
+        description: "SecretName - Deployment Identity App Subscription"
         required: true
-        default: "whoiswho_deployment_playground_subscription"
+        default: "deployment_identity_subscription"
+      whoiswho_identity_appid:
+        description: "SecretName - WhoIsWho Identity AppId "
+        required: true
+        default: "whoiswho_identity_appid"
+      whoiswho_identity_password:
+        description: "SecretName - WhoIsWho Identity Password "
+        required: true
+        default: "whoiswho_identity_password"
+      whoiswho_identity_tenant:
+        description: "SecretName - WhoIsWho Identity Tenant"
+        required: true
+        default: "whoiswho_identity_tenant"
       rgName:
         description: "Resource Group Name"
         required: true
@@ -38,14 +50,14 @@ jobs:
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets[github.event.inputs.azureSecretNameServicePrincipal] }}
+          creds: ${{ secrets[github.event.inputs.deployment_identity_appregistration] }}
 
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets[github.event.inputs.azureSecretNameSubscription] }}
+          subscriptionId: ${{ secrets[github.event.inputs.deployment_identity_subscription] }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
