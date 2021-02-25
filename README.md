@@ -5,7 +5,7 @@ Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
 ## Prerequisites 
-### Set up the Azure AD Service Principal used by the WhoIsWho
+### Set up the Azure AD Service Principal used by the WhoIsWho (WhoIsWho identity)
 You need to create an Azure AD Service Principal that will represent the application identity during the execution. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. The same principal should be set with the right permission on Azure Ad.
 ``` bash
 az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
@@ -22,7 +22,7 @@ and take note of the output JSON that should look like this:
 From now you can assign the Azure AD Service Principal identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
 
 ## Deployment
-### Create Resource Group and a Service Principal for deploy the resources
+### Create Resource Group and a Service Principal for deploy the resources (Deployment identity)
 You can deploy the solution via the ARM Template provided with this repo by executing the GitHub Action named "Deploy WhoIsWho". You will need to create an Azure Resource Group that will contain the resources and a Service Principal that will have the Contribution permission to it used by the GitHub Action for the deploy the resources and the code. You can use the following instructions: 
 1. Create a Resource Group on Azure
 2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
@@ -48,8 +48,8 @@ az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scope
 
 | SecretName| Content |
 | --- | --- |
-| yourname_appregistration | Store inside the App Registration output JSON for the deployment |
-| yourname_subscription | Store inside the subscription id for the deployment |
+| yourname_appregistration | Store inside the App Registration output JSON for the Deployment Identity |
+| yourname_subscription | Store inside the subscription id for the Deployment Identity |
 | yourname_whoiswho_appId | Store inside the appId of the Service Principal create for the WhoIsWho identity |
 | yourname_whoiswho_password | Store inside the password of the Service Principal create for the WhoIsWho identity |
 | yourname_whoiswho_tenant |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
