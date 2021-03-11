@@ -423,7 +423,7 @@
                         },
                         {
                             "name": "DataLoaderSyncUrl",
-                            "value": "[concat('https://',variables('func_whoiswho_datasync_name'),'.azurewebsites.net/api/WhoIsWhoSync?code=',listkeys(concat(resourceId('Microsoft.Web/sites', variables('func_whoiswho_datasync_name'), '/host/default/'),'2016-08-01').functionKeys.default,'&loader={0}')]"
+                            "value": "[concat('https://',variables('func_whoiswho_datasync_name'),'.azurewebsites.net/api/WhoIsWhoSync?code=',listkeys(concat(resourceId('Microsoft.Web/sites', variables('func_whoiswho_datasync_name')), '/host/default/'),'2016-08-01').functionKeys.default,'&loader={0}')]"
                         },
                         {
                             "name": "ARMLoaderCronTimer",
