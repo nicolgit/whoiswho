@@ -106,7 +106,7 @@ jobs:
           branch: master
           path: ./artifacts/datasync
 
-      - name: Deploy AzureDataLoader Function
+      - name: Deploy WhoIsWhoDataSync Function
         uses: Azure/functions-action@v1.3.1
         with:
           app-name: ${{ steps.deployarm.outputs.whoiswho_datasync_name }}
