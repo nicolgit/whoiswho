@@ -11,13 +11,13 @@
         "storageAccountName": {
             "type": "String"
         },
-        "whoiswho_identity_appid":{
+        "whoiswho_identity_appid": {
             "type": "String"
         },
-        "whoiswho_identity_password":{
+        "whoiswho_identity_password": {
             "type": "String"
         },
-        "whoiswho_identity_tenant":{
+        "whoiswho_identity_tenant": {
             "type": "String"
         }
     },
@@ -419,6 +419,10 @@
                         {
                             "name": "ServicePrincipalTenantID",
                             "value": "[parameters('whoiswho_identity_tenant')]"
+                        },
+                        {
+                            "name": "DataLoaderSyncUrl",
+                            "value": "[concat('https://',variables('func_whoiswho_datasync_name'),'.azurewebsites.net/api/WhoIsWhoSync?code=',listkeys(concat(variables('func_whoiswho_datasync_name'), '/host/default/'),'2016-08-01').functionKeys.default,'&loader={0}')]"
                         },
                         {
                             "name": "ARMLoaderCronTimer",
