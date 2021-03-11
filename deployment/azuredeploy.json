@@ -295,24 +295,6 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
-            "apiVersion": "2019-06-01",
-            "name": "[concat(parameters('storageAccountName'), '/default/FakeDataLoaderSource')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', parameters('storageAccountName'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/tableServices/tables",
-            "apiVersion": "2020-08-01-preview",
-            "name": "[concat(parameters('storageAccountName'), '/default/FakeDataLoaderSync')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/tableServices', parameters('storageAccountName'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
-            ]
-        },
-        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
             "name": "[variables('func_whoiswho_datasync_name')]",
