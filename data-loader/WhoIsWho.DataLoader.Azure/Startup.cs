@@ -26,9 +26,9 @@ namespace WhoIsWho.DataLoader.Azure
 				var servProv = builder.Services.BuildServiceProvider();
 				IConfiguration config = servProv.GetRequiredService<IConfiguration>();
 
-				var confClient = ConfidentialClientApplicationBuilder.Create(config["ServicePrincipal.ClientID"])
-					.WithTenantId(config["ServicePrincipal.TenantID"])
-					.WithClientSecret(config["ServicePrincipal.ClientSecret"])
+				var confClient = ConfidentialClientApplicationBuilder.Create(config["ServicePrincipalClientID"])
+					.WithTenantId(config["ServicePrincipalTenantID"])
+					.WithClientSecret(config["ServicePrincipalClientSecret"])
 					.Build();
 
 				builder.Services.AddSingleton<IGraphServiceClient>(sp =>

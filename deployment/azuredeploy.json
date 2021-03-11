@@ -358,6 +358,10 @@
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
                             "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
                         }
                     ]
                 },
@@ -419,15 +423,19 @@
                             "value": "dotnet"
                         },
                         {
-                            "name": "ServicePrincipal.ClientID",
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "ServicePrincipalClientID",
                             "value": "[parameters('whoiswho_identity_appid')]"
                         },
                         {
-                            "name": "ServicePrincipal.ClientSecret",
+                            "name": "ServicePrincipalClientSecret",
                             "value": "[parameters('whoiswho_identity_password')]"
                         },
                         {
-                            "name": "ServicePrincipal.TenantID",
+                            "name": "ServicePrincipalTenantID",
                             "value": "[parameters('whoiswho_identity_tenant')]"
                         },
                         {
