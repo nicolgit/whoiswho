@@ -111,3 +111,14 @@ jobs:
         with:
           app-name: ${{ steps.deployarm.outputs.whoiswho_datasync_name }}
           package: ./artifacts/datasync
+          
+          
+      - name: Azure CLI Action
+        uses: Azure/cli@1.0.4
+        with:
+          # Specify the script here
+          inlineScript: |
+            $functionKey=az functionapp keys list -g ${{ github.event.inputs.rgName }} -n ${{ steps.deployarm.outputs.whoiswho_datasync_name }} --query "functionKeys.default" -o tsv
+            az functionapp config appsettings set -g ${{ github.event.inputs.rgName }} -n ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }} --settings "DataLoaderSyncUrl=https://.azurewebsites.net/api/WhoIsWhoSync?loader={0}&code=$functionKey"
+            
+          
