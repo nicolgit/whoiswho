@@ -5,7 +5,7 @@ import { MaterialModule } from './material.module';
 
 import { FlexLayoutModule } from '@angular/flex-layout/';
 
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,12 +20,17 @@ import { MainSearchBoxComponent } from './components/main-search-box/main-search
 import { ResultListComponent } from './components/result-list/result-list.component';
 import { ResultComponent } from './components/result/result.component';
 import { GenericElementsComponent} from './components/relateditems/genericelements/genericelements.component';
+import { AppConfig } from './app.config';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 function getRedirectUri()
 {
   return window.location.origin + "/";
+}
+
+export function initializeApp(appConfig: AppConfig) {
+  return () => appConfig.load();
 }
 
 @NgModule({
@@ -90,6 +95,12 @@ function getRedirectUri()
     ReactiveFormsModule,
   ],
   providers: [
+    AppConfig,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AppConfig], multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,

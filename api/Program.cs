@@ -1,7 +1,10 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Azure.Functions.Worker.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using WhoIsWho.Api.services;
+
 
 namespace WhoIsWho.Api
 {
@@ -9,8 +12,12 @@ namespace WhoIsWho.Api
     {
         public static void Main()
         {
-            var host = new HostBuilder()
+            var host = Host.CreateDefaultBuilder()
                 .ConfigureFunctionsWorkerDefaults()
+                .ConfigureServices(s => { 
+                    s.AddSingleton<CognitiveSearchService>();
+                    s.AddHttpClient();  
+                })
                 .Build();
 
             host.Run();

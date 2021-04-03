@@ -8,14 +8,15 @@ import { catchError, retry } from 'rxjs/operators'
 import { suggester_response } from '../model/suggester';
 import { results_response } from '../model/results';
 
+import { AppConfig } from '../app.config';
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class AzureSearchService {
 
-  private query_key = 'EE7A8787FBAD8D2A6C44140947211933';
-  
+  private query_key = 'EE7A8787FBAD8D2A6C44140947211933'; 
   private base_url = 'https://whoiswho-engine.search.windows.net';
   private index = 'azuretable-index';
 
@@ -32,14 +33,11 @@ export class AzureSearchService {
 
   Suggestions(text:string)
   {
-    var get_url = this.suggestions_url + '&search=' + encodeURI(text);
+    var get_url = AppConfig.settings.searchUrl + '?search=' + encodeURI(text);
 
     return this.http.get<suggester_response>(get_url, {
         observe: 'body',
         responseType: 'json',
-        headers: new HttpHeaders({
-          'api-key': this.query_key
-        }),
       });
   }
 

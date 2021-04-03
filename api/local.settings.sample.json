@@ -1,7 +1,13 @@
 {
   "IsEncrypted": false,
+  "Host": {
+    "CORS": "*"
+  },
   "Values": {
     "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "SEARCH_SERVICE_KEY": "",
+    "SEARCH_SERVICE_URL": ""
   }
 }
