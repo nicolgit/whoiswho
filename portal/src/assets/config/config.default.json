@@ -2,5 +2,5 @@
     "env": {
         "name": "default"
     },
-    "searchUrl": "http://localhost:7071/api/Suggest"
+    "searchUrl": "http://localhost:7071/"
 }
