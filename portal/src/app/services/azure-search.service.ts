@@ -77,7 +77,7 @@ export class AzureSearchService {
 
   IndexSize ()
   {
-    var get_url = this.results_count_url;
+    var get_url = AppConfig.settings.ApiUrlBase + "/api/Count";
 
     return this.http.get<string>(get_url, {
       observe: 'body',

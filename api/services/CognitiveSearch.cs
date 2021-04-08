@@ -99,5 +99,25 @@ namespace WhoIsWho.Api.services
                 return null;
             }
         }
+
+        public async Task<string> Count()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get,urlResultCount);
+            request.Headers.Add("api-key", searchServiceKey);
+            request.Headers.Add("User-Agent", "Api");
+
+            var client = clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
