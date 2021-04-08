@@ -35,14 +35,54 @@ namespace WhoIsWho.Api.services
             searchServiceKey = config["SEARCH_SERVICE_KEY"];
             searchServiceUrl = config["SEARCH_SERVICE_URL"];
 
-            urlSuggest = searchServiceUrl + "/indexes/" + indexName + "/docs/suggest?api-version=2019-05-06&suggesterName=default&highlightPreTag=<b>&highlightPostTag=</b>&$select=Type,Key,Name&fuzzy=true";
-            urlResults = searchServiceUrl + "/indexes/" + indexName + "/docs?api-version=2019-05-06";
+            urlSuggest = searchServiceUrl +     "/indexes/" + indexName + "/docs/suggest?api-version=2019-05-06&suggesterName=default&highlightPreTag=<b>&highlightPostTag=</b>&$select=Type,Key,Name&fuzzy=true";
+            urlResults = searchServiceUrl +     "/indexes/" + indexName + "/docs?api-version=2019-05-06";
             urlResultCount = searchServiceUrl + "/indexes/" + indexName + "/docs/$count?api-version=2019-05-06";
         }
 
         public async Task<string> Suggest(string query)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,urlSuggest + "&search=" + HttpUtility.UrlEncode(query));
+            request.Headers.Add("api-key", searchServiceKey);
+            request.Headers.Add("User-Agent", "Api");
+
+            var client = clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> ResultByText(string query)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get,urlResults + "&search=" + HttpUtility.UrlEncode(query));
+            request.Headers.Add("api-key", searchServiceKey);
+            request.Headers.Add("User-Agent", "Api");
+
+            var client = clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> ResultByFilter(string query)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get,urlResults + "&$filter=" + HttpUtility.UrlEncode(query));
             request.Headers.Add("api-key", searchServiceKey);
             request.Headers.Add("User-Agent", "Api");
 

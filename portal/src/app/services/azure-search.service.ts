@@ -26,14 +26,9 @@ export class AzureSearchService {
 
   constructor( private logger: LoggerService, private http: HttpClient) { }
 
-  Sum (a:number, b:number)
-  {
-    return a + b;
-  }
-
   Suggestions(text:string)
   {
-    var get_url = AppConfig.settings.searchUrl + '?search=' + encodeURI(text);
+    var get_url = AppConfig.settings.ApiUrlBase + '/api/Suggest?search=' + encodeURI(text);
 
     return this.http.get<suggester_response>(get_url, {
         observe: 'body',
@@ -43,7 +38,7 @@ export class AzureSearchService {
 
   ResultsByText (text:string)
   {
-    var get_url = this.results_url + '&search=' + encodeURI(text);
+    var get_url = AppConfig.settings.ApiUrlBase + '/api/ResultByText?search=' + encodeURI(text);
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',
@@ -56,7 +51,7 @@ export class AzureSearchService {
 
   ResultsByFilters (filters:string)
   {
-    var get_url = this.results_url + '&$filter=' + encodeURI(filters);
+    var get_url = AppConfig.settings.ApiUrlBase + '/api/ResultByFilter?$filter=' + encodeURI(filters);
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',

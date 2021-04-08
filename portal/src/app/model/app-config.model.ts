@@ -2,5 +2,5 @@ export interface IAppConfig {
     env: {
         name: string;
     };
-    searchUrl: string;
+    ApiUrlBase: string;
 }
