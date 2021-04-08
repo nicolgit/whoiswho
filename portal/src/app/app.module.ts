@@ -29,6 +29,7 @@ function getRedirectUri()
   return window.location.origin + "/";
 }
 
+
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
 }
@@ -80,7 +81,8 @@ export function initializeApp(appConfig: AppConfig) {
       ],
       unprotectedResources: [],
       protectedResourceMap: [
-        ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+        ['https://graph.microsoft.com/v1.0/me', ['user.read']],
+        ['assets/', null] 
       ],
       extraQueryParameters: {}
     }),
