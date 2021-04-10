@@ -63,3 +63,21 @@ jobs:
         path: ./output/datasync/*
         if-no-files-found: error
         retention-days: 90 
+
+  Build-WhoIsWho-API:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v2
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v1
+       with:
+        dotnet-version: 3.1.x
+     - name: Publish
+       run: dotnet publish ./api/WhoIsWho.Portal.API/WhoIsWho.Portal.API.csproj --configuration Release --output ./output/portalapi
+     - name: Upload a Build Artifact
+       uses: actions/upload-artifact@v2.2.2
+       with:
+        name: WhoIsWho.Portal.API
+        path: ./output/portalapi/*
+        if-no-files-found: error
+        retention-days: 90 
