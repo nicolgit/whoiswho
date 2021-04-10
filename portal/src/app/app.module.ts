@@ -14,78 +14,90 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { MsalModule, MsalInterceptor, MsalService, MsalGuard } from '@azure/msal-angular';
+import { MsalModule, MsalInterceptor, MsalService, MsalGuard, MSAL_CONFIG, MSAL_CONFIG_ANGULAR, MsalAngularConfiguration } from '@azure/msal-angular';
 
 import { MainSearchBoxComponent } from './components/main-search-box/main-search-box.component';
 import { ResultListComponent } from './components/result-list/result-list.component';
 import { ResultComponent } from './components/result/result.component';
-import { GenericElementsComponent} from './components/relateditems/genericelements/genericelements.component';
+import { GenericElementsComponent } from './components/relateditems/genericelements/genericelements.component';
 import { AppConfig } from './app.config';
+import { Configuration } from 'msal';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
-function getRedirectUri()
-{
+function getRedirectUri() {
   return window.location.origin + "/";
 }
-
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
 }
+
+export function msalConfigFactory(config: AppConfig) {
+  const auth = {
+    auth: {
+      clientId: config.settings.authentication.clientID, // This is your client ID
+      authority: config.settings.authentication.authority, // This is your tenant ID
+      validateAuthority: true,
+      redirectUri: getRedirectUri(),// This is your redirect URI
+      postLogoutRedirectUri: getRedirectUri(),
+      navigateToLoginRequestUrl: true,
+    },
+    cache: {
+      cacheLocation: 'localStorage',
+      storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
+    },
+  };
+  return (auth as Configuration);
+}
+
+export function msalAngularConfigFactory(config: AppConfig): MsalAngularConfiguration {
+  const auth = {
+    popUp: !isIE,
+    consentScopes: [
+      'user.read',
+      'openid',
+      'profile',
+    ],
+    unprotectedResources: [],
+    protectedResourceMap: [
+      ['https://graph.microsoft.com/v1.0/me', ['user.read']],
+      ['assets/', null]
+    ],
+    extraQueryParameters: {}
+  };
+  return (auth as MsalAngularConfiguration);
+}
+
 
 @NgModule({
   declarations: [
     AppComponent,
     MainSearchBoxComponent,
     ResultListComponent,
-    ResultComponent, 
+    ResultComponent,
     GenericElementsComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
-        { path: '', component:MainSearchBoxComponent, canActivate: [MsalGuard] },
-        { path: 'search', 
-          children: [
-            { path: '', component: ResultListComponent, canActivate: [MsalGuard] },
-            { path: ':search_for', component: ResultListComponent, canActivate: [MsalGuard] } 
-          ]
-        },
-        { path: 'result',
-          children: [
-            { path: '', component: ResultComponent },
-            { path: ':key', component: ResultComponent } 
-          ]
-        },
-      ]),
-    MsalModule.forRoot({
-      auth: {
-        clientId: 'c45b71f2-8b57-43c0-8c8e-bcf7a00fa946', // This is your client ID
-        authority: 'https://login.microsoftonline.com/common/', // This is your tenant ID
-        validateAuthority: true,
-        redirectUri: getRedirectUri(), // 'http://localhost:4200/'// This is your redirect URI
-        postLogoutRedirectUri: "http://localhost:4200/",
-        navigateToLoginRequestUrl: true,
+      { path: '', component: MainSearchBoxComponent, canActivate: [MsalGuard] },
+      {
+        path: 'search',
+        children: [
+          { path: '', component: ResultListComponent, canActivate: [MsalGuard] },
+          { path: ':search_for', component: ResultListComponent, canActivate: [MsalGuard] }
+        ]
       },
-      cache: {
-        cacheLocation: 'localStorage',
-        storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
+      {
+        path: 'result',
+        children: [
+          { path: '', component: ResultComponent },
+          { path: ':key', component: ResultComponent }
+        ]
       },
-    }, {
-      popUp: !isIE,
-      consentScopes: [
-        'user.read',
-        'openid',
-        'profile',
-      ],
-      unprotectedResources: [],
-      protectedResourceMap: [
-        ['https://graph.microsoft.com/v1.0/me', ['user.read']],
-        ['assets/', null] 
-      ],
-      extraQueryParameters: {}
-    }),
+    ]),
+    MsalModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -101,8 +113,19 @@ export function initializeApp(appConfig: AppConfig) {
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
-      deps: [AppConfig], multi: true
+      deps: [AppConfig],
+      multi: true
+    }, {
+      provide: MSAL_CONFIG,
+      useFactory: msalConfigFactory,
+      deps: [AppConfig]
     },
+    {
+      provide: MSAL_CONFIG_ANGULAR,
+      useFactory: msalAngularConfigFactory,
+      deps: [AppConfig]
+    },
+    MsalService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
@@ -112,5 +135,5 @@ export function initializeApp(appConfig: AppConfig) {
   bootstrap: [AppComponent]
 })
 export class AppModule {
- }
+}
 

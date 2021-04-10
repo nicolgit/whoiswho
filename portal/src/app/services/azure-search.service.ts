@@ -20,11 +20,11 @@ export class AzureSearchService {
   private base_url = 'https://whoiswho-engine.search.windows.net';
   private index = 'azuretable-index';
 
-  constructor( private logger: LoggerService, private http: HttpClient) { }
+  constructor( private logger: LoggerService, private http: HttpClient, private appConfig: AppConfig) { }
 
   Suggestions(text:string)
   {
-    var get_url = AppConfig.settings.ApiUrlBase + '/api/Suggest?search=' + encodeURI(text);
+    var get_url = this.appConfig.settings.ApiUrlBase + '/api/Suggest?search=' + encodeURI(text);
     
     return this.http.get<suggester_response>(get_url, {
         observe: 'body',
@@ -34,7 +34,7 @@ export class AzureSearchService {
 
   ResultsByText (text:string)
   {
-    var get_url = AppConfig.settings.ApiUrlBase + '/api/ResultByText?search=' + encodeURI(text);
+    var get_url = this.appConfig.settings.ApiUrlBase + '/api/ResultByText?search=' + encodeURI(text);
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',
@@ -47,7 +47,7 @@ export class AzureSearchService {
 
   ResultsByFilters (filters:string)
   {
-    var get_url = AppConfig.settings.ApiUrlBase + '/api/ResultByFilter?$filter=' + encodeURI(filters);
+    var get_url = this.appConfig.settings.ApiUrlBase + '/api/ResultByFilter?$filter=' + encodeURI(filters);
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',
@@ -60,7 +60,7 @@ export class AzureSearchService {
   
   ResultByKey (key:string)
   {
-    var get_url = AppConfig.settings.ApiUrlBase + "/api/ResultByFilter?&$filter=Key eq '" + encodeURI(key) + "'";
+    var get_url = this.appConfig.settings.ApiUrlBase + "/api/ResultByFilter?&$filter=Key eq '" + encodeURI(key) + "'";
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',
@@ -73,7 +73,7 @@ export class AzureSearchService {
 
   IndexSize ()
   {
-    var get_url = AppConfig.settings.ApiUrlBase + "/api/Count";
+    var get_url = this.appConfig.settings.ApiUrlBase + "/api/Count";
 
     return this.http.get<string>(get_url, {
       observe: 'body',

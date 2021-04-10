@@ -3,4 +3,9 @@ export interface IAppConfig {
         name: string;
     };
     ApiUrlBase: string;
+
+    authentication: {
+        clientID: string;
+        authority: string;
+    }
 }
