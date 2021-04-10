@@ -18,13 +18,13 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-      working-directory: ./who-is-who/
+      working-directory: ./portal/
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.2
       with:
         name: WhoIsWho.SPA
-        path: ./who-is-who/dist/who-is-who/*
+        path: ./portal/dist/who-is-who/*
         if-no-files-found: error
         retention-days: 90
 
