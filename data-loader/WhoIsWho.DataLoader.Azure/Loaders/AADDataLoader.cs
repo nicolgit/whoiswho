@@ -27,10 +27,10 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 		}
 
 
-        public override async Task LoadDataAsync()
-        {
-            var users = await GetUsers().ConfigureAwait(false);
-            var groups = await GetGroups().ConfigureAwait(false);
+		public override async Task LoadDataAsync()
+		{
+			var users = await GetUsers().ConfigureAwait(false);
+			var groups = await GetGroups().ConfigureAwait(false);
 
 			var usersInGroup = await GetUsersInGroup(users).ConfigureAwait(false);
 			var groupsInGroup = await GetGroupsInGroup(groups).ConfigureAwait(false);
@@ -48,8 +48,7 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 				Name = g.DisplayName,
 				Description = g.Description,
 				Mail = g.Mail,
-				GroupType = GetGroupType(g.GroupTypes),
-
+				GroupType = GetGroupType(g.GroupTypes, g.MailEnabled, g.SecurityEnabled)
 			});
 
 			Task[] tasks = new Task[] {
@@ -147,9 +146,30 @@ namespace WhoIsWho.DataLoader.Azure.Loaders
 			return groupsInGroups;
 		}
 
-		private static string GetGroupType(IEnumerable<string> groupTypes)
+		private static string GetGroupType(IEnumerable<string> groupTypes, bool? mailEnabled, bool? securityEnabled)
 		{
-			return "TODO";
+			string groupType = "Unknown";
+
+			//https://docs.microsoft.com/en-us/graph/api/resources/groups-overview?view=graph-rest-1.0
+			if (groupTypes.Contains("Unified"))
+			{
+				if (mailEnabled.GetValueOrDefault())
+					groupType = "Microsoft 365 Group";
+			}
+			else
+			{
+				if (securityEnabled.GetValueOrDefault())
+				{
+					if (!mailEnabled.GetValueOrDefault())
+						groupType = "Security Group";
+					else
+						groupType = "Mail-enabled Security Group";
+				}
+				else if (mailEnabled.GetValueOrDefault())
+					groupType = "Distribution Group";
+			}
+
+			return groupType;
 		}
 
 		private async Task<IEnumerable<User>> GetUsers()
