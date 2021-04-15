@@ -1,0 +1,10 @@
+{
+    "env": {
+        "name": "default"
+    },
+    "ApiUrlBase": "http://localhost:7071",
+    "authentication":{
+        "clientID": "c45b71f2-8b57-43c0-8c8e-bcf7a00fa946",
+        "authority":"https://login.microsoftonline.com/common/"
+    }
+}

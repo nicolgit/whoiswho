@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Host": {
+    "CORS": "*"
+  },
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "SEARCH_SERVICE_KEY": "",
+    "SEARCH_SERVICE_URL": ""
+  }
+}
