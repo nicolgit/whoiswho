@@ -1,33 +1,32 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Logging;
+using WhoIsWho.Portal.Api.Services;
 
-namespace WhoIsWho.Api
+namespace WhoIsWho.Portal.API
 {
     public class SuggestFunction
     {
-        private readonly services.CognitiveSearchService searchService;
+        private readonly CognitiveSearchService searchService;
 
-        public SuggestFunction(services.CognitiveSearchService s)
+        public SuggestFunction(CognitiveSearchService s)
         {
             searchService = s;
         }
 
-        [Function("Suggest")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req, FunctionContext executionContext)
+        [FunctionName("Suggest")]
+        public async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-            var queryDictionary = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
-            var searchString = queryDictionary["search"];
-
+            var searchString = req.Query["search"];
             var json= await searchService.Suggest(searchString);
-
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "application/json; odata.metadata=minimal");
-            response.WriteString(json);
-
-            return response;
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
         }
     }
 }

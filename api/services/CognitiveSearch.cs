@@ -1,14 +1,10 @@
-using System.Collections.Generic;
-using System.Net;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Web;
 using System.Threading.Tasks;
 
-namespace WhoIsWho.Api.services
+namespace WhoIsWho.Portal.Api.Services
 {
     public class CognitiveSearchService
     {
