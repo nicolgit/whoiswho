@@ -8,6 +8,10 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "APPINSIGHTS_INSTRUMENTATIONKEY": "",
     "SEARCH_SERVICE_KEY": "",
-    "SEARCH_SERVICE_URL": ""
+    "SEARCH_SERVICE_URL": "",
+    "OIDC_AUDIENCE": "",
+    "OIDC_CLIENTID":"",
+    "OIDC_TENANT":"",
+    "OIDC_TENANTID":""
   }
 }

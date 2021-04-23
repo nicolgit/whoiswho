@@ -18,8 +18,8 @@ namespace WhoIsWho.Portal.API
             {
                 builder.Services.AddHttpClient();
                 builder.Services.AddSingleton<CognitiveSearchService>();
+                builder.Services.AddSingleton<AuthenticationService>();
             }
         }
-
     }
 }
