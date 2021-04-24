@@ -24,7 +24,7 @@ export class AzureSearchService {
 
   Suggestions(text:string)
   {
-    var get_url = this.appConfig.settings.ApiUrlBase + '/api/Suggest?search=' + encodeURI(text);
+    var get_url = this.appConfig.settings.ApiUrlBase + '/api/Suggest?s-earch=' + encodeURI(text);
     
     return this.http.get<suggester_response>(get_url, {
         observe: 'body',

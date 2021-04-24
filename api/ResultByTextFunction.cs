@@ -37,8 +37,6 @@ namespace WhoIsWho.Api
             {
                 return (ActionResult)new UnauthorizedResult();
             }
-
-            
         }
     }
 }
