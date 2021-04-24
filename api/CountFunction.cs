@@ -26,12 +26,12 @@ namespace WhoIsWho.Api
             if (claimsPrincipal != null)
             {
                 var json = await searchService.Count();
-                return (ActionResult)new OkObjectResult(new JsonResult(json));
+                return (ActionResult)new OkObjectResult(json);
             }
             else
             {
                 return (ActionResult)new UnauthorizedResult();
-            }  
+            }
         }
     }
 }

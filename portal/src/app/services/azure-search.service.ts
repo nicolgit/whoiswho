@@ -34,7 +34,7 @@ export class AzureSearchService {
 
   ResultsByText (text:string)
   {
-    var get_url = this.appConfig.settings.ApiUrlBase + '/api/ResultByText?search=' + encodeURI(text);
+    var get_url = this.appConfig.settings.ApiUrlBase + '/api/ResultByText?s-earch=' + encodeURI(text);
 
     return this.http.get<results_response>(get_url, {
       observe: 'body',

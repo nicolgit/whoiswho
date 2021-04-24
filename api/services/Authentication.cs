@@ -72,9 +72,7 @@ namespace WhoIsWho.Portal.Api.Services
                 // Debugging purposes only, set this to false for production
                 Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
-                var url = $"{authority}/.well-known/openid-configuration";
-                //var url = $"{authority}/common/.well-known/openid-configuration";
-                
+                var url = $"{authority}/.well-known/openid-configuration";    
 
                 ConfigurationManager<OpenIdConnectConfiguration> configManager =
                     new ConfigurationManager<OpenIdConnectConfiguration>(

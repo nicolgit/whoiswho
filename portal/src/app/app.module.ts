@@ -39,7 +39,7 @@ export function msalConfigFactory(config: AppConfig) {
       clientId: config.settings.authentication.clientID, // This is your client ID
       authority: config.settings.authentication.authority, // This is your tenant ID
       validateAuthority: true,
-      redirectUri: getRedirectUri(),// This is your redirect URI
+      redirectUri: getRedirectUri(), // This is your redirect URI
       postLogoutRedirectUri: getRedirectUri(),
       navigateToLoginRequestUrl: true,
     },
@@ -58,10 +58,12 @@ export function msalAngularConfigFactory(config: AppConfig): MsalAngularConfigur
       'user.read',
       'openid',
       'profile',
+      'api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user'
     ],
     unprotectedResources: [],
     protectedResourceMap: [
       ['https://graph.microsoft.com/v1.0/me', ['user.read']],
+      ['http://localhost:7071', ['api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user']],
       ['assets/', null]
     ],
     extraQueryParameters: {}

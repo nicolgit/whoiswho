@@ -5,6 +5,6 @@
     "ApiUrlBase": "http://localhost:7071",
     "authentication":{
         "clientID": "c45b71f2-8b57-43c0-8c8e-bcf7a00fa946",
-        "authority":"https://login.microsoftonline.com/common/"
+        "authority":"https://login.microsoftonline.com/250dc01a-4b55-42d6-a0d5-8ce0c1e3a4b0/"
     }
 }

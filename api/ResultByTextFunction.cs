@@ -12,22 +12,33 @@ namespace WhoIsWho.Api
 {
     public class ResultByTextFunction
     {
+        private readonly AuthenticationService authService;
         private readonly CognitiveSearchService searchService;
 
-        public ResultByTextFunction(CognitiveSearchService s)
+        public ResultByTextFunction(AuthenticationService a, CognitiveSearchService s)
         {
+            authService = a;
             searchService = s;
         }
 
         [FunctionName("ResultByText")]
-        public async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-            var searchString = req.Query["search"];
-            var json = await searchService.ResultByText(searchString);
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            var accessToken = authService.GetAccessToken(req);
+            var claimsPrincipal = await authService.ValidateAccessToken(accessToken);
+            if (claimsPrincipal != null)
             {
-                Content = new StringContent(json, Encoding.UTF8, "application/json")
-            };
+                var searchString = req.Query["s-earch"];
+                var json = await searchService.ResultByText(searchString);
+                
+                return (ActionResult)new OkObjectResult(json);
+            }
+            else
+            {
+                return (ActionResult)new UnauthorizedResult();
+            }
+
+            
         }
     }
 }
