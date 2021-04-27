@@ -20,7 +20,7 @@ export class AzureSearchService {
     return this.http.get<suggester_response>(get_url, {
         observe: 'body',
         responseType: 'json',
-      });
+      }); 
   }
 
   ResultsByText (text:string)
