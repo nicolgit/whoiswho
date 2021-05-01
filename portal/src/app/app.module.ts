@@ -135,20 +135,17 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory,
-      deps: [AppConfig],
-      multi: true
+      deps: [AppConfig]
     },
     {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory,
       deps: [AppConfig],
-      multi: true
     },
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory,
       deps: [AppConfig],
-      multi: true
     },
     MsalService,
     MsalGuard,
