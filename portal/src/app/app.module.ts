@@ -56,11 +56,12 @@ export function MSALInstanceFactory(config: AppConfig): IPublicClientApplication
   });
 }
 
-export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+export function MSALInterceptorConfigFactory(config: AppConfig): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  protectedResourceMap.set('https://graph.microsoft-ppe.com/v1.0/me', ['user.read']);
-  protectedResourceMap.set('http://localhost:7071', ['api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user']);
-  protectedResourceMap.set('assets/', null)
+
+  for (var resource of config.settings.protectedResources) {
+    protectedResourceMap.set(resource.endpoint, resource.scopes);
+  }
 
   return {
     interactionType: InteractionType.Redirect,
@@ -68,15 +69,11 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   };
 }
 
-export function MSALGuardConfigFactory(): MsalGuardConfiguration {
-  return { 
+export function MSALGuardConfigFactory(config: AppConfig): MsalGuardConfiguration {
+  return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: [
-        'user.read',
-        'openid',
-        'profile',
-        'api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user']
+      scopes: config.settings.MSALGuardScopes
     }
   };
 }
@@ -126,10 +123,9 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
       useFactory: initializeApp,
       deps: [AppConfig],
       multi: true
-    },{
+    }, {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
-      deps: [AppConfig],
       multi: true
     },
     {
@@ -140,12 +136,12 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MSALGuardConfigFactory,
-      deps: [AppConfig],
+      deps: [AppConfig]
     },
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory,
-      deps: [AppConfig],
+      deps: [AppConfig]
     },
     MsalService,
     MsalGuard,

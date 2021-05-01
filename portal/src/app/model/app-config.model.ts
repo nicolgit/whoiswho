@@ -8,4 +8,8 @@ export interface IAppConfig {
         clientID: string;
         authority: string;
     }
+
+    MSALGuardScopes: string[];
+
+    protectedResources: { endpoint: string, scopes: string[] }[];
 }
