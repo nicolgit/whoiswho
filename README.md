@@ -58,11 +58,11 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 
 | SecretName| Content |
 | --- | --- |
-| deployment_identity_appregistration | Store inside the App Registration output JSON for the Deployment Identity |
-| deployment_identity_subscription | Store inside the subscription id for the Deployment Identity |
-| whoiswho_identity_appId | Store inside the appId of the Service Principal create for the WhoIsWho identity |
-| whoiswho_identity_password | Store inside the password of the Service Principal create for the WhoIsWho identity |
-| whoiswho_identity_tenant |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
+| DEPLOYMENT_IDENTITY_APPREGISTRATION | Store inside the App Registration output JSON for the Deployment Identity |
+| DEPLOYMENT_IDENTITY_SUBSCRIPTION | Store inside the subscription id for the Deployment Identity |
+| WHOISWHO_IDENTITY_APPID | Store inside the appId of the Service Principal create for the WhoIsWho identity |
+| WHOISWHO_IDENTITY_PASSWORD | Store inside the password of the Service Principal create for the WhoIsWho identity |
+| WHOISWHO_IDENTITY_TENANT |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
 
 3. Launch manually the GitHub action named 'Deploy WhoIsWho' with the following parameters:
 
