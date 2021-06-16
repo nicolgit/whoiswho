@@ -7,7 +7,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 # Deployment
 
  1. Create in your Azure Active Directory tenant the following 3 required service principals
-	 1. **Deployment identity**, used by the GitHub action for the deployment:	 
+	 1. **WhoIsWho Deployment identity**, used by the GitHub action for the deployment:	 
 		 1. Create a Resource Group on Azure
 	    2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
 			``` bash
@@ -25,7 +25,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 			}
 			```
 	 
-	 2. **WhoIsWho identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index:
+	 2. **WhoIsWho Identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index:
 		``` bash
 		az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 		``` 
@@ -39,7 +39,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 		}
 		``` 
 		From now you can assign the Azure AD Service Principal identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
-	 3. **WhoIsWho identity Frontend**, represents the front-end and allows the user to authenticate:
+	 3. **WhoIsWho Identity Frontend**, represents the front-end and allows the user to authenticate:
 		``` bash
 		az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 		``` 
