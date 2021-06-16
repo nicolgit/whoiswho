@@ -26,7 +26,7 @@ jobs:
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets[github.event.inputs.deployment_identity_appregistration] }}
+          creds: ${{ secrets['DEPLOYMENT_IDENTITY_APPREGISTRATION'] }}
 
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
