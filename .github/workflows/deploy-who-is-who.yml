@@ -30,7 +30,7 @@ jobs:
 
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
-        uses: Azure/arm-deploy@v1
+        uses: Azure/arm-deploy@main
         with:
           scope: resourcegroup
           subscriptionId: ${{ secrets['DEPLOYMENT_IDENTITY_SUBSCRIPTION'] }}
