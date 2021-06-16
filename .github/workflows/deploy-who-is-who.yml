@@ -15,10 +15,6 @@ on:
         description: "Resources Name Main Identifier"
         required: true
         default: "who-is-who-deployment-playground"
-      storageAccountName:
-        description: "Storage Account Name"
-        required: true
-        default: "sawiswhpg"
 
 jobs:
   deploy-whoiswho:
@@ -43,7 +39,6 @@ jobs:
           deploymentMode: Incremental
           parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
-            storageAccountName=${{ github.event.inputs.storageAccountName }}
             whoiswho_identity_appid=${{ secrets['WHOISWHO_IDENTITY_APPID'] }}
             whoiswho_identity_password=${{ secrets['WHOISWHO_IDENTITY_PASSWORD'] }}
             whoiswho_identity_tenant=${{ secrets['WHOISWHO_IDENTITY_TENANT'] }}
