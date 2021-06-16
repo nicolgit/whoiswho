@@ -4,6 +4,59 @@
 Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active Directory and elements of other systems.
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
+# Deployment
+
+ 1. Create in your Azure Active Directory tenant the following 3 required service principals
+	 1. **Deployment identity**, used by the GitHub action for the deployment:	 
+		 1. Create a Resource Group on Azure
+	    2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
+			``` bash
+			az ad sp create-for-rbac --name {appRegistrationName} --role contributor --scopes /subscriptions/{subscriptionID}/resourceGroups/{resourceGroupName} --sdk-auth
+			```
+			 and take note of the output JSON that should look like this:
+			``` javascript
+			{
+			"clientId": "xxxxxxx-d574-47c3-a84b-yyyyyyyyy",
+			"clientSecret": "yourSecret",
+			"subscriptionId": "yourSubscriptionId",
+			"tenantId": "yourAADTenantId",
+			...
+			"managementEndpointUrl": "[https://management.core.windows.net/](https://management.core.windows.net/)"
+			}
+			```
+	 
+	 2. **WhoIsWho identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index:
+		``` bash
+		az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
+		``` 
+		and take note of the output JSON that should look like this:
+		``` javascript
+		{
+		"appId": "xxxxxxx-d574-47c3-a84b-yyyyyyyyy",
+		"password": "yourSecret",
+		"displayName": "yourSubscriptionId",
+		"tenant": "yourAADTenantId",
+		}
+		``` 
+		From now you can assign the Azure AD Service Principal identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
+	 3. **WhoIsWho identity Frontend**, represents the front-end and allows the user to authenticate:
+		``` bash
+		az ad sp create-for-rbac --name {appRegistrationName} --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
+		``` 
+		and take note of the output JSON that should look like this:
+		``` javascript
+		{
+		"appId": "xxxxxxx-d574-47c3-a84b-yyyyyyyyy",
+		"password": "yourSecret",
+		"displayName": "yourSubscriptionId",
+		"tenant": "yourAADTenantId",
+		}
+		``` 
+
+
+
+
+# ******************  Old docs ***************************
 ## Prerequisites 
 ### Set up the Azure AD Service Principal used by the WhoIsWho (WhoIsWho identity)
 You need to create an Azure AD Service Principal that will represent the application identity during the execution. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. The same principal should be set with the right permission on Azure Ad.
