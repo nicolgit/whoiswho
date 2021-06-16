@@ -3,26 +3,6 @@ name: Deploy WhoIsWho
 on:
   workflow_dispatch:
     inputs:
-      deployment_identity_appregistration:
-        description: "SecretName - Deployment Identity App Registration"
-        required: true
-        default: "deployment_identity_appregistration"
-      deployment_identity_subscription:
-        description: "SecretName - Deployment Identity App Subscription"
-        required: true
-        default: "deployment_identity_subscription"
-      whoiswho_identity_appid:
-        description: "SecretName - WhoIsWho Identity AppId "
-        required: true
-        default: "whoiswho_identity_appid"
-      whoiswho_identity_password:
-        description: "SecretName - WhoIsWho Identity Password "
-        required: true
-        default: "whoiswho_identity_password"
-      whoiswho_identity_tenant:
-        description: "SecretName - WhoIsWho Identity Tenant"
-        required: true
-        default: "whoiswho_identity_tenant"
       rgName:
         description: "Resource Group Name"
         required: true
@@ -57,16 +37,16 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets[github.event.inputs.deployment_identity_subscription] }}
+          subscriptionId: ${{ secrets['DEPLOYMENT_IDENTITY_SUBSCRIPTION'] }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
             storageAccountName=${{ github.event.inputs.storageAccountName }}
-            whoiswho_identity_appid=${{ secrets[github.event.inputs.whoiswho_identity_appid] }}
-            whoiswho_identity_password=${{ secrets[github.event.inputs.whoiswho_identity_password] }}
-            whoiswho_identity_tenant=${{ secrets[github.event.inputs.whoiswho_identity_tenant] }}
+            whoiswho_identity_appid=${{ secrets['WHOISWHO_IDENTITY_APPID'] }}
+            whoiswho_identity_password=${{ secrets['WHOISWHO_IDENTITY_PASSWORD'] }}
+            whoiswho_identity_tenant=${{ secrets['WHOISWHO_IDENTITY_TENANT'] }}
 
       - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
 
