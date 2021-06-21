@@ -26,22 +26,22 @@ jobs:
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets['DEPLOYMENT_IDENTITY_APPREGISTRATION'] }}
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
 
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
         uses: Azure/arm-deploy@main
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets['DEPLOYMENT_IDENTITY_SUBSCRIPTION'] }}
+          subscriptionId: ${{ secrets.DEPLOYMENT_IDENTITY_SUBSCRIPTION }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
-            whoiswho_identity_appid=${{ secrets['WHOISWHO_IDENTITY_APPID'] }}
-            whoiswho_identity_password=${{ secrets['WHOISWHO_IDENTITY_PASSWORD'] }}
-            whoiswho_identity_tenant=${{ secrets['WHOISWHO_IDENTITY_TENANT'] }}
+            whoiswho_identity_appid=${{ secrets.WHOISWHO_IDENTITY_APPID }}
+            whoiswho_identity_password=${{ secrets.WHOISWHO_IDENTITY_PASSWORD }}
+            whoiswho_identity_tenant=${{ secrets.WHOISWHO_IDENTITY_TENANT }}
 
       - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
       
@@ -57,6 +57,16 @@ jobs:
           name: WhoIsWho.SPA
           branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/whoiswhospa
+          
+      - name: WhoIsWho Frontend Config Settings Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'artifacts/whoiswhospa/assets/config.default.json'
+        env:
+          ApiUrlBase: ${{ steps.deployarm.outputs.whoiswho_portal_api_hostname }}
+          ApiAccessScope: 'api://${{ secrets.WHOISWHO_IDENTITY_APPID }}/access_as_user'
+          authentication.clientID: ${{ secrets.WHOISWHO_IDENTITY_FE_APPID }}
+          authentication.authority: 'https://login.microsoftonline.com/${{ secrets.DEPLOYMENT_IDENTITY_SUBSCRIPTION }}/'
 
       - name: Deploy WhoIsWho Frontend
         uses: azure/webapps-deploy@v2
