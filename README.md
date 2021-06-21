@@ -69,14 +69,8 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 
 |                            Parameter                                      | Value |
 | --- | --- |
-| Azure Secret Name - Service Principal | The name of the secret 'yourname_appregistration' |
-| Azure Secret Name - Subscription | The name of the secret 'yourname_subscription' |
-| Azure Secret Name - WhoIsWho - AppId | The name of the secret 'yourname_whoiswho_appId' |
-| Azure Secret Name - WhoIsWho - Password | The name of the secret 'yourname_whoiswho_password' |
-| Azure Secret Name - WhoIsWho - Tenant |The name of the secret 'yourname_whoiswho_tenant' |
 | Resource Group Name | The name of resource group where the WhoIsWho resources will be created|
 | Resource Location | The resources location |
 | Resources Name Main Identifier | The string that will identify uniquely all the Azure Resources that will be created, ex. if set to the value **'mywhoiswho'** deploy, the following resources will be created: app-**mywhoiswho**, appi-**mywhoiswho**, func-**mywhoiswho**-azureloader, func-**mywhoiswho**-datasync, plan-**mywhoiswho**, srch-**mywhoiswho**|
-| Storage Account Name | The name of the storage account that will be created and support the previous resources |
 
 3. Wait that the deploument will be completed
