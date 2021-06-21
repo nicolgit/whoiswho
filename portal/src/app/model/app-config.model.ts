@@ -3,6 +3,7 @@ export interface IAppConfig {
         name: string;
     };
     ApiUrlBase: string;
+    ApiAccessScope: string;
 
     authentication: {
         clientID: string;
