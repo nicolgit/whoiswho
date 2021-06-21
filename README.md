@@ -60,22 +60,17 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 | --- | --- |
 | DEPLOYMENT_IDENTITY_APPREGISTRATION | Store inside the App Registration output JSON for the Deployment Identity |
 | DEPLOYMENT_IDENTITY_SUBSCRIPTION | Store inside the subscription id for the Deployment Identity |
-| WHOISWHO_IDENTITY_APPID | Store inside the appId of the Service Principal create for the WhoIsWho identity |
-| WHOISWHO_IDENTITY_PASSWORD | Store inside the password of the Service Principal create for the WhoIsWho identity |
-| WHOISWHO_IDENTITY_TENANT |  Store inside the tenant of the Service Principal create for the WhoIsWho identity |
+| WHOISWHO_IDENTITY_APPID | Store inside the appId of the Service Principal create for the WhoIsWho Identity Backend |
+| WHOISWHO_IDENTITY_PASSWORD | Store inside the password of the Service Principal create for the WhoIsWho Identity Backend |
+| WHOISWHO_IDENTITY_TENANT |  Store inside the tenant of the Service Principal create for the WhoIsWho Identity Backend |
+| WHOISWHO_IDENTITY_FE_APPID | Store inside the appId of the Service Principal create for the WhoIsWho Identity Frontend |
 
 3. Launch manually the GitHub action named 'Deploy WhoIsWho' with the following parameters:
 
 |                            Parameter                                      | Value |
 | --- | --- |
-| Azure Secret Name - Service Principal | The name of the secret 'yourname_appregistration' |
-| Azure Secret Name - Subscription | The name of the secret 'yourname_subscription' |
-| Azure Secret Name - WhoIsWho - AppId | The name of the secret 'yourname_whoiswho_appId' |
-| Azure Secret Name - WhoIsWho - Password | The name of the secret 'yourname_whoiswho_password' |
-| Azure Secret Name - WhoIsWho - Tenant |The name of the secret 'yourname_whoiswho_tenant' |
 | Resource Group Name | The name of resource group where the WhoIsWho resources will be created|
 | Resource Location | The resources location |
 | Resources Name Main Identifier | The string that will identify uniquely all the Azure Resources that will be created, ex. if set to the value **'mywhoiswho'** deploy, the following resources will be created: app-**mywhoiswho**, appi-**mywhoiswho**, func-**mywhoiswho**-azureloader, func-**mywhoiswho**-datasync, plan-**mywhoiswho**, srch-**mywhoiswho**|
-| Storage Account Name | The name of the storage account that will be created and support the previous resources |
 
 3. Wait that the deploument will be completed
