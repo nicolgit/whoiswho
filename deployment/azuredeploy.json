@@ -26,7 +26,7 @@
         "func_whoiswho_azuredataloader_name": "[concat('func-', parameters('resourcesName'),'-azureloader')]",
         "func_whoiswho_datasync_name": "[concat('func-', parameters('resourcesName'),'-datasync')]",
         "func_whoiswho_portal_api_name": "[concat('func-', parameters('resourcesName'),'-portal-api')]",
-        "storageAccountName":"[uniqueString(resourceGroup().id)]"
+        "storageAccountName": "[uniqueString(resourceGroup().id)]"
     },
     "resources": [
         {
@@ -444,7 +444,7 @@
                 "redundancyMode": "None"
             }
         },
-         {
+        {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
             "name": "[variables('func_whoiswho_portal_api_name')]",
@@ -670,7 +670,7 @@
                 "reservedInstanceCount": 0
             }
         },
-         {
+        {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
             "name": "[concat(variables('func_whoiswho_portal_api_name'), '/web')]",
@@ -837,6 +837,10 @@
         "whoiswho_portal_api_name": {
             "type": "string",
             "value": "[variables('func_whoiswho_portal_api_name')]"
+        },
+        "whoiswho_portal_api_hostname": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Web/sites', variables('func_whoiswho_portal_api_name')), '2018-02-01').defaultHostName]"
         }
     }
 }
