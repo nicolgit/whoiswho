@@ -61,7 +61,7 @@ jobs:
       - name: WhoIsWho Frontend Config Settings Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'artifacts/whoiswhospa/assets/config.default.json'
+          files: 'artifacts/whoiswhospa/assets/config/config.default.json'
         env:
           ApiUrlBase: ${{ steps.deployarm.outputs.whoiswho_portal_api_hostname }}
           ApiAccessScope: 'api://${{ secrets.WHOISWHO_IDENTITY_APPID }}/access_as_user'
