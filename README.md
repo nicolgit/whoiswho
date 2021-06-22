@@ -7,11 +7,11 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 # Deployment
 
  1. Create in your Azure Active Directory tenant the following 3 required service principals
-	 1. **WhoIsWho Identity Deployment**, used by the GitHub action for the deployment:	 
+	 1. **WhoIsWho Deployment Identity**, used by the GitHub action for the deployment:	 
 		 1. Create a Resource Group on Azure
 	    2. Create an Azure AD App Registration/Service Principal. You can use the Azure AD functionalities from the portal or launch the followind "az cli" command:
 			``` bash
-			az ad sp create-for-rbac --name "WhoIsWhoIdentityDeployment" --role contributor --scopes /subscriptions/{subscriptionID}/resourceGroups/{resourceGroupName} --sdk-auth
+			az ad sp create-for-rbac --name "WhoIsWhoDeploymentIdentity" --role contributor --scopes /subscriptions/{subscriptionID}/resourceGroups/{resourceGroupName} --sdk-auth
 			```
 			 and take note of the output JSON that should look like this:
 			``` javascript
