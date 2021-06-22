@@ -73,4 +73,4 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 | Resource Location | The resources location |
 | Resources Name Main Identifier | The string that will identify uniquely all the Azure Resources that will be created, ex. if set to the value **'mywhoiswho'** deploy, the following resources will be created: app-**mywhoiswho**, appi-**mywhoiswho**, func-**mywhoiswho**-azureloader, func-**mywhoiswho**-datasync, plan-**mywhoiswho**, srch-**mywhoiswho**|
 
-3. Wait that the deploument will be completed
+4. Wait that the deploument will be completed
