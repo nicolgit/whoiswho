@@ -66,7 +66,7 @@ jobs:
           ApiUrlBase: ${{ steps.deployarm.outputs.whoiswho_portal_api_hostname }}
           ApiAccessScope: 'api://${{ secrets.WHOISWHO_IDENTITY_APPID }}/access_as_user'
           authentication.clientID: ${{ secrets.WHOISWHO_IDENTITY_FE_APPID }}
-          authentication.authority: 'https://login.microsoftonline.com/${{ secrets.DEPLOYMENT_IDENTITY_SUBSCRIPTION }}/'
+          authentication.authority: 'https://login.microsoftonline.com/${{ secrets.WHOISWHO_IDENTITY_TENANT }}/'
 
       - name: Deploy WhoIsWho Frontend
         uses: azure/webapps-deploy@v2
