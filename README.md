@@ -54,7 +54,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 	}
 	``` 
 ## 2. Grant the Frontend to the WhoIsWhoIdentityBackend permission 
-   Grant the WhoIsWhoIdentityBackend "user_impersonation" permission to the WhoIsWhoIdentityFrontend service principal:
+   Grant the WhoIsWhoIdentityBackend "user_impersonation" permission to the WhoIsWhoIdentityFrontend service principal. Execute the followind "az cli" command:
 ``` bash
 $appIdFrontend=az ad app list --display-name "WhoIsWhoIdentityFrontend" --query "[0].appId"
 $appBackend= az ad app list --display-name "WhoIsWhoIdentityBackend" --query "{appId:[0].appId,permissionId:[0].oauth2Permissions[?value=='user_impersonation'] | [0].id}" | ConvertFrom-Json
