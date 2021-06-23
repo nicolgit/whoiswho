@@ -68,7 +68,7 @@ jobs:
           files: 'artifacts/whoiswhospa/assets/config/config.default.json'
         env:
           ApiUrlBase: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_portal_api_hostname }}
-          ApiAccessScope: 'api://${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).displayName }}/access_as_user'
+          ApiAccessScope: 'http://${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).displayName }}/access_as_user'
           authentication.clientID: ${{ fromJson(secrets.WHOISWHO_IDENTITY_FE).appId }}
           authentication.authority: 'https://login.microsoftonline.com/${{ fromJson(secrets.WHOISWHO_IDENTITY_FE).tenant }}/'
       - uses: azure/login@v1
