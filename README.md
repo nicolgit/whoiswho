@@ -62,16 +62,16 @@ az ad app permission add --id $appIdFrontend --api $appBackend.appId --api-permi
 az ad app permission grant --id $appIdFrontend --api $appBackend.appId
 ``` 
 
-## 3. Create the following GitHub secrets:
-
+## 3. Create the GitHub secrets
+Create the following GitHub secrets:
 | SecretName| Content |
 | --- | --- |
 | DEPLOYMENT_IDENTITY | Store the App Registration output JSON for the Deployment Identity |
 | WHOISWHO_IDENTITY_BE | Store the App Registration output JSON for the WhoIsWho Identity Backend |
 | WHOISWHO_IDENTITY_FE | Store the App Registration output JSON for the WhoIsWho Identity Frontend |
 
-## 4. Launch the GitHub Action named 'Deploy WhoIsWho' with the following parameters:
-
+## 4. Launch the GitHub Action named 'Deploy WhoIsWho'
+Launch the GitHub Action named 'Deploy WhoIsWho' with the following parameters:
 |                            Parameter                                      | Value |
 | --- | --- |
 | Resource Group Name | The name of resource group where the WhoIsWho resources will be created|
