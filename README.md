@@ -10,7 +10,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 
  1. **WhoIsWho Deployment Identity**, used by the GitHub action for the deployment:	 
  	1. Create a Resource Group on Azure
-   	2. Create an Azure AD App Registration/Service Principal with the followind "az cli" command:
+   	2. Create an Azure AD App Registration/Service Principal with the following "az cli" command:
 		``` bash
 		az ad sp create-for-rbac --name "WhoIsWhoDeploymentIdentity" --role contributor --scopes /subscriptions/{subscriptionID}/resourceGroups/{resourceGroupName} --sdk-auth
 		```
@@ -26,7 +26,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 		}
 		```
 	 
- 2. **WhoIsWho Identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. Execute the followind "az cli" command:
+ 2. **WhoIsWho Identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. the following "az cli" command:
 	``` bash
 	az ad sp create-for-rbac --name "WhoIsWhoIdentityBackend --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 	``` 
@@ -40,7 +40,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 	}
 	``` 
 	From now you can assign the Azure AD Service Principal identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
-3. **WhoIsWho Identity Frontend**, represents the front-end and allows the user to authenticate.. Execute the followind "az cli" command:
+3. **WhoIsWho Identity Frontend**, represents the front-end and allows the user to authenticate. Execute the following "az cli" command:
 	``` bash
 	az ad sp create-for-rbac --name "WhoIsWhoIdentityFrontend" --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 	``` 
@@ -54,7 +54,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 	}
 	``` 
 ## 2. Grant the Frontend to the WhoIsWhoIdentityBackend permission 
-   Grant the WhoIsWhoIdentityBackend "user_impersonation" permission to the WhoIsWhoIdentityFrontend service principal. Execute the followind "az cli" command:
+   Grant the WhoIsWhoIdentityBackend "user_impersonation" permission to the WhoIsWhoIdentityFrontend service principal. Execute the following "az cli" command in Powershell:
 ``` bash
 $appIdFrontend=az ad app list --display-name "WhoIsWhoIdentityFrontend" --query "[0].appId"
 $appBackend= az ad app list --display-name "WhoIsWhoIdentityBackend" --query "{appId:[0].appId,permissionId:[0].oauth2Permissions[?value=='user_impersonation'] | [0].id}" | ConvertFrom-Json
