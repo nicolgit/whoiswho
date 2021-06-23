@@ -26,7 +26,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 		}
 		```
 	 
- 2. **WhoIsWho Identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index:
+ 2. **WhoIsWho Identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. Execute the followind "az cli" command:
 	``` bash
 	az ad sp create-for-rbac --name "WhoIsWhoIdentityBackend --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 	``` 
@@ -40,7 +40,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 	}
 	``` 
 	From now you can assign the Azure AD Service Principal identified by the displayName to every Azure Resource via RBAC with the "Reader" role assignment. 
-3. **WhoIsWho Identity Frontend**, represents the front-end and allows the user to authenticate:
+3. **WhoIsWho Identity Frontend**, represents the front-end and allows the user to authenticate.. Execute the followind "az cli" command:
 	``` bash
 	az ad sp create-for-rbac --name "WhoIsWhoIdentityFrontend" --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 	``` 
