@@ -71,7 +71,9 @@ jobs:
           ApiAccessScope: 'api://${{ secrets.WHOISWHO_IDENTITY_APPID }}/access_as_user'
           authentication.clientID: ${{ secrets.WHOISWHO_IDENTITY_FE_APPID }}
           authentication.authority: 'https://login.microsoftonline.com/${{ secrets.WHOISWHO_IDENTITY_TENANT }}/'
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
       - name: Deploy WhoIsWho Frontend
         uses: azure/webapps-deploy@v2
         with:
@@ -89,7 +91,9 @@ jobs:
           name: WhoIsWho.DataLoader.Azure
           branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/azuredataloader
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
       - name: Deploy AzureDataLoader Function
         uses: Azure/functions-action@v1.3.1
         with:
@@ -107,7 +111,9 @@ jobs:
           name: WhoIsWho.DataSync
           branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/datasync
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
       - name: Deploy WhoIsWhoDataSync Function
         uses: Azure/functions-action@v1.3.1
         with:
@@ -125,7 +131,9 @@ jobs:
           name: WhoIsWho.Portal.API
           branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/portalapi
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
       - name: Deploy WhoIsWhoPortalAPI Function
         uses: Azure/functions-action@v1.3.1
         with:
