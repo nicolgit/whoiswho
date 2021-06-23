@@ -30,21 +30,21 @@ jobs:
       - uses: actions/checkout@v2
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
         uses: Azure/arm-deploy@main
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets.DEPLOYMENT_IDENTITY_SUBSCRIPTION }}
+          subscriptionId: ${{ fromJson(secrets.DEPLOYMENT_IDENTITY).subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
-            whoiswho_identity_appid=${{ secrets.WHOISWHO_IDENTITY_APPID }}
-            whoiswho_identity_password=${{ secrets.WHOISWHO_IDENTITY_PASSWORD }}
-            whoiswho_identity_tenant=${{ secrets.WHOISWHO_IDENTITY_TENANT }}
+            whoiswho_identity_appid=${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).appId }}
+            whoiswho_identity_password=${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).password }}
+            whoiswho_identity_tenant=${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).tenant }}
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -68,12 +68,12 @@ jobs:
           files: 'artifacts/whoiswhospa/assets/config/config.default.json'
         env:
           ApiUrlBase: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_portal_api_hostname }}
-          ApiAccessScope: 'api://${{ fromJson(secrets.WHOISWHO_IDENTITY).displayName }}/access_as_user'
-          authentication.clientID: ${{ secrets.WHOISWHO_IDENTITY_FE_APPID }}
-          authentication.authority: 'https://login.microsoftonline.com/${{ secrets.WHOISWHO_IDENTITY_TENANT }}/'
+          ApiAccessScope: 'api://${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).displayName }}/access_as_user'
+          authentication.clientID: ${{ fromJson(secrets.WHOISWHO_IDENTITY_FE).appId }}
+          authentication.authority: 'https://login.microsoftonline.com/${{ fromJson(secrets.WHOISWHO_IDENTITY_FE).tenant }}/'
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy WhoIsWho Frontend
         uses: azure/webapps-deploy@v2
         with:
@@ -93,7 +93,7 @@ jobs:
           path: ./artifacts/azuredataloader
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy AzureDataLoader Function
         uses: Azure/functions-action@v1.3.1
         with:
@@ -113,7 +113,7 @@ jobs:
           path: ./artifacts/datasync
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy WhoIsWhoDataSync Function
         uses: Azure/functions-action@v1.3.1
         with:
@@ -133,7 +133,7 @@ jobs:
           path: ./artifacts/portalapi
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.DEPLOYMENT_IDENTITY_APPREGISTRATION }}
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy WhoIsWhoPortalAPI Function
         uses: Azure/functions-action@v1.3.1
         with:
