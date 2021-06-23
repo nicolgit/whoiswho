@@ -64,12 +64,9 @@ az ad app permission grant --id $appIdFrontend --api $appBackend.appId
 
 | SecretName| Content |
 | --- | --- |
-| DEPLOYMENT_IDENTITY_APPREGISTRATION | Store inside the App Registration output JSON for the Deployment Identity |
-| DEPLOYMENT_IDENTITY_SUBSCRIPTION | Store inside the subscription id for the Deployment Identity |
-| WHOISWHO_IDENTITY_APPID | Store inside the appId of the Service Principal create for the WhoIsWho Identity Backend |
-| WHOISWHO_IDENTITY_PASSWORD | Store inside the password of the Service Principal create for the WhoIsWho Identity Backend |
-| WHOISWHO_IDENTITY_TENANT |  Store inside the tenant of the Service Principal create for the WhoIsWho Identity Backend |
-| WHOISWHO_IDENTITY_FE_APPID | Store inside the appId of the Service Principal create for the WhoIsWho Identity Frontend |
+| DEPLOYMENT_IDENTITY | Store the App Registration output JSON for the Deployment Identity |
+| WHOISWHO_IDENTITY_BE | Store the App Registration output JSON for the WhoIsWho Identity Backend |
+| WHOISWHO_IDENTITY_FE | Store the App Registration output JSON for the WhoIsWho Identity Frontend |
 
 4. Launch manually the GitHub action named 'Deploy WhoIsWho' with the following parameters:
 
