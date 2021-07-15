@@ -3,6 +3,7 @@
         "name": "default"
     },
     "ApiUrlBase": "http://localhost:7071",
+    "ApiAccessScope": "api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user",
     "authentication": {
         "clientID": "4f910f38-a4e5-437b-b493-49fc330758da",
         "authority": "https://login.microsoftonline.com/4a5f3518-cc7e-487f-9888-f47a30257b67/"
@@ -15,12 +16,6 @@
             ]
         },
         {
-            "endpoint": "http://localhost:7071",
-            "scopes": [
-                "api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user"
-            ]
-        },
-        {
             "endpoint": "assets/",
             "scopes": null
         }
@@ -28,7 +23,6 @@
     "MSALGuardScopes": [
         "user.read",
         "openid",
-        "profile",
-        "api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user"
+        "profile"
     ]
 }

@@ -62,6 +62,7 @@ export function MSALInterceptorConfigFactory(config: AppConfig): MsalInterceptor
   for (var resource of config.settings.protectedResources) {
     protectedResourceMap.set(resource.endpoint, resource.scopes);
   }
+  protectedResourceMap.set(config.settings.ApiUrlBase, [config.settings.ApiAccessScope])
 
   return {
     interactionType: InteractionType.Redirect,
@@ -70,10 +71,12 @@ export function MSALInterceptorConfigFactory(config: AppConfig): MsalInterceptor
 }
 
 export function MSALGuardConfigFactory(config: AppConfig): MsalGuardConfiguration {
+  var currentScopes = config.settings.MSALGuardScopes;
+  currentScopes.push(config.settings.ApiAccessScope);
   return {
     interactionType: InteractionType.Redirect,
     authRequest: {
-      scopes: config.settings.MSALGuardScopes
+      scopes: currentScopes
     }
   };
 }

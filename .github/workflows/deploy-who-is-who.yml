@@ -3,26 +3,6 @@ name: Deploy WhoIsWho
 on:
   workflow_dispatch:
     inputs:
-      deployment_identity_appregistration:
-        description: "SecretName - Deployment Identity App Registration"
-        required: true
-        default: "deployment_identity_appregistration"
-      deployment_identity_subscription:
-        description: "SecretName - Deployment Identity App Subscription"
-        required: true
-        default: "deployment_identity_subscription"
-      whoiswho_identity_appid:
-        description: "SecretName - WhoIsWho Identity AppId "
-        required: true
-        default: "whoiswho_identity_appid"
-      whoiswho_identity_password:
-        description: "SecretName - WhoIsWho Identity Password "
-        required: true
-        default: "whoiswho_identity_password"
-      whoiswho_identity_tenant:
-        description: "SecretName - WhoIsWho Identity Tenant"
-        required: true
-        default: "whoiswho_identity_tenant"
       rgName:
         description: "Resource Group Name"
         required: true
@@ -35,95 +15,129 @@ on:
         description: "Resources Name Main Identifier"
         required: true
         default: "who-is-who-deployment-playground"
-      storageAccountName:
-        description: "Storage Account Name"
-        required: true
-        default: "sawiswhpg"
 
 jobs:
-  deploy-whoiswho:
-    # The type of runner that the job will run on
+  deploy_whoiswho_infrastracture:
     runs-on: ubuntu-latest
-
+    outputs:
+      branchName: ${{ steps.extract_branch.outputs.branch }}
+      whoiswho_portal_api_hostname: ${{ steps.deployarm.outputs.whoiswho_portal_api_hostname }}
+      whoiswho_app_name: ${{ steps.deployarm.outputs.whoiswho_app_name }}
+      whoiswho_azuredataloader_name: ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }}
+      whoiswho_datasync_name: ${{ steps.deployarm.outputs.whoiswho_datasync_name }}
+      whoiswho_portal_api_name: ${{ steps.deployarm.outputs.whoiswho_portal_api_name }}
     steps:
       - uses: actions/checkout@v2
-
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets[github.event.inputs.deployment_identity_appregistration] }}
-
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy Azure Resource Manager (ARM) Template
         id: deployarm
-        uses: Azure/arm-deploy@v1
+        uses: Azure/arm-deploy@main
         with:
           scope: resourcegroup
-          subscriptionId: ${{ secrets[github.event.inputs.deployment_identity_subscription] }}
+          subscriptionId: ${{ fromJson(secrets.DEPLOYMENT_IDENTITY).subscriptionId }}
           resourceGroupName: ${{ github.event.inputs.rgName }}
           template: ./deployment/azuredeploy.json
           deploymentMode: Incremental
           parameters: rgLocation=${{ github.event.inputs.rgLocation }}
             resourcesName=${{ github.event.inputs.resourcesName }}
-            storageAccountName=${{ github.event.inputs.storageAccountName }}
-            whoiswho_identity_appid=${{ secrets[github.event.inputs.whoiswho_identity_appid] }}
-            whoiswho_identity_password=${{ secrets[github.event.inputs.whoiswho_identity_password] }}
-            whoiswho_identity_tenant=${{ secrets[github.event.inputs.whoiswho_identity_tenant] }}
+            whoiswho_identity_appid=${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).appId }}
+            whoiswho_identity_password=${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).password }}
+            whoiswho_identity_tenant=${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).tenant }}
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
 
-      - run: echo ${{ steps.deployarm.outputs.whoiswho_app_name }}
-
+  deploy-whoiswho-frontend:
+    needs: deploy_whoiswho_infrastracture
+    runs-on: ubuntu-latest
+    steps:
       - name: Download WhoIsWho Frontend Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
           workflow: build-who-is-who.yml
           name: WhoIsWho.SPA
-          branch: master
+          branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/whoiswhospa
-
+          
+      - name: WhoIsWho Frontend Config Settings Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'artifacts/whoiswhospa/assets/config/config.default.json'
+        env:
+          ApiUrlBase: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_portal_api_hostname }}
+          ApiAccessScope: 'http://${{ fromJson(secrets.WHOISWHO_IDENTITY_BE).displayName }}/user_impersonation'
+          authentication.clientID: ${{ fromJson(secrets.WHOISWHO_IDENTITY_FE).appId }}
+          authentication.authority: 'https://login.microsoftonline.com/${{ fromJson(secrets.WHOISWHO_IDENTITY_FE).tenant }}/'
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy WhoIsWho Frontend
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.deployarm.outputs.whoiswho_app_name }}
+          app-name: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_app_name }}
           package: ./artifacts/whoiswhospa
 
+  deploy-whoiswho-azuredataloader:
+    needs: deploy_whoiswho_infrastracture
+    runs-on: ubuntu-latest
+    steps:
       - name: Download AzureDataLoader Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
           workflow: build-who-is-who.yml
           name: WhoIsWho.DataLoader.Azure
-          branch: master
+          branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/azuredataloader
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy AzureDataLoader Function
         uses: Azure/functions-action@v1.3.1
         with:
-          app-name: ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }}
+          app-name: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_azuredataloader_name }}
           package: ./artifacts/azuredataloader
 
+  deploy-whoiswho-datasync:
+    needs: deploy_whoiswho_infrastracture
+    runs-on: ubuntu-latest
+    steps:
       - name: Download WhoIsWhoDataSync Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
           workflow: build-who-is-who.yml
           name: WhoIsWho.DataSync
-          branch: master
+          branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/datasync
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy WhoIsWhoDataSync Function
         uses: Azure/functions-action@v1.3.1
         with:
-          app-name: ${{ steps.deployarm.outputs.whoiswho_datasync_name }}
+          app-name: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_datasync_name }}
           package: ./artifacts/datasync
 
+  deploy-whoiswho-portalapi:
+    needs: deploy_whoiswho_infrastracture
+    runs-on: ubuntu-latest
+    steps:
       - name: Download WhoIsWhoPortalAPI Artifact
         uses: dawidd6/action-download-artifact@v2.11.0
         with:
           workflow: build-who-is-who.yml
           name: WhoIsWho.Portal.API
-          branch: master
+          branch: ${{ steps.extract_branch.outputs.branch }}
           path: ./artifacts/portalapi
-
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Deploy WhoIsWhoPortalAPI Function
         uses: Azure/functions-action@v1.3.1
         with:
-          app-name: ${{ steps.deployarm.outputs.whoiswho_portal_api_name }}
+          app-name: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_portal_api_name }}
           package: ./artifacts/portalapi
 
       - name: Finalization of AzureDataLoader settings
@@ -131,5 +145,5 @@ jobs:
         with:
           # FunctionApp URL is set here because listkey in the ARM template is not working due to key availability delays altough dependsOn is set
           inlineScript: |
-            functionKey=$(az functionapp keys list -g ${{ github.event.inputs.rgName }} -n ${{ steps.deployarm.outputs.whoiswho_datasync_name }} --query "functionKeys.default" -o tsv)
-            az functionapp config appsettings set -g ${{ github.event.inputs.rgName }} -n ${{ steps.deployarm.outputs.whoiswho_azuredataloader_name }} --settings "DataLoaderSyncUrl=https://${{ steps.deployarm.outputs.whoiswho_datasync_name }}.azurewebsites.net/api/WhoIsWhoSync?loader={0}&code=$functionKey" --output none
+            functionKey=$(az functionapp keys list -g ${{ github.event.inputs.rgName }} -n ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_datasync_name }} --query "functionKeys.default" -o tsv)
+            az functionapp config appsettings set -g ${{ github.event.inputs.rgName }} -n ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_azuredataloader_name }} --settings "DataLoaderSyncUrl=https://${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_datasync_name }}.azurewebsites.net/api/WhoIsWhoSync?loader={0}&code=$functionKey" --output none
