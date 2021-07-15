@@ -8,12 +8,13 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 
 ## 1. Prepare target subscription
 
-In order to deploy required resources, the Microsoft.Web provider must be enabled and a target resource group is required
+In order to deploy required resources, some Azure provider must be enabled and a target resource group is required
 
- 1. Register the required Azure Resource Proovider and create a Resource Group on Azure:
+ 1. Register the required Azure Resource Prooviders and create a Resource Group on Azure:
 	``` bash
 	az provider register --namespace 'Microsoft.Web'
 	az provider register --namespace 'Microsoft.Search'
+	az provider register --namespace 'Microsoft.KeyVault'
 	az group create -l westus -n {ResourceGroupName}
 	```
 
