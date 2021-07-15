@@ -28,7 +28,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 	 
  2. **WhoIsWho Identity Backend**, exposes API to the frontend. This principal can be assigned to the Azure Resources (ex.Subscription,Resource Group, AppService, etc.) that you want the solution will index. Execute the following "az cli" command:
 	``` bash
-	az ad sp create-for-rbac --name "WhoIsWhoIdentityBackend --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
+	az ad sp create-for-rbac --name "WhoIsWhoIdentityBackend" --years {numberOfTheYearOfExpirationForGeneratedPassword} --skip-assignment
 	``` 
 	and take note of the output JSON that should look like this:
 	``` javascript
