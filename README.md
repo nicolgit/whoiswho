@@ -6,7 +6,20 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 
 # Deployment
 
-## 1. Create in your Azure Active Directory tenant the 3 required service principals
+## 1. Prepare target subscription
+
+In order to deploy required resources, the Microsoft.Web provider must be enabled and a target resource group is required
+
+ 1. Register the required Azure Resource Proovider and create a Resource Group on Azure:
+	``` bash
+	az provider register --namespace 'Microsoft.Web'
+	az group create -l westus -n {ResourceGroupName}
+	```
+
+and take note of the resource group name.
+
+
+## 2. Create in your Azure Active Directory tenant the 3 required service principals
 
  1. **WhoIsWho Deployment Identity**, used by the GitHub action for the deployment:	 
  	1. Register the required Azure Resource Proovider and create a Resource Group on Azure:
@@ -58,7 +71,7 @@ You can leverage the Who Is Who full-text search to find all you need and retrie
 	"tenant": "yourAADTenantId",
 	}
 	``` 
-## 2. Grant the Frontend to the WhoIsWhoIdentityBackend permission 
+## 3. Grant the Frontend to the WhoIsWhoIdentityBackend permission 
    Grant the WhoIsWhoIdentityBackend "user_impersonation" permission to the WhoIsWhoIdentityFrontend service principal. Execute the following "az cli" command in Powershell:
 ``` bash
 $appIdFrontend=az ad app list --display-name "WhoIsWhoIdentityFrontend" --query "[0].appId"
@@ -67,7 +80,7 @@ az ad app permission add --id $appIdFrontend --api $appBackend.appId --api-permi
 az ad app permission grant --id $appIdFrontend --api $appBackend.appId
 ``` 
 
-## 3. Create the GitHub secrets
+## 4. Create the GitHub secrets
 Create the following GitHub secrets:
 | SecretName| Content |
 | --- | --- |
@@ -75,7 +88,7 @@ Create the following GitHub secrets:
 | WHOISWHO_IDENTITY_BE | Store the App Registration output JSON for the WhoIsWho Identity Backend |
 | WHOISWHO_IDENTITY_FE | Store the App Registration output JSON for the WhoIsWho Identity Frontend |
 
-## 4. Launch the GitHub Action named 'Deploy WhoIsWho'
+## 5. Launch the GitHub Action named 'Deploy WhoIsWho'
 Launch the GitHub Action named 'Deploy WhoIsWho' with the following parameters:
 |                            Parameter                                      | Value |
 | --- | --- |
@@ -83,4 +96,4 @@ Launch the GitHub Action named 'Deploy WhoIsWho' with the following parameters:
 | Resource Location | The resources location |
 | Resources Name Main Identifier | The string that will identify uniquely all the Azure Resources that will be created, ex. if set to the value **'mywhoiswho'** deploy, the following resources will be created: app-**mywhoiswho**, appi-**mywhoiswho**, func-**mywhoiswho**-azureloader, func-**mywhoiswho**-datasync, plan-**mywhoiswho**, srch-**mywhoiswho**|
 
-## 5. Wait that the deployment will be completed
+## 6. Wait that the deployment will be completed
