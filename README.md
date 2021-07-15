@@ -13,6 +13,7 @@ In order to deploy required resources, the Microsoft.Web provider must be enable
  1. Register the required Azure Resource Proovider and create a Resource Group on Azure:
 	``` bash
 	az provider register --namespace 'Microsoft.Web'
+	az provider register --namespace 'Microsoft.Search'
 	az group create -l westus -n {ResourceGroupName}
 	```
 
