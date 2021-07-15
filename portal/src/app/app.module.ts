@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
@@ -14,7 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { MsalModule, MsalInterceptor, MsalService, MsalGuard, MSAL_CONFIG, MSAL_CONFIG_ANGULAR, MsalAngularConfiguration } from '@azure/msal-angular';
+import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { MainSearchBoxComponent } from './components/main-search-box/main-search-box.component';
 import { ResultListComponent } from './components/result-list/result-list.component';
@@ -22,6 +22,7 @@ import { ResultComponent } from './components/result/result.component';
 import { GenericElementsComponent } from './components/relateditems/genericelements/genericelements.component';
 import { AppConfig } from './app.config';
 import { Configuration } from 'msal';
+import { BrowserCacheLocation, InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -33,42 +34,52 @@ export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
 }
 
-export function msalConfigFactory(config: AppConfig) {
-  const auth = {
+
+export function MSALInstanceFactory(config: AppConfig): IPublicClientApplication {
+  return new PublicClientApplication({
     auth: {
       clientId: config.settings.authentication.clientID, // This is your client ID
       authority: config.settings.authentication.authority, // This is your tenant ID
-      validateAuthority: true,
-      redirectUri: getRedirectUri(),// This is your redirect URI
+      redirectUri: getRedirectUri(), // This is your redirect URI
       postLogoutRedirectUri: getRedirectUri(),
       navigateToLoginRequestUrl: true,
     },
     cache: {
-      cacheLocation: 'localStorage',
-      storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+      storeAuthStateInCookie: isIE, // set to true for IE 11
     },
-  };
-  return (auth as Configuration);
+    system: {
+      loggerOptions: {
+        piiLoggingEnabled: false
+      }
+    }
+  });
 }
 
-export function msalAngularConfigFactory(config: AppConfig): MsalAngularConfiguration {
-  const auth = {
-    popUp: !isIE,
-    consentScopes: [
-      'user.read',
-      'openid',
-      'profile',
-    ],
-    unprotectedResources: [],
-    protectedResourceMap: [
-      ['https://graph.microsoft.com/v1.0/me', ['user.read']],
-      ['assets/', null]
-    ],
-    extraQueryParameters: {}
+export function MSALInterceptorConfigFactory(config: AppConfig): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+
+  for (var resource of config.settings.protectedResources) {
+    protectedResourceMap.set(resource.endpoint, resource.scopes);
+  }
+  protectedResourceMap.set(config.settings.ApiUrlBase, [config.settings.ApiAccessScope])
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap
   };
-  return (auth as MsalAngularConfiguration);
 }
 
+export function MSALGuardConfigFactory(config: AppConfig): MsalGuardConfiguration {
+  var currentScopes = config.settings.MSALGuardScopes;
+  currentScopes.push(config.settings.ApiAccessScope);
+  return {
+    interactionType: InteractionType.Redirect,
+    authRequest: {
+      scopes: currentScopes
+    }
+  };
+}
 
 @NgModule({
   declarations: [
@@ -116,23 +127,30 @@ export function msalAngularConfigFactory(config: AppConfig): MsalAngularConfigur
       deps: [AppConfig],
       multi: true
     }, {
-      provide: MSAL_CONFIG,
-      useFactory: msalConfigFactory,
-      deps: [AppConfig]
-    },
-    {
-      provide: MSAL_CONFIG_ANGULAR,
-      useFactory: msalAngularConfigFactory,
-      deps: [AppConfig]
-    },
-    MsalService,
-    {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory,
+      deps: [AppConfig]
+    },
+    {
+      provide: MSAL_GUARD_CONFIG,
+      useFactory: MSALGuardConfigFactory,
+      deps: [AppConfig]
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MSALInterceptorConfigFactory,
+      deps: [AppConfig]
+    },
+    MsalService,
+    MsalGuard,
+    MsalBroadcastService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule {
 }

@@ -73,7 +73,7 @@ jobs:
        with:
         dotnet-version: 3.1.x
      - name: Publish
-       run: dotnet publish ./api/WhoIsWho.Portal.API/WhoIsWho.Portal.API.csproj --configuration Release --output ./output/portalapi
+       run: dotnet publish ./api/WhoIsWho.Portal.API.csproj --configuration Release --output ./output/portalapi
      - name: Upload a Build Artifact
        uses: actions/upload-artifact@v2.2.2
        with:

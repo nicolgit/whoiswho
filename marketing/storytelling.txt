@@ -1,0 +1,51 @@
+Typical large Enterprise IT have to manage:
+ - one or more on-premise datacenters
+ - one or more cloud provider (Azure, AWS, Google)
+ - Office 365
+ - many custom data repository
+
+
+many projects|platforms, each one have
+ - git(s) repository
+ - many people involved - people involved in different roles 
+ - official documentation, internal/external site
+ - (open)API (endpoint and documentation)
+ - interaction with other platforms
+ - connection and interaction between all the 
+
+
+Who is responsible for ...
+hwere are located the service of ...
+who is the administrator of ...
+where is the sharepoint site for the project...
+is there any SR open for ...
+what is the public documentation for the API...
+
+
+corelations are well defined in the enterprise but 
+doesn't  exist a one-fit-all co-relation diagram
+
+google demonstrated the full text search can work as entrypoint for everything on internet
+
+
+WhoIsWho
+
+a unified and handy view of all enterprise IT assets and his connections, costs, point of contacts, managers, documentation.
+
+an open-source extendible design based on Azure Cognitive search that can be tailored on any enterprise organization
+a well defined pattern to include more data entity and corelate each other
+a SPA search based app 
+an API available for integrating in 3th party apps
+
+ARCHITECTURE
+
+DEMO
+
+how to seel it
+open source code managed by microsoft for Azure and Office connectors
+Customer Engineer can help customer in extend and tailor the schema of ther solution his needs
+
+CONSUMPTION and VALUE for MICROSOFT
+insight on customer IT
+
+
