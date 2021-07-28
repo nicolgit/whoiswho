@@ -119,9 +119,9 @@ jobs:
         with:
           app-name: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_datasync_name }}
           package: ./artifacts/datasync
-
+      
   deploy-whoiswho-portalapi:
-    needs: [deploy_whoiswho_infrastracture,deploy-whoiswho-azuredataloader]
+    needs: deploy_whoiswho_infrastracture
     runs-on: ubuntu-latest
     steps:
       - name: Download WhoIsWhoPortalAPI Artifact
@@ -140,6 +140,10 @@ jobs:
           app-name: ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_portal_api_name }}
           package: ./artifacts/portalapi
 
+  deploy-finalization:
+    needs: [deploy_whoiswho_infrastracture,deploy-whoiswho-frontend,deploy-whoiswho-azuredataloader,deploy-whoiswho-datasync,deploy-whoiswho-portalapi]
+    runs-on: ubuntu-latest
+    steps:
       - name: Finalization of AzureDataLoader settings
         uses: Azure/cli@1.0.4
         with:
