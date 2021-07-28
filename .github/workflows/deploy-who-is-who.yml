@@ -144,6 +144,9 @@ jobs:
     needs: [deploy_whoiswho_infrastracture,deploy-whoiswho-frontend,deploy-whoiswho-azuredataloader,deploy-whoiswho-datasync,deploy-whoiswho-portalapi]
     runs-on: ubuntu-latest
     steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYMENT_IDENTITY }}
       - name: Finalization of AzureDataLoader settings
         uses: Azure/cli@1.0.4
         with:
