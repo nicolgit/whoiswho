@@ -12,22 +12,31 @@ namespace WhoIsWho.Api
 {
     public class ResultByFilterFunction
     {
+        private readonly AuthenticationService authService;
         private readonly CognitiveSearchService searchService;
 
-        public ResultByFilterFunction(CognitiveSearchService s)
+        public ResultByFilterFunction(AuthenticationService a, CognitiveSearchService s)
         {
+            authService = a;
             searchService = s;
         }
 
         [FunctionName("ResultByFilter")]
-        public async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-            var searchString = req.Query["$filter"];
-            var json = await searchService.ResultByFilter(searchString);
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            var accessToken = authService.GetAccessToken(req);
+            var claimsPrincipal = await authService.ValidateAccessToken(accessToken);
+            if (claimsPrincipal != null)
             {
-                Content = new StringContent(json, Encoding.UTF8, "application/json")
-            };
+                var searchString = req.Query["$filter"];
+                var json = await searchService.ResultByFilter(searchString);
+
+                return (ActionResult)new OkObjectResult(json);
+            }
+            else
+            {
+                return (ActionResult)new UnauthorizedResult();
+            }
         }
     }
 }

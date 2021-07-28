@@ -9,18 +9,29 @@ namespace WhoIsWho.Api
 {
     public class CountFunction
     {
+        private readonly AuthenticationService authService;
         private readonly CognitiveSearchService searchService;
 
-        public CountFunction(CognitiveSearchService s)
+        public CountFunction(AuthenticationService a, CognitiveSearchService s)
         {
+            authService = a;
             searchService = s;
         }
 
         [FunctionName("Count")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
-            var json = await searchService.Count();
-            return new JsonResult(json);
+            var accessToken = authService.GetAccessToken(req);
+            var claimsPrincipal = await authService.ValidateAccessToken(accessToken);
+            if (claimsPrincipal != null)
+            {
+                var json = await searchService.Count();
+                return (ActionResult)new OkObjectResult(json);
+            }
+            else
+            {
+                return (ActionResult)new UnauthorizedResult();
+            }
         }
     }
 }

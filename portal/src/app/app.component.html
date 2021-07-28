@@ -41,8 +41,8 @@
                 <span class="label" style="display: block;">{{profile?.displayName}}</span>
               </li>
               <li>
-                <button mat-raised-button *ngIf="!loggedIn" (click)="login()">Login</button>
-                <button mat-raised-button *ngIf="loggedIn" (click)="logout()">Logout</button>
+                <button mat-raised-button *ngIf="!loginDisplay" (click)="loginPopup()">Login</button>
+                <button mat-raised-button *ngIf="loginDisplay" (click)="logout()">Logout</button>
               </li>
             
           </ul>

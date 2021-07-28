@@ -3,8 +3,26 @@
         "name": "default"
     },
     "ApiUrlBase": "http://localhost:7071",
-    "authentication":{
-        "clientID": "c45b71f2-8b57-43c0-8c8e-bcf7a00fa946",
-        "authority":"https://login.microsoftonline.com/common/"
-    }
+    "ApiAccessScope": "api://84daf407-55bf-4241-8512-960393de9fe4/access_as_user",
+    "authentication": {
+        "clientID": "4f910f38-a4e5-437b-b493-49fc330758da",
+        "authority": "https://login.microsoftonline.com/4a5f3518-cc7e-487f-9888-f47a30257b67/"
+    },
+    "protectedResources": [
+        {
+            "endpoint": "https://graph.microsoft-ppe.com/v1.0/me",
+            "scopes": [
+                "user.read"
+            ]
+        },
+        {
+            "endpoint": "assets/",
+            "scopes": null
+        }
+    ],
+    "MSALGuardScopes": [
+        "user.read",
+        "openid",
+        "profile"
+    ]
 }
