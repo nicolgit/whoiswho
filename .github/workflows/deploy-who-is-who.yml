@@ -152,5 +152,6 @@ jobs:
         with:
           # FunctionApp URL is set here because listkey in the ARM template is not working due to key availability delays altough dependsOn is set
           inlineScript: |
+            sleep 30s
             functionKey=$(az functionapp keys list -g ${{ github.event.inputs.rgName }} -n ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_datasync_name }} --query "functionKeys.default" -o tsv)
             az functionapp config appsettings set -g ${{ github.event.inputs.rgName }} -n ${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_azuredataloader_name }} --settings "DataLoaderSyncUrl=https://${{ needs.deploy_whoiswho_infrastracture.outputs.whoiswho_datasync_name }}.azurewebsites.net/api/WhoIsWhoSync?loader={0}&code=$functionKey" --output none
