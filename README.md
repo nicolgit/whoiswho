@@ -4,6 +4,9 @@
 Who Is Who allows you to index all your IT assets: Azure Resources, Azure Active Directory and elements of other systems.
 You can leverage the Who Is Who full-text search to find all you need and retrieve the relationships betweeb the different elements.
 
+* [what is](what-is.md)
+* [how it works](how-it-works.md)
+
 # Deployment
 
 ## 1. Prepare target subscription
