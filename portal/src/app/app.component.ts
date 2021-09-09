@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
         this.authService.instance.setNavigationClient(customNavigationClient);
     }
   
-  title = "Azure Enterprise App's Search Engine";
+  title = "WhoisWho";
   isIframe = false;
   loginDisplay = false;
   profile;
