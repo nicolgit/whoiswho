@@ -16,7 +16,7 @@ Google have demonstrated the full text search can work as entrypoint for everyth
 
 # Introducing: WhoIsWho
 
-WhoIsWho is **a unified and handy view of all enterprise IT assets and his connections, costs, point of contacts, managers, documentation******.
+WhoIsWho is **a unified and handy view of all enterprise IT assets and his connections, costs, point of contacts, managers, documentation**.
 
 WhoIsWho is an open-source extendible design based on Azure Cognitive search that can be tailored on any enterprise organization. A well defined pattern to include more data entity and corelate each other
 a SPA search based app gives a starting point and a reference architecture to integrate and corelate all IT assets. An API is also available for integrating WhoIsWho data in 3th party applications.
