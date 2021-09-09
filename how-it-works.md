@@ -9,6 +9,8 @@ The WhoIsWho app completely relies on the full-text search to find all you need 
 
 The solution is completely based on the Azure cloud and is designed in a scalable and extensible way.
 
+![architecture](./marketing/architecture.png)
+
 The main components are:
 * WhoIsWho Web Application: this is a SPA created with Angular that gives to the end-user the perfect UI to explore all the information he/she needs
 * Data Provider(s): these are Azure Functions written in C# that integrate with the various asset providers, timed execution allows you to have an always up-to-date situation. The project includes some built-in implementations (Azure Resources, AAD Users, Groups and device, Microsoft 365 SharePoint Sites, GitHub/AzDevOps repos, etc.) but third-party providers can be integrated by implementing new functions that exploit the programming model
@@ -19,3 +21,4 @@ The main components are:
  
 Software development is managed through GitHub and a full DevOps approach as well as infrastructure as Code allow you to deploy the solution on any Azure tenant through existing GitHub actions.
 
+![entity and relations](./marketing/entities-and-relations.png)
