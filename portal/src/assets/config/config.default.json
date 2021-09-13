@@ -2,7 +2,7 @@
     "env": {
         "name": "default"
     },
-    "ApiUrlBase": "http://localhost:7071",
+    "ApiUrlBase": "https://apiwiwnicold.azurewebsites.net",
     "ApiAccessScope": "api://36009462-2717-46b8-a54f-165cc875e666/access_as_user",
     "authentication": {
         "clientID": "74bdd920-855d-4c59-8510-f4c6b7aecc4b",
@@ -16,6 +16,12 @@
             ]
         },
         {
+            "endpoint": "https://apiwiwnicold.azurewebsites.net",
+            "scopes": [
+                "api://36009462-2717-46b8-a54f-165cc875e666/access_as_user"
+            ]
+        },
+        {
             "endpoint": "assets/",
             "scopes": null
         }
@@ -23,6 +29,7 @@
     "MSALGuardScopes": [
         "user.read",
         "openid",
-        "profile"
+        "profile",
+        "api://36009462-2717-46b8-a54f-165cc875e666/access_as_user"
     ]
 }

@@ -89,7 +89,8 @@ namespace WhoIsWho.Portal.Api.Services
                 {
                     // App Id URI and AppId of this service application are both valid audiences.
                     ValidateAudience = true,
-                    ValidAudiences = new[] { audience, clientID },
+                    //ValidAudiences = new[] { audience, clientID },
+                    ValidAudiences = new[] { audience },
 
                     // Support Azure AD V1 and V2 endpoints.
                     ValidateIssuer = true,
