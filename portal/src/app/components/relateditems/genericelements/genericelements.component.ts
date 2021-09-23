@@ -60,8 +60,9 @@ export class GenericElementsComponent implements OnInit {
 
   errorMessage: string;
   iconSVG: SafeHtml;
-  
+  IsWaitChild:boolean;
   get hasData(): boolean {
+    
     return this.searchResults != null && this.searchResults.length>0;
   }
 
@@ -87,7 +88,7 @@ export class GenericElementsComponent implements OnInit {
   {
     var caller = this;
     caller.searchResults = [];
-
+    caller.IsWaitChild =true;
     if (this.CorelationType==null || caller.RowKey==null || caller.PartitionKey==null)
       return;
 
@@ -103,7 +104,7 @@ export class GenericElementsComponent implements OnInit {
       default:
         throw "ERROR - CorelationType not valid('" + caller.CorelationType + "')";
     }
-
+    
     this.SearchService.ResultsByFilters(filters).subscribe( {
       next(sr) {
         sr.value.forEach(element => {
@@ -153,21 +154,27 @@ export class GenericElementsComponent implements OnInit {
                   }
                 ); 
               });
+              caller.IsWaitChild=false;
             },
             error(msg) {
               caller.errorMessage = msg.message;
               console.log('error ResultByKey: ', msg.message);
+             
             }
           });
-        
-         
+                
           caller.searchResults.push(s);
+          
+          
         });
+        
       },
       error(msg) {
         caller.errorMessage = msg.message;
         console.log('error: ', msg.message);
       }
+      
     });
-  }
+   }
+  
 }
