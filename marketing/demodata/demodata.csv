@@ -186,8 +186,8 @@ DeviceForUser;DVFUS301;2021-09-17T17:23:24.280Z;;;FALSE;;;;DeviceForUser;;;;;;De
 DeviceForUser;DVFUS302;2021-09-17T17:23:24.280Z;;;FALSE;;;;DeviceForUser;;;;;;Device;;DV302;;User;;U04;;;;;;;;;;;
 DeviceForUser;DVFUS401;2021-09-17T17:23:24.280Z;;;FALSE;;;;DeviceForUser;;;;;;Device;;DV401;;User;;U05;;;;;;;;;;;
 DeviceForUser;DVFUS402;2021-09-17T17:23:24.280Z;;;FALSE;;;;DeviceForUser;;;;;;Device;;DV402;;User;;U05;;;;;;;;;;;
-Teams;TMS001;2021-09-17T17:23:24.280Z;;;FALSE;Edm.Boolean;Sales;Edm.String;Device;;;;;;;;;;;;;;;;;;;;;;;
-Teams;TMS002;2021-09-17T17:23:24.280Z;;;FALSE;Edm.Boolean;Developers ;Edm.String;Device;;;;;;;;;;;;;;;;;;;;;;;
+Teams;TMS001;2021-09-17T17:23:24.280Z;;;FALSE;Edm.Boolean;Sales;Edm.String;Teams;;;;;;;;;;;;;;;;;;;;;;;
+Teams;TMS002;2021-09-17T17:23:24.280Z;;;FALSE;Edm.Boolean;Developers ;Edm.String;Teams;;;;;;;;;;;;;;;;;;;;;;;
 UserInTeams;UITMS001;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInTeams;;;;;;User;;U12;;Teams;;TMS001;;;;;;;;;;;
 UserInTeams;UITMS002;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInTeams;;;;;;User;;U15;;Teams;;TMS001;;;;;;;;;;;
 UserInTeams;UITMS003;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInTeams;;;;;;User;;U23;;Teams;;TMS002;;;;;;;;;;;
@@ -199,6 +199,6 @@ UserInEnterpriseApplication;USINEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;User
 UserInEnterpriseApplication;USINEAPP002;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInEnterpriseApplication;;;;;;User;;U12;;EnterpriseApplication;;EAPP002;;;;;;;;;;;
 UserInEnterpriseApplication;USINEAPP003;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInEnterpriseApplication;;;;;;User;;U10;;EnterpriseApplication;;EAPP003;;;;;;;;;;;
 UserInEnterpriseApplication;USINEAPP004;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInEnterpriseApplication;;;;;;User;;U03;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
-SharePointCollectionInEnterpriseAppplication;SHPEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInEnterpriseApplication;;;;;;SharePointCollection;;SP001;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
-ReposInEnterpriseApplication;REPEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInEnterpriseApplication;;;;;;Repos;;REP004;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
-TeamsInEnterpriseApplication;TMSEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;UserInEnterpriseApplication;;;;;;Teams;;TMS001;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
+SharePointCollectionInEnterpriseAppplication;SHPEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;SharePointCollectionInEnterpriseAppplication;;;;;;SharePointCollection;;SP001;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
+ReposInEnterpriseApplication;REPEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;ReposInEnterpriseApplication;;;;;;Repos;;REP004;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
+TeamsInEnterpriseApplication;TMSEAPP001;2021-09-17T17:23:24.280Z;;;FALSE;;;;TeamsInEnterpriseApplication;;;;;;Teams;;TMS001;;EnterpriseApplication;;EAPP004;;;;;;;;;;;
