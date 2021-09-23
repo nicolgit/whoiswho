@@ -135,9 +135,9 @@ GroupInApplication;GRIAPP001;2021-01-12T17:32:37.006Z;;;FALSE;Edm.Boolean;User A
 GroupInResource;GRIR001;2021-01-12T17:32:51.446Z;;;FALSE;Edm.Boolean;User Access Administrator;Edm.String;GroupInResource;Edm.String;;;;;Group;Edm.String;G06;Edm.String;Resource;Edm.String;R01;Edm.String;;;;;;;;;;
 GroupInSubscription;GRISUB001;2021-01-12T17:33:21.430Z;;;FALSE;Edm.Boolean;Reader;Edm.String;GroupInSubscription;Edm.String;;;;;Group;Edm.String;G02;Edm.String;Subscription;Edm.String;S02;Edm.String;;;;;;;;;;
 Tag;TAG001;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;CostCenter: X01F;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
-Tag;TAG002;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;CostCenter: X01F;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
-Tag;TAG003;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;CostCenter: X01F;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
-Tag;TAG004;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;CostCenter: X01F;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
+Tag;TAG002;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;ProjectID: 1243;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
+Tag;TAG003;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;CenterName: Operations;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
+Tag;TAG004;2021-01-12T17:33:56.417Z;;;FALSE;Edm.Boolean;TeamName: Dev;Edm.String;Tag;Edm.String;;;;;;;;;;;;;;;;;;;;;;
 TagInApplication;TINAP001;2021-01-12T17:34:00.289Z;;;FALSE;Edm.Boolean;;Edm.String;TagInApplication;Edm.String;;;;;Tag;Edm.String;TAG001;Edm.String;Application;Edm.String;APP02;Edm.String;;;;;;;;;;
 TagInResource;TINRES001;2021-01-12T17:34:15.203Z;;;FALSE;Edm.Boolean;;Edm.String;TagInResource;Edm.String;;;;;Tag;Edm.String;TAG002;Edm.String;Resource;Edm.String;R11;Edm.String;;;;;;;;;;
 TagInResourceGroup;TINRG001;2021-01-12T17:34:30.731Z;;;FALSE;Edm.Boolean;;Edm.String;TagInResourceGroup;Edm.String;;;;;Tag;Edm.String;TAG003;Edm.String;ResourceGroup;Edm.String;RG01;Edm.String;;;;;;;;;;
