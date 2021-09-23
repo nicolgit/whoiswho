@@ -1,6 +1,7 @@
 <div *ngIf="hasData">
     <h1 style="color:red;"><b>{{ errorMessage }}</b></h1>
-  
+    <mat-progress-spinner mode="indeterminate" *ngIf="IsWaitChild"  >
+    </mat-progress-spinner>
     <mat-divider class="divider-class"></mat-divider>
     
     <h1><b>{{ Name }}</b></h1>

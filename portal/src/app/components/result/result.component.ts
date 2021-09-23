@@ -43,7 +43,8 @@ export class ResultComponent implements OnInit {
   userType:string;
   groupType:string;
   typeIdColumn:string;
-
+  IsWait:boolean ;
+  
   public goDeeplink(url:string)
   {
     var win = window.open(url, '_blank');
@@ -53,7 +54,7 @@ export class ResultComponent implements OnInit {
   private populate()
   {
     var caller = this;
-    
+    caller.IsWait=true;
     this.SearchService.ResultByKey(caller.key).subscribe( {
       next(sr) {
         sr.value.forEach(element => {
@@ -79,11 +80,14 @@ export class ResultComponent implements OnInit {
             caller.userType = element.UserType;
             caller.groupType = element.GroupType;
             caller.typeIdColumn = element.Type + "Id"; 
+           
         });    
+        caller.IsWait=false;
       },
       error(msg) {
         caller.errorMessage = msg.message;
         console.log('error: ', msg.message);
+       
       }
     });
   }
