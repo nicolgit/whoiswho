@@ -67,7 +67,7 @@ export class ResultListComponent implements OnInit {
               s.highlightText = caller.sanitizer.bypassSecurityTrustHtml(element["@search.text"]);
               caller.IconService.getSvg(element.Type).subscribe( data =>
                 {
-                  data = data.replace("<svg ", "<svg style='width: 16; height: 16;' ")
+                  data = data.replace("<svg ", "<svg style='width: 16px; height: 16px;' ")
                   var sanit = caller.sanitizer.bypassSecurityTrustHtml(data);
                   
                   s.iconSVG = sanit;
