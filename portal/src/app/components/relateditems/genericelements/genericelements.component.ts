@@ -148,7 +148,7 @@ export class GenericElementsComponent implements OnInit {
 
                 caller.IconService.getSvg(element.Type).subscribe( data =>
                   {
-                    data = data.replace("<svg ", "<svg style='width: 32; height: 32;' ")
+                    data = data.replace("<svg ", "<svg style='width: 32px; height: 32px;' ")
                     var sanit = caller.sanitizer.bypassSecurityTrustHtml(data);
                     s.iconSVG = sanit;
                   }
