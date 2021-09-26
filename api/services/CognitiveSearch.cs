@@ -58,7 +58,7 @@ namespace WhoIsWho.Portal.Api.Services
 
         public async Task<string> ResultByText(string query)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get,urlResults + "&search=" + HttpUtility.UrlEncode(query));
+            var request = new HttpRequestMessage(HttpMethod.Get,urlResults + "&$filter=ParentPartitionKey eq null&search=" + HttpUtility.UrlEncode(query));
             request.Headers.Add("api-key", searchServiceKey);
             request.Headers.Add("User-Agent", "Api");
 
