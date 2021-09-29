@@ -6,7 +6,7 @@ import { Logger, CryptoUtils } from 'msal';
 
 import { AppStatics } from './model/appstatics';
 import { Router } from '@angular/router';
-import { AuthenticationResult, InteractionStatus, PopupRequest, RedirectRequest } from '@azure/msal-browser';
+import { AuthenticationResult, EventMessage, EventType, InteractionStatus, PopupRequest, RedirectRequest } from '@azure/msal-browser';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
@@ -18,16 +18,16 @@ import { filter, takeUntil } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-    private msalBroadcastService: MsalBroadcastService,   
+    private msalBroadcastService: MsalBroadcastService,
     private authService: MsalService,
     private http: HttpClient,
     private router: Router,
-    private location: Location) { 
-       // Custom navigation set for client-side navigation. See performance doc for details: https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-angular/docs/v2-docs/performance.md
-        const customNavigationClient = new MsalCustomNavigationClient(authService, this.router, this.location);
-        this.authService.instance.setNavigationClient(customNavigationClient);
-    }
-  
+    private location: Location) {
+    // Custom navigation set for client-side navigation. See performance doc for details: https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-angular/docs/v2-docs/performance.md
+    const customNavigationClient = new MsalCustomNavigationClient(authService, this.router, this.location);
+    this.authService.instance.setNavigationClient(customNavigationClient);
+  }
+
   title = "WhoisWho";
   isIframe = false;
   loginDisplay = false;
@@ -45,7 +45,16 @@ export class AppComponent implements OnInit {
       )
       .subscribe(() => {
         this.setLoginDisplay();
-      })
+      });
+
+    this.msalBroadcastService.msalSubject$
+      .pipe(
+        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS),
+        takeUntil(this._destroying$)
+      )
+      .subscribe((result: EventMessage) => {
+        this.router.navigate(['/'])
+      });
 
     this.isIframe = window !== window.parent && !window.opener;
 
@@ -57,24 +66,24 @@ export class AppComponent implements OnInit {
   }
 
   loginRedirect() {
-    if (this.msalGuardConfig.authRequest){
-      this.authService.loginRedirect({...this.msalGuardConfig.authRequest} as RedirectRequest);
+    if (this.msalGuardConfig.authRequest) {
+      this.authService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
     } else {
       this.authService.loginRedirect();
     }
   }
 
   loginPopup() {
-    if (this.msalGuardConfig.authRequest){
-      this.authService.loginPopup({...this.msalGuardConfig.authRequest} as PopupRequest)
+    if (this.msalGuardConfig.authRequest) {
+      this.authService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
         .subscribe((response: AuthenticationResult) => {
           this.authService.instance.setActiveAccount(response.account);
         });
-      } else {
-        this.authService.loginPopup()
-          .subscribe((response: AuthenticationResult) => {
-            this.authService.instance.setActiveAccount(response.account);
-      });
+    } else {
+      this.authService.loginPopup()
+        .subscribe((response: AuthenticationResult) => {
+          this.authService.instance.setActiveAccount(response.account);
+        });
     }
   }
 
