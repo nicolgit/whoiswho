@@ -183,19 +183,19 @@
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="TagInApplication">
     </related-generic-elements>
     <related-generic-elements
-        Name="This SharePointCollection contains the following Azure Active Directory Users (UserInSharePoint)"
+        Name="This SharePoint Site Collection contains the following Azure Active Directory Users (UserInSharePoint)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInSharePoint">
     </related-generic-elements>
 
     <related-generic-elements
-        Name="This Azure Active Directory User can access to  following SharePointCollections (UserInSharePoint)"
+        Name="This Azure Active Directory User can access to  following SharePoint Site Collections (UserInSharePoint)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInSharePoint">
     </related-generic-elements>
-    <related-generic-elements Name="This Azure Active Directory User can access to  following  Devices (DeviceForUser)"
+    <related-generic-elements Name="This Azure Active Directory User is the owner of following  Devices (DeviceForUser)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="DeviceForUser">
     </related-generic-elements>
 
-    <related-generic-elements Name="This Device is for  following Azure Active Directory Users (DeviceForUser)"
+    <related-generic-elements Name="This Device is owned by following Azure Active Directory Users (DeviceForUser)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="DeviceForUser">
     </related-generic-elements>
     <related-generic-elements
@@ -207,18 +207,18 @@
         Name="This Azure Active Directory User can access to  following Repos (UserInRepos)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInRepos">
     </related-generic-elements>
-    <related-generic-elements Name="This Enterprise Aplication contains following Repos (ReposInEnterpriseApplication)"
+    <related-generic-elements Name="This Enterprise Aplication is related to following Repos (ReposInEnterpriseApplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="ReposInEnterpriseApplication">
     </related-generic-elements>
 
     <related-generic-elements Name="This Repo used in following Enterprise Applications (ReposInEnterpriseApplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="ReposInEnterpriseApplication">
     </related-generic-elements>
-    <related-generic-elements Name="This Enterprise Aplication contains following Teams (TeamsInEnterpriseApplication)"
+    <related-generic-elements Name="This Enterprise Aplication has following Teams (TeamsInEnterpriseApplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="TeamsInEnterpriseApplication">
     </related-generic-elements>
 
-    <related-generic-elements Name="This Teams used  following Enterprise Applications (TeamsInEnterpriseApplication)"
+    <related-generic-elements Name="This Teams is used  for following Enterprise Application (TeamsInEnterpriseApplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="TeamsInEnterpriseApplication">
     </related-generic-elements>
     <related-generic-elements
@@ -229,10 +229,10 @@
         Name="This Azure Active Directory User can access to  following Teams (UserInTeams)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInTeams">
     </related-generic-elements>
-    <related-generic-elements Name="This Enterprise Aplication contains following Sharepontcollection (SharePointCollectionInEnterpriseAppplication)"
+    <related-generic-elements Name="This Enterprise Aplication contains following SharePoint Site Collections (SharePointCollectionInEnterpriseAppplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="SharePointCollectionInEnterpriseAppplication">
     </related-generic-elements>
-    <related-generic-elements Name="This SharePointCollection used in following Enterprise Applications (SharePointCollectionInEnterpriseAppplication)"
+    <related-generic-elements Name="This SharePoint Site Collection is related to following Enterprise Application (SharePointCollectionInEnterpriseAppplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="SharePointCollectionInEnterpriseAppplication">
     </related-generic-elements>
     
