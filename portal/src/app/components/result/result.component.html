@@ -2,38 +2,38 @@
     <h1 style="color:red;"><b>{{ errorMessage }}</b></h1>
 
     <h1><b>{{ resourceType }}</b></h1>
-    <mat-progress-spinner mode="indeterminate" *ngIf="IsWait" >
+    <mat-progress-spinner mode="indeterminate" *ngIf="IsWait">
     </mat-progress-spinner>
     <mat-divider class="divider-class"></mat-divider>
 
-        <mat-card class="user-card">
-            <mat-card-header>
-                <div *ngIf="!hasValue(ImgUrl)" mat-card-avatar [innerHTML]="iconSVG"></div>
-                <div *ngIf="hasValue(ImgUrl)" mat-card-avatar class="user-header-image"
-                    [ngStyle]="{ 'background-image': 'url(' + ImgUrl + ')'}"></div>
-                <mat-card-title>{{ name }} {{ surname }}</mat-card-title>
-                <mat-card-subtitle *ngIf="hasValue(email)"><b>mail:</b> {{ email }}</mat-card-subtitle>
-                <mat-card-subtitle *ngIf="hasValue(department)"><b>department:</b> {{ department }}</mat-card-subtitle>
-                <mat-card-subtitle *ngIf="hasValue(userType)"><b>user type:</b> {{ userType }}</mat-card-subtitle>
-                <mat-card-subtitle *ngIf="hasValue(groupType)"><b>group type:</b> {{ groupType }}</mat-card-subtitle>
-                <mat-card-subtitle>&nbsp;</mat-card-subtitle>
+    <mat-card class="user-card">
+        <mat-card-header>
+            <div *ngIf="!hasValue(ImgUrl)" mat-card-avatar [innerHTML]="iconSVG"></div>
+            <div *ngIf="hasValue(ImgUrl)" mat-card-avatar class="user-header-image"
+                [ngStyle]="{ 'background-image': 'url(' + ImgUrl + ')'}"></div>
+            <mat-card-title>{{ name }} {{ surname }}</mat-card-title>
+            <mat-card-subtitle *ngIf="hasValue(email)"><b>mail:</b> {{ email }}</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="hasValue(department)"><b>department:</b> {{ department }}</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="hasValue(userType)"><b>user type:</b> {{ userType }}</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="hasValue(groupType)"><b>group type:</b> {{ groupType }}</mat-card-subtitle>
+            <mat-card-subtitle>&nbsp;</mat-card-subtitle>
 
-            </mat-card-header>
+        </mat-card-header>
 
-            <mat-card-content>
-                <b>id</b>: {{rowKey}}<br />
-                <b>last update</b>: {{lastupdate}}
-            </mat-card-content>
+        <mat-card-content>
+            <b>id</b>: {{rowKey}}<br />
+            <b>last update</b>: {{lastupdate}}
+        </mat-card-content>
 
-            <mat-card-actions>
-                <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">SEE ON
-                    AZURE</button>
-                <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'User'"
-                    style="background-color: lightgoldenrodyellow">SEE ON SERVICE NOW</button>
-            </mat-card-actions>
-        </mat-card>
-   
-    
+        <mat-card-actions>
+            <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">SEE ON
+                AZURE</button>
+            <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'User'"
+                style="background-color: lightgoldenrodyellow">SEE ON SERVICE NOW</button>
+        </mat-card-actions>
+    </mat-card>
+
+
 
 
     <related-generic-elements
@@ -183,11 +183,56 @@
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="TagInApplication">
     </related-generic-elements>
     <related-generic-elements
-        Name="This SharePointCollection contains the following Azure Active Directory Users (UserInSharePoint)"
+        Name="This SharePoint Site Collection contains the following Azure Active Directory Users (UserInSharePoint)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInSharePoint">
     </related-generic-elements>
-    
+
     <related-generic-elements
-        Name="This Azure Active Directory User manages to the following SharePointCollections (UserInSharePoint)"
+        Name="This Azure Active Directory User can access to  following SharePoint Site Collections (UserInSharePoint)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInSharePoint">
     </related-generic-elements>
+    <related-generic-elements Name="This Azure Active Directory User is the owner of following  Devices (DeviceForUser)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="DeviceForUser">
+    </related-generic-elements>
+
+    <related-generic-elements Name="This Device is owned by following Azure Active Directory Users (DeviceForUser)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="DeviceForUser">
+    </related-generic-elements>
+    <related-generic-elements
+        Name="This Repos contains the following Azure Active Directory Users (UserInRepos)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInRepos">
+    </related-generic-elements>
+
+    <related-generic-elements
+        Name="This Azure Active Directory User can access to  following Repos (UserInRepos)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInRepos">
+    </related-generic-elements>
+    <related-generic-elements Name="This Enterprise Aplication is related to following Repos (ReposInEnterpriseApplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="ReposInEnterpriseApplication">
+    </related-generic-elements>
+
+    <related-generic-elements Name="This Repo used in following Enterprise Applications (ReposInEnterpriseApplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="ReposInEnterpriseApplication">
+    </related-generic-elements>
+    <related-generic-elements Name="This Enterprise Aplication has following Teams (TeamsInEnterpriseApplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="TeamsInEnterpriseApplication">
+    </related-generic-elements>
+
+    <related-generic-elements Name="This Teams is used  for following Enterprise Application (TeamsInEnterpriseApplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="TeamsInEnterpriseApplication">
+    </related-generic-elements>
+    <related-generic-elements
+        Name="This Teams contains the following Azure Active Directory Users (UserInTeams)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInTeams">
+    </related-generic-elements>
+    <related-generic-elements
+        Name="This Azure Active Directory User can access to  following Teams (UserInTeams)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInTeams">
+    </related-generic-elements>
+    <related-generic-elements Name="This Enterprise Aplication contains following SharePoint Site Collections (SharePointCollectionInEnterpriseAppplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="SharePointCollectionInEnterpriseAppplication">
+    </related-generic-elements>
+    <related-generic-elements Name="This SharePoint Site Collection is related to following Enterprise Application (SharePointCollectionInEnterpriseAppplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="SharePointCollectionInEnterpriseAppplication">
+    </related-generic-elements>
+    
