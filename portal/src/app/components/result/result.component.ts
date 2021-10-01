@@ -22,7 +22,7 @@ export class ResultComponent implements OnInit {
   ngOnInit(): void {
       this.key = this.route.snapshot.paramMap.get('key');
       this.populate();
-    }
+     }
 
   key: string;
   partitionKey:string;
@@ -44,17 +44,21 @@ export class ResultComponent implements OnInit {
   groupType:string;
   typeIdColumn:string;
   IsWait:boolean ;
-  
+
   public goDeeplink(url:string)
   {
     var win = window.open(url, '_blank');
     win.focus();
   }
-
+ public getIsWait()
+ {
+  return this.SearchService.GetIsWaitData();
+ }
   private populate()
   {
     var caller = this;
     caller.IsWait=true;
+    localStorage.setItem('IsWaitStorage',JSON.stringify(caller.IsWait));
     this.SearchService.ResultByKey(caller.key).subscribe( {
       next(sr) {
         sr.value.forEach(element => {
@@ -82,7 +86,7 @@ export class ResultComponent implements OnInit {
             caller.typeIdColumn = element.Type + "Id"; 
            
         });    
-        caller.IsWait=false;
+               caller.IsWait=false;
       },
       error(msg) {
         caller.errorMessage = msg.message;

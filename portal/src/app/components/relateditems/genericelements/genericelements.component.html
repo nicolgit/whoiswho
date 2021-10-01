@@ -1,7 +1,5 @@
 <div *ngIf="hasData">
     <h1 style="color:red;"><b>{{ errorMessage }}</b></h1>
-    <mat-progress-spinner mode="indeterminate" *ngIf="IsWaitChild"  >
-    </mat-progress-spinner>
     <mat-divider class="divider-class"></mat-divider>
     
     <h1><b>{{ Name }}</b></h1>
@@ -18,9 +16,8 @@
                 </mat-card-content>
                 <mat-card-actions>
                     <button mat-button (click)="go(result.key);" style="background-color: lightseagreen;" >Drill into</button>
-                    <button mat-button (click)="goDeeplink('to be implemented');" style="background-color: azure;">SEE ON AZURE</button>
+                    <button mat-button (click)="goDeeplink('to be implemented');" style="background-color: azure;">Explore | Navigate to</button>
                 </mat-card-actions>
             </mat-card>
         </div>
 </div>
-

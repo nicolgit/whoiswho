@@ -12,7 +12,6 @@ import { AppConfig } from '../app.config';
 
 export class AzureSearchService {
   constructor( private logger: LoggerService, private http: HttpClient, private appConfig: AppConfig) { }
-
   Suggestions(text:string)
   {
     var get_url = this.appConfig.settings.ApiUrlBase + '/api/Suggest?s-earch=' + encodeURI(text);
@@ -52,7 +51,10 @@ export class AzureSearchService {
       responseType: 'json',
     });
   }
-
+  GetIsWaitData()
+  {
+    return JSON.parse(localStorage.getItem('IsWaitStorage')) as boolean; 
+  }
   IndexSize ()
   {
     var get_url = this.appConfig.settings.ApiUrlBase + "/api/Count";
