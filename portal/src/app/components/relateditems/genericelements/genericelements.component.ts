@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -32,12 +32,13 @@ export class GenericElementsComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    localStorage.setItem('IsWaitStorage',JSON.stringify(true));
   }
-
+ 
   @Input() Name: string;
   @Input() CorelationType: string;
   @Input() KeyIs: string;
-  
+
   private _partitionKey;
   @Input()
   set PartitionKey (pt:string) {
@@ -60,8 +61,7 @@ export class GenericElementsComponent implements OnInit {
 
   errorMessage: string;
   iconSVG: SafeHtml;
-  IsWaitChild:boolean;
-  get hasData(): boolean {
+    get hasData(): boolean {
     
     return this.searchResults != null && this.searchResults.length>0;
   }
@@ -88,7 +88,6 @@ export class GenericElementsComponent implements OnInit {
   {
     var caller = this;
     caller.searchResults = [];
-    caller.IsWaitChild =true;
     if (this.CorelationType==null || caller.RowKey==null || caller.PartitionKey==null)
       return;
 
@@ -154,7 +153,7 @@ export class GenericElementsComponent implements OnInit {
                   }
                 ); 
               });
-              caller.IsWaitChild=false;
+              localStorage.setItem('IsWaitStorage',JSON.stringify(false));
             },
             error(msg) {
               caller.errorMessage = msg.message;

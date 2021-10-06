@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AzureSearchService } from '../../services/azure-search.service';
 import { AzureIconService } from '../../services/azure-icons.service';
+import * as _ from 'underscore';
 
 export class Result {
   iconSVG: SafeHtml;
@@ -35,7 +36,10 @@ export class ResultListComponent implements OnInit {
     private IconService:AzureIconService,
     private route: ActivatedRoute,
     private router: Router,
-    private sanitizer:DomSanitizer) { }
+    private sanitizer:DomSanitizer) {
+      this.doSuggestions=_.debounce(this.doSuggestions,1000);
+      this.goSearch=_.debounce(this.goSearch,1000)
+     }
 
   ngOnInit(): void {
       this.searchString = this.route.snapshot.paramMap.get('search_for');

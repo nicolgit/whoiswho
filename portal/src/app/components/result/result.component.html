@@ -1,9 +1,9 @@
 <div style="margin: 32px;">
     <h1 style="color:red;"><b>{{ errorMessage }}</b></h1>
-
-    <h1><b>{{ resourceType }}</b></h1>
-    <mat-progress-spinner mode="indeterminate" *ngIf="IsWait">
+    <mat-progress-spinner mode="indeterminate" diameter="60" *ngIf="getIsWait()">
     </mat-progress-spinner>
+    <h1><b>{{ resourceType }}</b></h1>
+    
     <mat-divider class="divider-class"></mat-divider>
 
     <mat-card class="user-card">
@@ -26,10 +26,11 @@
         </mat-card-content>
 
         <mat-card-actions>
-            <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">SEE ON
-                AZURE</button>
+            <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">Explore | Navigate to</button>
             <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'User'"
                 style="background-color: lightgoldenrodyellow">SEE ON SERVICE NOW</button>
+            <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'Resource'"
+                style="background-color: lightgoldenrodyellow">Cost(AZURE)</button>
         </mat-card-actions>
     </mat-card>
 

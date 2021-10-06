@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { AzureSearchService } from '../../services/azure-search.service'
 import { AzureIconService } from '../../services/azure-icons.service';
+import * as _ from 'underscore';
 
 export class Suggest {
   iconSVG: SafeHtml;
@@ -25,7 +26,9 @@ export class MainSearchBoxComponent implements OnInit {
     private IconService:AzureIconService,
     private router: Router,
     private http: HttpClient,
-    private sanitizer:DomSanitizer) { }
+    private sanitizer:DomSanitizer) { 
+      this.doSuggestions=_.debounce(this.doSuggestions,1000)
+    }
 
   ngOnInit(): void {
     var caller = this;
@@ -44,7 +47,6 @@ export class MainSearchBoxComponent implements OnInit {
   selectedAutocomplete: Suggest;
 
   userName: string;
-
   doSuggestions()
   {
     var caller = this;
@@ -52,7 +54,7 @@ export class MainSearchBoxComponent implements OnInit {
     
     if (typeof this.searchString != 'undefined' && this.searchString.trim())
     {
-      this.SearchService.Suggestions(this.searchString).subscribe( {
+        this.SearchService.Suggestions(this.searchString).subscribe( {
         next(sr) {
             sr.value.forEach(element => {
               var s = new Suggest();
@@ -71,12 +73,12 @@ export class MainSearchBoxComponent implements OnInit {
               );
 
               caller.suggestions.push(s);
-            });    
-        },
+            });  
+         },
         error(msg) {
           console.log('error: ', msg);
         }
-      });
+        });
     }
   }
 
