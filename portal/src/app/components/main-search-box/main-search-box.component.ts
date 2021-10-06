@@ -27,7 +27,7 @@ export class MainSearchBoxComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private sanitizer:DomSanitizer) { 
-      this.doSuggestions=_.debounce(this.doSuggestions,1000)
+      this.doSuggestions=_.debounce(this.doSuggestions,300)
     }
 
   ngOnInit(): void {

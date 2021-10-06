@@ -37,8 +37,8 @@ export class ResultListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer:DomSanitizer) {
-      this.doSuggestions=_.debounce(this.doSuggestions,1000);
-      this.goSearch=_.debounce(this.goSearch,1000)
+      this.doSuggestions=_.debounce(this.doSuggestions,300);
+      this.goSearch=_.debounce(this.goSearch,300)
      }
 
   ngOnInit(): void {
