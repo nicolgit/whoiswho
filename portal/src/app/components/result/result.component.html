@@ -3,7 +3,7 @@
     <mat-progress-spinner mode="indeterminate" diameter="60" *ngIf="getIsWait()">
     </mat-progress-spinner>
     <h1><b>{{ resourceType }}</b></h1>
-    
+
     <mat-divider class="divider-class"></mat-divider>
 
     <mat-card class="user-card">
@@ -26,7 +26,8 @@
         </mat-card-content>
 
         <mat-card-actions>
-            <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">Explore | Navigate to</button>
+            <button mat-button (click)="goDeeplink(deeplink);" style="background-color: azure;">Explore | Navigate
+                to</button>
             <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'User'"
                 style="background-color: lightgoldenrodyellow">SEE ON SERVICE NOW</button>
             <button mat-button (click)="goDeeplink(key);" *ngIf="resourceType == 'Resource'"
@@ -199,16 +200,15 @@
     <related-generic-elements Name="This Device is owned by following Azure Active Directory Users (DeviceForUser)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="DeviceForUser">
     </related-generic-elements>
-    <related-generic-elements
-        Name="This Repos contains the following Azure Active Directory Users (UserInRepos)"
+    <related-generic-elements Name="This Repos contains the following Azure Active Directory Users (UserInRepos)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInRepos">
     </related-generic-elements>
 
-    <related-generic-elements
-        Name="This Azure Active Directory User can access to  following Repos (UserInRepos)"
+    <related-generic-elements Name="This Azure Active Directory User can access to  following Repos (UserInRepos)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInRepos">
     </related-generic-elements>
-    <related-generic-elements Name="This Enterprise Aplication is related to following Repos (ReposInEnterpriseApplication)"
+    <related-generic-elements
+        Name="This Enterprise Aplication is related to following Repos (ReposInEnterpriseApplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="ReposInEnterpriseApplication">
     </related-generic-elements>
 
@@ -219,21 +219,31 @@
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="TeamsInEnterpriseApplication">
     </related-generic-elements>
 
-    <related-generic-elements Name="This Teams is used  for following Enterprise Application (TeamsInEnterpriseApplication)"
+    <related-generic-elements
+        Name="This Teams is used  for following Enterprise Application (TeamsInEnterpriseApplication)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="TeamsInEnterpriseApplication">
     </related-generic-elements>
-    <related-generic-elements
-        Name="This Teams contains the following Azure Active Directory Users (UserInTeams)"
+    <related-generic-elements Name="This Teams contains the following Azure Active Directory Users (UserInTeams)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInTeams">
     </related-generic-elements>
-    <related-generic-elements
-        Name="This Azure Active Directory User can access to  following Teams (UserInTeams)"
+    <related-generic-elements Name="This Azure Active Directory User can access to  following Teams (UserInTeams)"
         [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="UserInTeams">
     </related-generic-elements>
-    <related-generic-elements Name="This Enterprise Aplication contains following SharePoint Site Collections (SharePointCollectionInEnterpriseAppplication)"
-        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="SharePointCollectionInEnterpriseAppplication">
+    <related-generic-elements
+        Name="This Enterprise Aplication contains following SharePoint Site Collections (SharePointCollectionInEnterpriseAppplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent"
+        CorelationType="SharePointCollectionInEnterpriseAppplication">
     </related-generic-elements>
-    <related-generic-elements Name="This SharePoint Site Collection is related to following Enterprise Application (SharePointCollectionInEnterpriseAppplication)"
-        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child" CorelationType="SharePointCollectionInEnterpriseAppplication">
+    <related-generic-elements
+        Name="This SharePoint Site Collection is related to following Enterprise Application (SharePointCollectionInEnterpriseAppplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Child"
+        CorelationType="SharePointCollectionInEnterpriseAppplication">
     </related-generic-elements>
-    
+    <related-generic-elements
+        Name="This Enterprise Aplication is related to following Users (UserInEnterpriseApplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="UserInEnterpriseApplication">
+    </related-generic-elements>
+    <related-generic-elements
+        Name="This Enterprise Aplication have the following Azure Tags associated (TagsInEnterpriseApplication)"
+        [PartitionKey]="partitionKey" [RowKey]="rowKey" KeyIs="Parent" CorelationType="TagsInEnterpriseApplication">
+    </related-generic-elements>
