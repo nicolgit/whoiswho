@@ -233,3 +233,4 @@ ResourceGroup;RG0210;2021-01-12T17:33:40.885Z;https://portal.azure.com/#blade/Hu
 TagInResourceGroup;TINRG00110;2021-01-12T17:34:30.731Z;;;FALSE;Edm.Boolean;;Edm.String;TagInResourceGroup;Edm.String;;;;;Tag;Edm.String;TAG0010;Edm.String;ResourceGroup;Edm.String;RG0110;Edm.String;;;;;;;;;;
 TagInResourceGroup;TINRG00210;2021-01-12T17:34:30.731Z;;;FALSE;Edm.Boolean;;Edm.String;TagInResourceGroup;Edm.String;;;;;Tag;Edm.String;TAG0010;Edm.String;ResourceGroup;Edm.String;RG0210;Edm.String;;;;;;;;;;
 TagInSubscription;TINSUB00110;2021-01-12T17:34:46.688Z;;;FALSE;Edm.Boolean;;Edm.String;TagInSubscription;Edm.String;;;;;Tag;Edm.String;TAG0010;Edm.String;Subscription;Edm.String;S0210;Edm.String;;;;;;;;;;
+SharePointCollectionInEnterpriseAppplication;SHPEAPP0010;2021-09-17T17:23:24.280Z;;;FALSE;;;;SharePointCollectionInEnterpriseAppplication;;;;;;SharePointCollection;;SP0010;;EnterpriseApplication;;EAPP010;;;;;;;;;;;
