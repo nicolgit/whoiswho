@@ -24,6 +24,16 @@
     font-size: medium;
 }
 
+.result-item
+{
+    cursor: pointer;
+}
+
+.result-item:hover
+{
+    background-color: azure;
+}
+
 .mat-line.result-title
 {
     font-weight: bold;
